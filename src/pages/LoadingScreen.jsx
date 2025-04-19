@@ -3,17 +3,18 @@ import '../assets/css/LoadingScreen.css';
 import loadingMessagesJson from '../assets/json/messages.json';
 import bgVideo from '../assets/video/loading.gif';
 import bgm from '../assets/music/shelter.mp3';
-import { FaUser, FaSignInAlt, FaUserPlus, FaSignOutAlt } from 'react-icons/fa';
+import { FaUser, FaSignInAlt, FaUserPlus, FaSignOutAlt, FaCog } from 'react-icons/fa';
 
 const LoadingScreen = () => {
     const [progress, setProgress] = useState(0);
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState('');
     const [showDropdown, setShowDropdown] = useState(false);
+    const [showSettings, setShowSettings] = useState(false); // To toggle settings menu
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [initStarted, setInitStarted] = useState(false);
     const [audio] = useState(new Audio(bgm));
-
+    const [volume, setVolume] = useState(1); // Volume state (1 is max volume)
 
     useEffect(() => {
         if (!initStarted) return;
@@ -48,19 +49,24 @@ const LoadingScreen = () => {
                 return prev + (100 / (duration * 10));
             });
         }, 100);
-
         // Start music
         audio.loop = true;
         audio.play();
-    }, [initStarted]);
+        audio.volume = volume; // Set initial volume
+    }, [initStarted, volume]); // Re-run when volume changes
 
-
+    const handleVolumeChange = (event) => {
+        const newVolume = event.target.value;
+        setVolume(newVolume);
+        audio.volume = newVolume; // Update audio volume
+    };
 
     return (
-        <div className="loading-screen">
+        <div className="loading-screen unselectable">
             <img src={bgVideo} alt="Loading Background" className="bg-video" />
 
             <div className="user-menu">
+                <FaCog onClick={() => setShowSettings(!showSettings)} className="icon-btn settings-icon" />
                 <FaUser onClick={() => setShowDropdown(!showDropdown)} className="icon-btn" />
                 {showDropdown && (
                     <div className="dropdown-menu">
@@ -76,21 +82,38 @@ const LoadingScreen = () => {
                 )}
             </div>
 
+            {/* Volume settings dropdown positioned to top-left */}
+            {showSettings && (
+                <div className="settings-dropdown">
+                    <label htmlFor="volume-slider" style={{ color: 'white' }}>Volume:</label>
+                    <input
+                        type="range"
+                        id="volume-slider"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        value={volume}
+                        onChange={handleVolumeChange}
+                        style={{ width: '100%' }}
+                    />
+                </div>
+            )}
+
             {!initStarted ? (
                 <div className="click-start" onClick={() => setInitStarted(true)}>
-                    <p className="blinking unselectable">Click to Load</p>
+                    <p className="blinking ">Click to Load</p>
                 </div>
             ) : loading ? (
                 <div className="loading-container">
                     <div className="progress-bar">
-                        <div className="bar unselectable" style={{ width: `${progress}%` }}></div>
-                        <span className="progress-percent unselectable">{Math.floor(progress)}%</span>
+                        <div className="bar" style={{ width: `${progress}%` }}></div>
+                        <span className="progress-percent">{Math.floor(progress)}%</span>
                     </div>
-                    <p className="loading-message unselectable">{message}</p>
+                    <p className="loading-message">{message}</p>
                 </div>
             ) : (
                 <div className="click-start">
-                    <p className="blinking unselectable">Click to Start</p>
+                    <p className="blinking">Click to Start</p>
                 </div>
             )}
         </div>
