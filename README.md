@@ -25,7 +25,7 @@ Follow these steps to get your development environment up and running:
 ### 1. 📥 Pull the Repository
 
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
+git clone https://github.com/TrshCan/FE2_DoAnNhom_KGC.git
 ```
 
 ### 2. 📂 Navigate to the Project Folder
