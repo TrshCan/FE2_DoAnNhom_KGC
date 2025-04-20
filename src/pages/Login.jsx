@@ -1,6 +1,7 @@
 import '../assets/css/AuthModal.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import BASE_URL from '../components/BaseURL'
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
@@ -18,7 +19,7 @@ const Login = () => {
         }
 
         try {
-            const response = await fetch('http://localhost/FE2/src/includes/login.php', {
+            const response = await fetch(`${BASE_URL}/src/includes/login.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),

@@ -1,6 +1,7 @@
 import '../assets/css/AuthModal.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import BASE_URL from '../components/BaseURL';
 
 const Register = () => {
     const [formData, setFormData] = useState({ username: '', email: '', password: '', confirmPassword: '' });
@@ -16,7 +17,7 @@ const Register = () => {
         if (!/^\S+@\S+\.\S+$/.test(formData.email)) return alert("Invalid email format.");
         if (formData.password !== formData.confirmPassword) return alert("Passwords don't match.");
 
-        fetch('http://localhost/FE2/src/includes/register.php', {
+        fetch(`${BASE_URL}/src/includes/register.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
