@@ -21,11 +21,7 @@ const LoadingScreen = () => {
     const navigate = useNavigate();
 
     const handleStartClick = () => {
-        if (isLoggedIn) {
-            navigate('/mainhall');
-        } else {
-            navigate('/login');
-        }
+        navigate('/mainhall');
     };
 
     useEffect(() => {

@@ -1,6 +1,9 @@
 import '../assets/css/AuthModal.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Register = () => {
     const [formData, setFormData] = useState({ username: '', email: '', password: '', confirmPassword: '' });
@@ -16,7 +19,7 @@ const Register = () => {
         if (!/^\S+@\S+\.\S+$/.test(formData.email)) return alert("Invalid email format.");
         if (formData.password !== formData.confirmPassword) return alert("Passwords don't match.");
 
-        fetch('http://localhost/FE2/src/includes/register.php', {
+        fetch('http://localhost/FE2_DoAnNhom_KGC/src/includes/register.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
@@ -24,10 +27,24 @@ const Register = () => {
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    alert('Registered successfully! You can now log in.');
-                    navigate('/login');
+                    toast.success('🧝‍♀️ Đăng ký thành công! Bạn đã được ghi danh vào Vương quốc!', {
+                        position: 'top-center',
+                        autoClose: 3000,
+                        style: {
+                            backgroundColor: '#009688',
+                            color: '#ffffff',
+                            fontWeight: 'bold',
+                            fontSize: '16px',
+                            borderRadius: '12px',
+                            boxShadow: '0 0 10px #00ffc8',
+                        },
+                        icon: '📜',
+                    });
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 3000);
                 } else {
-                    alert(data.message);
+                    toast.error(`🚫 ${data.message}`);
                 }
             });
 
@@ -44,6 +61,7 @@ const Register = () => {
                 <button type="submit">Sign Up</button>
                 <p onClick={() => navigate('/login')} className="nav-link">Already signed up? Log in now</p>
             </form>
+            <ToastContainer/>
         </div>
     );
 };

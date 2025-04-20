@@ -181,3 +181,163 @@
     -moz-user-select: none;    /* Firefox */
     -ms-user-select: none;     /* IE10+/Edge */
 }
+.mail-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(30, 30, 40, 0.95);
+    border: 3px solid #ffc107;
+    border-radius: 16px;
+    padding: 24px;
+    width: 450px;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 999;
+    box-shadow: 0 0 20px #000;
+    animation: popupFade 0.3s ease-out;
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .popup-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .popup-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    color: #ffe082;
+    border-bottom: 1px solid #ffc107;
+    padding-bottom: 10px;
+  }
+  
+  .mail-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .mail-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid #666;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .mail-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .mail-title {
+    font-size: 18px;
+    color: #ffca28;
+    margin-bottom: 4px;
+  }
+  
+  .mail-content {
+    font-family: 'Cinzel', serif; /* Phông chữ cổ điển, kiểu fantasy */
+    font-size: 18px;
+    line-height: 1.8;
+    color: #f5e6c8; /* Màu kiểu giấy cổ hoặc ánh sáng phép thuật */
+    background: linear-gradient(135deg, #3b2f2f, #1f1a17); /* Nền tối kiểu sách phép */
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid #d4af37; /* Viền vàng kiểu hoàng gia/magic */
+    box-shadow: 0 0 15px #d4af37;
+    text-shadow: 1px 1px 2px #000;
+    word-break: break-word;
+}
+
+  .selected-mail-content {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+  }
+  
+  .selected-mail-content h4 {
+    font-size: 20px;
+    color: #ffca28;
+  }
+  
+  .selected-mail-content p {
+    font-size: 14px;
+    color: #ddd;
+  }
+  .mail-item {
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  
+  .mail-title {
+    font-weight: bold;
+  }
+  
+  .mail-content-expanded {
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #f5e6c8; /* Màu vàng nhẹ của phép thuật */
+    padding: 20px;
+    background: #2a1f1f; /* Nền tối kiểu sách phép, giống với cuộn giấy phép thuật */
+    border: 2px solid #d4af37; /* Viền vàng tạo cảm giác quý tộc và ma thuật */
+    border-radius: 12px;
+    box-shadow: 0 0 15px #d4af37, 0 0 30px #ffcc00;
+    text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8); /* Ánh sáng nhẹ tạo cảm giác ma thuật */
+    font-family: 'Cinzel', serif; /* Phông chữ fantasy cổ điển */
+    background-image: radial-gradient(circle, rgba(255, 204, 0, 0.1), rgba(0, 0, 0, 0.8)); /* Gradient ma thuật */
+}
+
+  
+  .popup-buttons {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .close-btn {
+    padding: 5px 15px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  
+  .popup-buttons {
+    text-align: center;
+  }
+  
+  .close-btn {
+    background-color: #ff5722;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .close-btn:hover {
+    background-color: #e64a19;
+  }
+  
+  @keyframes popupFade {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -60%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+  }
+  
+

@@ -7,10 +7,11 @@ import MainHall from './pages/MainHall';
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<LoadingScreen />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Login />} />
+      <Route path="/mainhall" element={<MainHall />}/>
       <Route path="/register" element={<Register />} />
       <Route path="/mainhall" element={<MainHall />} />
+      <Route path="/loading" element={<LoadingScreen/>} />
     </Routes>
   );
 };
