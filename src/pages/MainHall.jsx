@@ -3,6 +3,7 @@ import { FaTasks, FaBoxOpen, FaEnvelope, FaChevronUp, FaChevronDown, FaCity, FaU
 import '../assets/css/MainHall.css';
 import ArrowToggle from "../components/Arrow_Toggle"; // Adjust the path as necessary
 import illustration from '../assets/img/heroes/illustration/NPC_Illust_Luminesera.png'; // Adjust the path as necessary
+import BASE_URL from '../components/BaseURL';
 
 const MainHall = () => {
     const [showTopNav, setShowTopNav] = useState(true);
@@ -15,7 +16,7 @@ const MainHall = () => {
 
     const fetchMails = async () => {
         try {
-            const response = await fetch('http://localhost/FE2_DOANNHOM_KGC/src/includes/mail.php');
+            const response = await fetch(`${BASE_URL}/src/includes/mail.php`);
             const data = await response.json();
 
             if (data.success) {
@@ -92,7 +93,7 @@ const MainHall = () => {
             </div>
             {/* Mail Popup */}
             {showMailPopup && (
-                <div className="mail-popup">
+                <div className="mail-popup unselectable">
                     <div className="popup-content">
                         <h3 className="popup-title">📧 Hòm Thư</h3>
 
