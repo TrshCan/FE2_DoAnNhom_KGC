@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import BASE_URL from '../components/BaseURL';
+
 const Login = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,7 +23,7 @@ const Login = () => {
         }
 
         try {
-            const response = await fetch('http://localhost/FE2_DOANNHOM_KGC/src/includes/login.php', {
+            const response = await fetch(`${BASE_URL}/src/includes/login.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
