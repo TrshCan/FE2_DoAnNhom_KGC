@@ -4,6 +4,9 @@ import loadingMessagesJson from '../assets/json/messages.json';
 import bgVideo from '../assets/video/loading.gif';
 import bgm from '../assets/music/shelter.mp3';
 import { FaUser, FaSignInAlt, FaUserPlus, FaSignOutAlt, FaCog } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import GameName from '../components/GameName';
+
 
 const LoadingScreen = () => {
     const [progress, setProgress] = useState(0);
@@ -15,6 +18,15 @@ const LoadingScreen = () => {
     const [initStarted, setInitStarted] = useState(false);
     const [audio] = useState(new Audio(bgm));
     const [volume, setVolume] = useState(1); // Volume state (1 is max volume)
+    const navigate = useNavigate();
+
+    const handleStartClick = () => {
+        if (isLoggedIn) {
+            navigate('/mainhall');
+        } else {
+            navigate('/login');
+        }
+    };
 
     useEffect(() => {
         if (!initStarted) return;
@@ -101,7 +113,7 @@ const LoadingScreen = () => {
 
             {!initStarted ? (
                 <div className="click-start" onClick={() => setInitStarted(true)}>
-                    <p className="blinking ">Click to Load</p>
+                    <p className="blinking">Click to Load</p>
                 </div>
             ) : loading ? (
                 <div className="loading-container">
@@ -112,9 +124,13 @@ const LoadingScreen = () => {
                     <p className="loading-message">{message}</p>
                 </div>
             ) : (
-                <div className="click-start">
-                    <p className="blinking">Click to Start</p>
-                </div>
+                <>
+                    <GameName />
+                    <div className="click-start" onClick={handleStartClick}>
+                        <p className="blinking">Click to Start</p>
+                    </div>
+                </>
+
             )}
         </div>
     );

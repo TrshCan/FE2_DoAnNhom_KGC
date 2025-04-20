@@ -1,6 +1,3 @@
-<?php
-$base_url = '/nhomh/public/';
-?>
 
 <?php
 /** The name of the database*/
