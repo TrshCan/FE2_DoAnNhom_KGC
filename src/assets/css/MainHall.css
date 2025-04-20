@@ -160,6 +160,21 @@
     transform: scale(1.4);
 }
 
+.illustration-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0; /* Adjust as necessary */
+    height: 100%; /* Adjust the height based on your design */
+}
+
+.illustration-image {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain; /* This ensures the image scales properly without distorting */
+}
+
+
 .unselectable {
     user-select: none;
     -webkit-user-select: none; /* Safari */

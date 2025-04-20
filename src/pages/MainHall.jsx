@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { FaTasks, FaBoxOpen, FaEnvelope, FaChevronUp, FaChevronDown, FaCity, FaUserFriends, FaDoorOpen } from 'react-icons/fa';
 import '../assets/css/MainHall.css';
 import ArrowToggle from "../components/Arrow_Toggle"; // Adjust the path as necessary
+import illustration from '../assets/img/heroes/illustration/NPC_Illust_Luminesera.png'; // Adjust the path as necessary
+
 
 const MainHall = () => {
     const [showTopNav, setShowTopNav] = useState(true);
@@ -36,6 +38,10 @@ const MainHall = () => {
 
             {/* Toggle Arrow */}
             <ArrowToggle showTopNav={showTopNav} setShowTopNav={setShowTopNav} />
+
+            <div className="illustration-container">
+                <img src={illustration} alt="Main Hall Illustration" className="illustration-image" />
+            </div>
 
             {/* Bottom Navigation */}
             <div className="bottom-nav">
