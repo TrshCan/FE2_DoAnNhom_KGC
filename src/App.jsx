@@ -3,6 +3,7 @@ import LoadingScreen from './pages/LoadingScreen';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import MainHall from './pages/MainHall';
+import Barrack from './pages/Barrack';
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/mainhall" element={<MainHall />} />
       <Route path="/loading" element={<LoadingScreen />} />
+      <Route path="/barrack" element={<Barrack />} />
     </Routes>
   );
 };

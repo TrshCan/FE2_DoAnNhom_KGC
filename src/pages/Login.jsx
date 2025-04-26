@@ -33,6 +33,8 @@ const Login = () => {
 
             const data = await response.json();
             if (data.success) {
+                console.log('Login successful, user id:', data.user_id);
+                localStorage.setItem('user_id', data.user_id);
                 toast.success('🧙‍♂️ Đăng nhập thành công! Cổng phép thuật đã mở...', {
                     position: 'top-center',
                     autoClose: 3000,

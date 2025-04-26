@@ -24,6 +24,7 @@ const LoadingScreen = () => {
         navigate('/mainhall');
     };
 
+
     useEffect(() => {
         if (!initStarted) return;
 
@@ -80,13 +81,32 @@ const LoadingScreen = () => {
                     <div className="dropdown-menu">
                         {!isLoggedIn ? (
                             <>
-                                <a href="pages/login.php"><FaSignInAlt /> Login</a>
-                                <a href="pages/signup.php"><FaUserPlus /> Register</a>
+                                <div className="dropdown-link" onClick={() => {
+                                    audio.pause();
+                                    audio.currentTime = 0;
+                                    setShowDropdown(false); navigate('/login');
+                                }}>
+                                    <FaSignInAlt /> Login
+                                </div>
+                                <div className="dropdown-link" onClick={() => {
+                                    audio.pause();
+                                    audio.currentTime = 0;
+                                    setShowDropdown(false); navigate('/register');
+                                }}>
+                                    <FaUserPlus /> Register
+                                </div>
                             </>
                         ) : (
-                            <a href="includes/logout.php"><FaSignOutAlt /> Logout</a>
+                            <div className="dropdown-link" onClick={() => {
+                                audio.pause();
+                                audio.currentTime = 0;
+                                setShowDropdown(false); navigate('/logout');
+                            }}>
+                                <FaSignOutAlt /> Logout
+                            </div>
                         )}
                     </div>
+
                 )}
             </div>
 

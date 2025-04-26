@@ -36,7 +36,8 @@ CREATE TABLE
   classes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    description TEXT
+    description TEXT,
+    icon VARCHAR(100) NULL
   );
 
 INSERT INTO
@@ -71,7 +72,8 @@ CREATE TABLE
   regions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    description TEXT
+    description TEXT,
+    icon VARCHAR(100) NULL
   );
 
 INSERT INTO
@@ -106,6 +108,8 @@ CREATE TABLE
     class_id INT,
     title VARCHAR(100) NOT NULL,
     description TEXT,
+    icon VARCHAR(100) NULL,
+    illustration VARCHAR(100) NULL
     FOREIGN KEY (region_id) REFERENCES regions (id) ON DELETE SET NULL,
     FOREIGN KEY (class_id) REFERENCES classes (id) ON DELETE SET NULL
   );
@@ -157,6 +161,7 @@ CREATE TABLE
     name VARCHAR(100),
     description TEXT,
     type ENUM ('passive', 'awakening', 'ultimate'),
+    icon VARCHAR(100) NULL,
     FOREIGN KEY (hero_id) REFERENCES heroes (id) ON DELETE CASCADE
   );
 
