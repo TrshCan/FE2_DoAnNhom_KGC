@@ -1,18 +1,24 @@
 <?php
-// Thêm header cho phép CORS
-header("Access-Control-Allow-Origin: *");  // Cho phép tất cả nguồn gốc
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");  // Các phương thức được phép
-header("Access-Control-Allow-Headers: Content-Type, Authorization");  // Các header được phép
+// Bắt đầu phiên
+session_start();
+
+// Thiết lập các tiêu đề CORS
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Credentials: true"); // Cho phép gửi cookie
+header("Content-Type: application/json");
+
+// Xử lý yêu cầu preflight OPTIONS
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    exit; 
+    http_response_code(200);
+    exit();
 }
 
-// Tiến hành xử lý đăng xuất
-session_start();
-session_unset();
-session_destroy();
-echo json_encode(['success' => true]);
+// Hủy phiên
+session_unset(); // Bỏ đặt tất cả các biến phiên
+session_destroy(); // Hủy phiên
 
-
-?>
-
+// Trả về phản hồi thành công
+echo json_encode(['success' => true, 'message' => 'Đăng xuất thành công']);
+exit();

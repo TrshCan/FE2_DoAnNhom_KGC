@@ -5,32 +5,51 @@ import bgVideo from '../assets/video/loading.gif';
 import bgm from '../assets/music/shelter.mp3';
 import { FaUser, FaSignInAlt, FaUserPlus, FaSignOutAlt, FaCog } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import GameName from '../components/GameName';
-
+import BASE_URL from '../components/BaseURL';
 
 const LoadingScreen = () => {
     const [progress, setProgress] = useState(0);
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState('');
     const [showDropdown, setShowDropdown] = useState(false);
-    const [showSettings, setShowSettings] = useState(false); // To toggle settings menu
+    const [showSettings, setShowSettings] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [initStarted, setInitStarted] = useState(false);
     const [audio] = useState(new Audio(bgm));
-    const [volume, setVolume] = useState(1); // Volume state (1 is max volume)
+    const [volume, setVolume] = useState(1);
     const navigate = useNavigate();
 
+    // Kiểm tra trạng thái đăng nhập ngay khi component mount
+    useEffect(() => {
+        const checkSession = async () => {
+            try {
+                const response = await fetch(`${BASE_URL}/src/includes/check-session.php`, {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+                const data = await response.json();
+                setIsLoggedIn(data.loggedIn);
+            } catch (err) {
+                console.error('Error checking session:', err);
+                toast.error('❌ Kết nối đến máy chủ thất bại.');
+            }
+        };
+        checkSession();
+    }, []);
+
     const handleStartClick = () => {
-        navigate('/mainhall');
+        if (isLoggedIn) {
+            navigate('/mainhall');
+        } else {
+            toast.error('Vui lòng đăng nhập để vào game!');
+            navigate('/login');
+        }
     };
 
     useEffect(() => {
         if (!initStarted) return;
-
-        // Simulate session check
-        fetch('../includes/check-session.php')
-            .then(res => res.json())
-            .then(data => setIsLoggedIn(data.loggedIn));
 
         const { loadingMessages } = loadingMessagesJson;
         const shuffled = [...loadingMessages].sort(() => 0.5 - Math.random());
@@ -47,26 +66,39 @@ const LoadingScreen = () => {
         // Simulate loading
         const duration = Math.floor(Math.random() * 15) + 15;
         const interval = setInterval(() => {
-            setProgress(prev => {
+            setProgress((prev) => {
                 if (prev >= 100) {
                     clearInterval(interval);
                     clearInterval(messageInterval);
                     setLoading(false);
+                    // Chuyển hướng sau khi load xong
+                    if (isLoggedIn) {
+                        navigate('/mainhall');
+                    } else {
+                        navigate('/login');
+                    }
                     return 100;
                 }
-                return prev + (100 / (duration * 10));
+                return prev + 100 / (duration * 10);
             });
         }, 100);
+
         // Start music
         audio.loop = true;
-        audio.play();
-        audio.volume = volume; // Set initial volume
-    }, [initStarted, volume]); // Re-run when volume changes
+        audio.play().catch((err) => console.error('Audio play error:', err));
+        audio.volume = volume;
+
+        return () => {
+            clearInterval(interval);
+            clearInterval(messageInterval);
+            audio.pause();
+        };
+    }, [initStarted, volume, navigate, isLoggedIn]);
 
     const handleVolumeChange = (event) => {
         const newVolume = event.target.value;
         setVolume(newVolume);
-        audio.volume = newVolume; // Update audio volume
+        audio.volume = newVolume;
     };
 
     return (
@@ -80,20 +112,47 @@ const LoadingScreen = () => {
                     <div className="dropdown-menu">
                         {!isLoggedIn ? (
                             <>
-                                <a href="pages/login.php"><FaSignInAlt /> Login</a>
-                                <a href="pages/signup.php"><FaUserPlus /> Register</a>
+                                <a onClick={() => navigate('/login')}>
+                                    <FaSignInAlt /> Login
+                                </a>
+                                <a onClick={() => navigate('/register')}>
+                                    <FaUserPlus /> Register
+                                </a>
                             </>
                         ) : (
-                            <a href="includes/logout.php"><FaSignOutAlt /> Logout</a>
+                            <a
+                                onClick={async () => {
+                                    try {
+                                        const response = await fetch(`${BASE_URL}/src/includes/logout.php`, {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            credentials: 'include',
+                                        });
+                                        const data = await response.json();
+                                        if (data.success) {
+                                            setIsLoggedIn(false);
+                                            toast.success('👋 Đăng Xuất Thành Công!');
+                                            navigate('/login');
+                                        } else {
+                                            toast.error(`Lỗi khi đăng xuất: ${data.message}`);
+                                        }
+                                    } catch (error) {
+                                        toast.error(`❌ Đăng Xuất Thất Bại: ${error.message}`);
+                                    }
+                                }}
+                            >
+                                <FaSignOutAlt /> Logout
+                            </a>
                         )}
                     </div>
                 )}
             </div>
 
-            {/* Volume settings dropdown positioned to top-left */}
             {showSettings && (
                 <div className="settings-dropdown">
-                    <label htmlFor="volume-slider" style={{ color: 'white' }}>Volume:</label>
+                    <label htmlFor="volume-slider" style={{ color: 'white' }}>
+                        Volume:
+                    </label>
                     <input
                         type="range"
                         id="volume-slider"
@@ -126,7 +185,6 @@ const LoadingScreen = () => {
                         <p className="blinking">Click to Start</p>
                     </div>
                 </>
-
             )}
         </div>
     );

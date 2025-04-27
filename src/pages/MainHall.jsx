@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { FaTasks, FaBoxOpen, FaEnvelope, FaCog, FaChevronUp, FaChevronDown, FaCity, FaUserFriends, FaDoorOpen } from 'react-icons/fa';
+import { FaTasks, FaBoxOpen, FaEnvelope, FaCog, FaCity, FaUserFriends, FaDoorOpen } from 'react-icons/fa';
 import '../assets/css/MainHall.css';
-import ArrowToggle from "../components/Arrow_Toggle"; // Adjust the path as necessary
-import illustration from '../assets/img/heroes/illustration/NPC_Illust_Luminesera.png'; // Adjust the path as necessary
+import ArrowToggle from '../components/Arrow_Toggle';
+import illustration from '../assets/img/heroes/illustration/NPC_Illust_Luminesera.png';
 import BASE_URL from '../components/BaseURL';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import SettingsPopup from '../components/Setting';
 import MailPopup from '../components/Mail';
 import QuestPopup from '../components/Quest';
@@ -12,7 +13,7 @@ import InventoryPopup from '../components/Inventory';
 
 const MainHall = () => {
     const [showTopNav, setShowTopNav] = useState(true);
-    const username = "Something"; // Replace with actual username from session/user data
+    const username = 'Something'; // Thay bằng username thực từ session
     const [showMailPopup, setShowMailPopup] = useState(false);
     const [showSettingsPopup, setShowSettingsPopup] = useState(false);
     const [showQuestPopup, setShowQuestPopup] = useState(false);
@@ -24,7 +25,29 @@ const MainHall = () => {
     const [items, setItems] = useState([]);
     const [selectedQuest, setSelectedQuest] = useState(null);
     const [loading, setLoading] = useState(true);
-    console.log("MainHall rendered");
+    const navigate = useNavigate();
+
+    // Kiểm tra trạng thái đăng nhập khi component mount
+    useEffect(() => {
+        const checkSession = async () => {
+            try {
+                const response = await fetch(`${BASE_URL}/src/includes/check-session.php`, {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+                const data = await response.json();
+                if (!data.loggedIn) {
+                    toast.error('Vui lòng đăng nhập để vào game!');
+                    navigate('/login');
+                }
+            } catch (err) {
+                console.error('Error checking session:', err);
+                toast.error('❌ Kết nối đến máy chủ thất bại.');
+                navigate('/login');
+            }
+        };
+        checkSession();
+    }, [navigate]);
 
     const fetchMails = async () => {
         try {
@@ -95,22 +118,26 @@ const MainHall = () => {
         try {
             const response = await fetch(`${BASE_URL}/src/includes/logout.php`, {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
             });
 
-            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
 
             const data = await response.json();
             if (data.success) {
                 toast.success('👋 Đăng Xuất Thành Công!');
                 setTimeout(() => {
-                    window.location.href = '/login';
+                    navigate('/login');
                 }, 1000);
             } else {
-                toast.error('Lỗi khi đăng xuất!');
+                toast.error(`Lỗi khi đăng xuất: ${data.message || 'Unknown error'}`);
             }
         } catch (error) {
             console.error('Logout error:', error);
-            toast.error('❌ Đăng Xuất Thất Bại.');
+            toast.error(`❌ Đăng Xuất Thất Bại: ${error.message}`);
         } finally {
             setIsLoggingOut(false);
         }
@@ -119,15 +146,12 @@ const MainHall = () => {
     return (
         <>
             <div className="mainhall-container unselectable">
-                {/* Top Left Avatar */}
                 <div className="top-left">
                     <div className="avatar-frame"></div>
                     <div className="avatar-img"></div>
-
                     <span className="username">{username}</span>
                 </div>
 
-                {/* Top Right Navigation */}
                 <div className={`top-right ${showTopNav ? 'show' : ''}`}>
                     <div className="nav-item" onClick={() => setShowSettingsPopup(true)}>
                         <FaCog className="nav-icon" title="Setting" />
@@ -147,14 +171,12 @@ const MainHall = () => {
                     </div>
                 </div>
 
-                {/* Toggle Arrow */}
                 <ArrowToggle showTopNav={showTopNav} setShowTopNav={setShowTopNav} />
 
                 <div className="illustration-container">
                     <img src={illustration} alt="Main Hall Illustration" className="illustration-image" />
                 </div>
 
-                {/* Bottom Navigation */}
                 <div className="bottom-nav">
                     <div className="nav-item">
                         <FaCity className="nav-icon" title="Barrack" />
@@ -170,7 +192,7 @@ const MainHall = () => {
                     </div>
                 </div>
             </div>
-            {/* Mail Popup */}
+
             <MailPopup
                 showMailPopup={showMailPopup}
                 setShowMailPopup={setShowMailPopup}
@@ -203,4 +225,3 @@ const MainHall = () => {
 };
 
 export default MainHall;
-
