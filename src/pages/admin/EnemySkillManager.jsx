@@ -1,31 +1,23 @@
 import React, { useEffect, useState } from 'react';
 
-const HeroSkillManager = () => {
-  const [heroSkills, setHeroSkills] = useState([]);
+const EnemySkillManager = () => {
+  const [enemySkills, setEnemySkills] = useState([]);
   const [form, setForm] = useState({
     id: null,
-    hero_id: '',
+    enemy_id: '',
     name: '',
     description: '',
     type: ''
   });
-  const [heroes, setHeroes] = useState([]);
 
   useEffect(() => {
-    fetchHeroSkills();
-    fetchHeroes();
+    fetchEnemySkills();
   }, []);
 
-  const fetchHeroSkills = async () => {
-    const res = await fetch('http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/hero-skills/get-hero-skills.php');
+  const fetchEnemySkills = async () => {
+    const res = await fetch('http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/enemy-skills/get-enemy-skills.php');
     const data = await res.json();
-    setHeroSkills(data);
-  };
-
-  const fetchHeroes = async () => {
-    const res = await fetch('http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/heroes/get-heroes-byID.php');
-    const data = await res.json();
-    setHeroes(data);
+    setEnemySkills(data);
   };
 
   const handleChange = (e) => {
@@ -35,16 +27,16 @@ const HeroSkillManager = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const endpoint = form.id ? 'update-hero-skill.php' : 'add-hero-skill.php';
+    const endpoint = form.id ? 'update-enemy-skill.php' : 'add-enemy-skill.php';
 
-    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/hero-skills/${endpoint}`, {
+    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/enemy-skills/${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
     });
 
-    fetchHeroSkills();
-    setForm({ id: null, hero_id: '', name: '', description: '', type: '' });
+    fetchEnemySkills();
+    setForm({ id: null, enemy_id: '', name: '', description: '', type: '' });
   };
 
   const handleEdit = (skill) => {
@@ -54,33 +46,30 @@ const HeroSkillManager = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Bạn có chắc muốn xoá kỹ năng này không?')) return;
 
-    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/hero-skills/delete-hero-skill.php`, {
+    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/enemy-skills/delete-enemy-skill.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id })
     });
 
-    fetchHeroSkills();
+    fetchEnemySkills();
   };
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Quản lý Kỹ năng Hero</h2>
+      <h2 className="text-2xl font-bold mb-4">Quản lý Kỹ năng Enemy</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div className="grid grid-cols-2 gap-4">
-          <select 
-            name="hero_id" 
-            value={form.hero_id} 
+          <input 
+            name="enemy_id" 
+            type="number" 
+            value={form.enemy_id} 
             onChange={handleChange} 
+            placeholder="ID Enemy" 
             className="border p-2" 
-            required
-          >
-            <option value="" disabled>Chọn Hero</option>
-            {heroes.map(hero => (
-              <option key={hero.id} value={hero.id}>{hero.name}</option>
-            ))}
-          </select>
+            required 
+          />
           <input 
             name="name" 
             value={form.name} 
@@ -113,7 +102,7 @@ const HeroSkillManager = () => {
         <thead>
           <tr className="bg-gray-200">
             <th className="border p-2">ID</th>
-            <th className="border p-2">Hero</th>
+            <th className="border p-2">Enemy</th>
             <th className="border p-2">Tên kỹ năng</th>
             <th className="border p-2">Loại</th>
             <th className="border p-2">Mô tả</th>
@@ -121,10 +110,10 @@ const HeroSkillManager = () => {
           </tr>
         </thead>
         <tbody>
-          {heroSkills.map(skill => (
+          {enemySkills.map(skill => (
             <tr key={skill.id}>
               <td className="border p-2 text-center">{skill.id}</td>
-              <td className="border p-2">{skill.hero_name || skill.hero_id}</td>
+              <td className="border p-2">{skill.enemy_name || skill.enemy_id}</td>
               <td className="border p-2">{skill.name}</td>
               <td className="border p-2">{skill.type}</td>
               <td className="border p-2">{skill.description}</td>
@@ -140,4 +129,4 @@ const HeroSkillManager = () => {
   );
 };
 
-export default HeroSkillManager;
+export default EnemySkillManager;
