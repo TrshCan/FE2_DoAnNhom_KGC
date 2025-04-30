@@ -1,0 +1,127 @@
+/* Overlay che phủ toàn màn hình */
+.inventory-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Lớp phủ mờ giống MailPopup */
+    z-index: 999; /* Dưới inventory-popup */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Container chính của popup */
+  .inventory-popup {
+    background-color: rgba(30, 30, 40, 0.95); /* Màu nền giống MailPopup */
+    border: 3px solid #ffc107; /* Viền vàng */
+    border-radius: 16px;
+    padding: 24px;
+    width: 450px; /* Kích thước giống MailPopup */
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 1000; /* Trên overlay */
+    box-shadow: 0 0 20px #000; /* Hiệu ứng bóng */
+    animation: popupFade 0.3s ease-out; /* Animation giống MailPopup */
+    color: #fff;
+    font-family: "Arial", sans-serif;
+  }
+  
+  /* Nội dung popup */
+  .popup-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  /* Tiêu đề */
+  .popup-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    color: #ffe082; /* Màu vàng nhạt giống MailPopup */
+    border-bottom: 1px solid #ffc107; /* Đường viền dưới */
+    padding-bottom: 10px;
+  }
+  
+  /* Danh sách vật phẩm */
+  .inventory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 400px; /* Giới hạn chiều cao giống mail-list */
+    overflow-y: auto;
+  }
+  
+  /* Mỗi vật phẩm */
+  .inventory-item {
+    background-color: rgba(255, 255, 255, 0.05); /* Nền giống mail-item */
+    border: 1px solid #666; /* Viền giống mail-item */
+    padding: 12px;
+    border-radius: 10px;
+    transition: background-color 0.2s;
+  }
+  
+  /* Hiệu ứng hover */
+  .inventory-item:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Giống mail-item:hover */
+  }
+  
+  /* Tên vật phẩm */
+  .item-name {
+    font-size: 18px;
+    color: #ffca28; /* Màu vàng giống mail-title */
+    padding-left: 20px;
+    margin: 0;
+  }
+  
+  /* Số lượng vật phẩm */
+  .item-quantity {
+    font-size: 14px;
+    color: #ffca28; /* Màu giống item-name */
+  }
+  
+  /* Mô tả vật phẩm */
+  .item-description {
+    font-family: "Cinzel", serif; /* Phông chữ giống mail-content */
+    font-size: 16px;
+    color: #f5e6c8; /* Màu giống mail-content */
+    text-shadow: 1px 1px 2px #000;
+    word-break: break-word;
+    padding: 0 20px;
+  }
+  
+  /* Container cho nút */
+  .popup-buttons {
+    text-align: center;
+  }
+  
+  /* Nút đóng */
+  .close-btn {
+    background-color: #ff5722; /* Màu giống MailPopup */
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  /* Hiệu ứng hover cho nút đóng */
+  .close-btn:hover {
+    background-color: #e64a19; /* Màu giống MailPopup */
+  }
+  
+  /* Animation khi popup xuất hiện */
+  @keyframes popupFade {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }

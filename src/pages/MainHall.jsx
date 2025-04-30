@@ -66,7 +66,7 @@ const MainHall = () => {
             setLoading(false);
         }
     };
-
+  
     const fetchQuests = async () => {
         try {
             const response = await fetch(`${BASE_URL}/src/includes/quests.php`);
@@ -85,13 +85,17 @@ const MainHall = () => {
 
     const fetchItems = async () => {
         try {
+            console.log('Fetching items from:', `${BASE_URL}/src/includes/inventory.php`);
             const response = await fetch(`${BASE_URL}/src/includes/inventory.php`);
+            console.log('Response status:', response.status);
             const data = await response.json();
-
+            console.log('Response data:', data);
+    
             if (data.success) {
                 setItems(data.items);
             } else {
                 toast.error('❌ Không thể tải danh sách vật phẩm.');
+                console.error('API error:', data.message);
             }
         } catch (error) {
             console.error('Fetch error:', error);
