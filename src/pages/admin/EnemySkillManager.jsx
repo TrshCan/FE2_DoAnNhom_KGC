@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import BASE_URL from '../../components/BaseURL';
 
 const EnemySkillManager = () => {
   const [enemySkills, setEnemySkills] = useState([]);
@@ -15,7 +16,7 @@ const EnemySkillManager = () => {
   }, []);
 
   const fetchEnemySkills = async () => {
-    const res = await fetch('http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/enemy-skills/get-enemy-skills.php');
+    const res = await fetch(`${BASE_URL}/src/includes/admin/enemy-skills/get-enemy-skills.php`);
     const data = await res.json();
     setEnemySkills(data);
   };
@@ -29,7 +30,7 @@ const EnemySkillManager = () => {
     e.preventDefault();
     const endpoint = form.id ? 'update-enemy-skill.php' : 'add-enemy-skill.php';
 
-    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/enemy-skills/${endpoint}`, {
+    await fetch(`${BASE_URL}/src/includes/admin/enemy-skills/${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
@@ -46,7 +47,7 @@ const EnemySkillManager = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Bạn có chắc muốn xoá kỹ năng này không?')) return;
 
-    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/enemy-skills/delete-enemy-skill.php`, {
+    await fetch(`${BASE_URL}/src/includes/admin/enemy-skills/delete-enemy-skill.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id })

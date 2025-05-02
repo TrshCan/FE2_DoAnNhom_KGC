@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
+import BASE_URL from '../components/BaseURL';
 
 export default function ClassesManager() {
   const [classes, setClasses] = useState([]);
   const [form, setForm] = useState({ id: null, name: "", description: "" });
 
   const fetchClasses = async () => {
-    const res = await fetch("http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/classes/get-classes.php");
+    const res = await fetch(`${BASE_URL}/src/includes/admin/classes/get-classes.php`);
     const data = await res.json();
     setClasses(data);
   };
@@ -23,7 +24,7 @@ export default function ClassesManager() {
       ? "update-class.php"
       : "add-class.php";
 
-    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/classes/${url}`, {
+    await fetch(`${BASE_URL}/src/includes/admin/classes/${url}`, {
       method: "POST",
       body: JSON.stringify(form),
     });
@@ -38,7 +39,7 @@ export default function ClassesManager() {
 
   const handleDelete = async (id) => {
     if (!window.confirm("Bạn có chắc muốn xóa?")) return;
-    await fetch("http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/classes/delete-class.php", {
+    await fetch(`${BASE_URL}/src/includes/admin/classes/delete-class.php`, {
       method: "POST",
       body: JSON.stringify({ id }),
     });

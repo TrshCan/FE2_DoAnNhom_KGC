@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import BASE_URL from '../../components/BaseURL';
 
 const UserManager = () => {
   const [users, setUsers] = useState([]);
@@ -16,7 +17,7 @@ const UserManager = () => {
   }, []);
 
   const fetchUsers = async () => {
-    const res = await fetch('http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/users/get-users.php');
+    const res = await fetch(`${BASE_URL}/src/includes/admin/users/get-users.php`);
     const data = await res.json();
     setUsers(data);
   };
@@ -36,7 +37,7 @@ const UserManager = () => {
       delete payload.password;
     }
 
-    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/users/${endpoint}`, {
+    await fetch(`${BASE_URL}/src/includes/admin/users/${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -53,7 +54,7 @@ const UserManager = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Bạn có chắc muốn xoá user này không?')) return;
 
-    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/users/delete-user.php`, {
+    await fetch(`${BASE_URL}/src/includes/admin/users/delete-user.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id })

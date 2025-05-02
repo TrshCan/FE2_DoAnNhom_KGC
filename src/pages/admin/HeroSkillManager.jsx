@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import BASE_URL from '../../components/BaseURL';
 
 const HeroSkillManager = () => {
   const [heroSkills, setHeroSkills] = useState([]);
@@ -17,13 +18,13 @@ const HeroSkillManager = () => {
   }, []);
 
   const fetchHeroSkills = async () => {
-    const res = await fetch('http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/hero-skills/get-hero-skills.php');
+    const res = await fetch(`${BASE_URL}/src/includes/admin/hero-skills/get-hero-skills.php`);
     const data = await res.json();
     setHeroSkills(data);
   };
 
   const fetchHeroes = async () => {
-    const res = await fetch('http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/heroes/get-heroes-byID.php');
+    const res = await fetch(`${BASE_URL}/src/includes/admin/heroes/get-heroes-byID.php`);
     const data = await res.json();
     setHeroes(data);
   };
@@ -37,7 +38,7 @@ const HeroSkillManager = () => {
     e.preventDefault();
     const endpoint = form.id ? 'update-hero-skill.php' : 'add-hero-skill.php';
 
-    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/hero-skills/${endpoint}`, {
+    await fetch(`${BASE_URL}/src/includes/admin/hero-skills/${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
@@ -54,7 +55,7 @@ const HeroSkillManager = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Bạn có chắc muốn xoá kỹ năng này không?')) return;
 
-    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/hero-skills/delete-hero-skill.php`, {
+    await fetch(`${BASE_URL}/src/includes/admin/hero-skills/delete-hero-skill.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id })

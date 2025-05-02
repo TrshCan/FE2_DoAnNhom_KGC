@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import BASE_URL from '../../components/BaseURL';
 
 const RegionManager = () => {
   const [regions, setRegions] = useState([]);
@@ -14,7 +15,7 @@ const RegionManager = () => {
   }, []);
 
   const fetchRegions = async () => {
-    const res = await fetch('http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/regions/get-regions.php');
+    const res = await fetch(`${BASE_URL}/src/includes/admin/regions/get-regions.php`);
     const data = await res.json();
     setRegions(data);
   };
@@ -28,7 +29,7 @@ const RegionManager = () => {
     e.preventDefault();
     const endpoint = form.id ? 'update-region.php' : 'add-region.php';
 
-    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/regions/${endpoint}`, {
+    await fetch(`${BASE_URL}/src/includes/admin/regions/${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
@@ -45,7 +46,7 @@ const RegionManager = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Bạn có chắc muốn xoá region này không?')) return;
 
-    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/regions/delete-region.php`, {
+    await fetch(`${BASE_URL}/src/includes/admin/regions/delete-region.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id })

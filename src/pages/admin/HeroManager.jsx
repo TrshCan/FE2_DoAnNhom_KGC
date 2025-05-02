@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import BASE_URL from '../../components/BaseURL';
 
 const HeroManager = () => {
   const [heroes, setHeroes] = useState([]);
@@ -14,19 +15,19 @@ const HeroManager = () => {
   const [classes, setClasses] = useState([]);
 
   const fetchHeroes = async () => {
-    const res = await fetch('http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/heroes/get-heroes.php');
+    const res = await fetch(`${BASE_URL}/src/includes/admin/heroes/get-heroes.php`);
     const data = await res.json();
     setHeroes(data);
   };
 
   const fetchRegions = async () => {
-    const res = await fetch('http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/heroes/get-regions.php');
+    const res = await fetch(`${BASE_URL}/src/includes/admin/heroes/get-regions.php`);
     const data = await res.json();
     setRegions(data);
   };
 
   const fetchClasses = async () => {
-    const res = await fetch('http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/heroes/get-classes.php');
+    const res = await fetch(`${BASE_URL}/src/includes/admin/heroes/get-classes.php`);
     const data = await res.json();
     setClasses(data);
   };
@@ -49,7 +50,7 @@ const HeroManager = () => {
       ? 'update-hero.php'
       : 'add-hero.php';
 
-    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/heroes/${endpoint}`, {
+    await fetch(`${BASE_URL}/src/includes/admin/heroes/${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
@@ -66,7 +67,7 @@ const HeroManager = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Xác nhận xoá hero?')) return;
 
-    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/heroes/delete-hero.php`, {
+    await fetch(`${BASE_URL}/src/includes/admin/heroes/delete-hero.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id })

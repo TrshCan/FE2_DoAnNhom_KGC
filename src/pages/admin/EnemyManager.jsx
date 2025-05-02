@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import BASE_URL from '../../components/BaseURL';
 
 const EnemyManager = () => {
   const [enemies, setEnemies] = useState([]);
@@ -21,19 +22,19 @@ const EnemyManager = () => {
   }, []);
 
   const fetchEnemies = async () => {
-    const res = await fetch('http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/enemies/get-enemies.php');
+    const res = await fetch(`${BASE_URL}/src/includes/admin/enemies/get-enemies.php`);
     const data = await res.json();
     setEnemies(data);
   };
 
   const fetchRegions = async () => {
-    const res = await fetch('http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/regions/get-regions-byID.php');
+    const res = await fetch(`${BASE_URL}/src/includes/admin/regions/get-regions-byID.php`);
     const data = await res.json();
     setRegions(data);
   };
 
   const fetchClasses = async () => {
-    const res = await fetch('http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/classes/get-classes-byID.php');
+    const res = await fetch(`${BASE_URL}/src/includes/admin/classes/get-classes-byID.php`);
     const data = await res.json();
     setClasses(data);
   };
@@ -47,7 +48,7 @@ const EnemyManager = () => {
     e.preventDefault();
     const endpoint = form.id ? 'update-enemy.php' : 'add-enemy.php';
 
-    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/enemies/${endpoint}`, {
+    await fetch(`${BASE_URL}/src/includes/admin/enemies/${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
@@ -64,7 +65,7 @@ const EnemyManager = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Bạn có chắc muốn xoá enemy này không?')) return;
 
-    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/enemies/delete-enemy.php`, {
+    await fetch(`${BASE_URL}/src/includes/admin/enemies/delete-enemy.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id })

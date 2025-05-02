@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import BASE_URL from '../../components/BaseURL';
 
 const SundryManager = () => {
   const [sundries, setSundries] = useState([]);
@@ -15,7 +16,7 @@ const SundryManager = () => {
   }, []);
 
   const fetchSundries = async () => {
-    const res = await fetch('http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/sundries/get-sundries.php');
+    const res = await fetch(`${BASE_URL}/src/includes/admin/sundries/get-sundries.php`);
     const data = await res.json();
     setSundries(data);
   };
@@ -29,7 +30,7 @@ const SundryManager = () => {
     e.preventDefault();
     const endpoint = form.id ? 'update-sundry.php' : 'add-sundry.php';
 
-    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/sundries/${endpoint}`, {
+    await fetch(`${BASE_URL}/src/includes/admin/sundries/${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
@@ -46,7 +47,7 @@ const SundryManager = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Bạn có chắc muốn xoá sundry này không?')) return;
 
-    await fetch(`http://localhost/FE2_DoAnNhom_KGC/src/includes/admin/sundries/delete-sundry.php`, {
+    await fetch(`${BASE_URL}/src/includes/admin/sundries/delete-sundry.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id })
