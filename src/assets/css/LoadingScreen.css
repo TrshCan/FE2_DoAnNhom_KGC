@@ -1,0 +1,188 @@
+/* Fullscreen layout */
+.loading-screen {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+}
+
+/* Background GIF (fullscreen) */
+.bg-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+/* Background music is hidden */
+audio {
+    display: none;
+}
+
+/* User menu (top right) */
+.user-menu {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    display: flex;
+    z-index: 10;
+    background-color: #00ffff;
+}
+
+.icon-btn {
+    position: absolute;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s;
+    right: 30px;
+}
+
+.icon-btn:hover {
+    transform: scale(1.1);
+    color: #66e6ff;
+}
+
+
+/* Top bar to hold both icons */
+
+/* Settings icon */
+.settings-icon {
+    position: absolute;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s;
+    left: 30px;
+}
+
+.settings-icon:hover {
+    transform: scale(1.1);
+}
+
+
+/* Volume settings dropdown */
+.settings-dropdown {
+    position: absolute;
+    top: 60px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 8px;
+    z-index: 20;
+    width: 200px;
+}
+
+.settings-dropdown label {
+    color: white;
+    font-size: 14px;
+}
+
+.settings-dropdown input {
+    width: 100%;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    position: absolute;
+    top: 35px;
+    right: 17px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 20;
+}
+
+.dropdown-menu a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.dropdown-menu a:hover {
+    color: #00ffff;
+}
+
+/* Loading bar container */
+.loading-container {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    text-align: center;
+}
+
+/* Progress bar styles */
+.progress-bar {
+    width: 100%;
+    height: 24px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.bar {
+    height: 100%;
+    background-color: #66e6ff;
+    transition: width 0.2s ease-in-out;
+}
+
+.progress-percent {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 0;
+    left: 0;
+    color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Loading message */
+.loading-message {
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+/* Click to Start blinking */
+.click-start {
+    position: absolute;
+    bottom: 80px;
+    width: 100%;
+    text-align: center;
+}
+
+.blinking {
+    font-size: 24px;
+    font-weight: bold;
+    animation: blink 1.5s infinite ease-in-out;
+    cursor: pointer;
+}
+
+@keyframes blink {
+    0% { opacity: 0.2; }
+    50% { opacity: 0.7; }
+    100% { opacity: 0.2; }
+}
+
+.unselectable {
+    user-select: none;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE10+/Edge */
+}
