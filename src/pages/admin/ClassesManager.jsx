@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import BASE_URL from '../components/BaseURL';
+import BASE_URL from "../../components/BaseURL";
 
 export default function ClassesManager() {
   const [classes, setClasses] = useState([]);
