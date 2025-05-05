@@ -63,7 +63,6 @@ CREATE TABLE `enemies` (
   `description` text DEFAULT NULL,
   `icon` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 -- --------------------------------------------------------
 
 --
@@ -112,6 +111,8 @@ CREATE TABLE `enemy_skills` (
   `type` enum('passive','awakening','ultimate') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+ALTER TABLE enemy_skills
+ADD COLUMN icon VARCHAR(100) DEFAULT NULL;
 -- --------------------------------------------------------
 
 --
