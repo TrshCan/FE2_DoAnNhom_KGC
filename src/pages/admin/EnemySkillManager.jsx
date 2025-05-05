@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BASE_URL from "../../components/BaseURL";
+import BASE_URL_upload_image from "../../components/BaseURL-upload_image";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function EnemySkillManager() {
@@ -12,12 +13,17 @@ export default function EnemySkillManager() {
     name: "",
     description: "",
     type: "",
+    icon: "",
   });
+  const [iconFile, setIconFile] = useState(null);
+  const [iconPreview, setIconPreview] = useState(null);
   const [enemies, setEnemies] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+
+  const skillTypes = ["passive", "awakening", "ultimate"];
 
   const fetchEnemySkills = async () => {
     const res = await fetch(`${BASE_URL}/src/includes/admin/enemy-skills/get-enemy-skills.php`);
@@ -27,7 +33,7 @@ export default function EnemySkillManager() {
   };
 
   const fetchEnemies = async () => {
-    const res = await fetch(`${BASE_URL}/src/includes/admin/enemies/get-enemies.php`);
+    const res = await fetch(`${BASE_URL}/src/includes/admin/enemies/get-enemies-byID.php`);
     const data = await res.json();
     setEnemies(data);
   };
@@ -52,17 +58,36 @@ export default function EnemySkillManager() {
     setForm({ ...form, [name]: value });
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setIconFile(file);
+      setIconPreview(URL.createObjectURL(file));
+      setForm({ ...form, icon: file.name });
+    }
+  };
+
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
   const handleSubmit = async (isEdit = false) => {
     const url = isEdit ? "update-enemy-skill.php" : "add-enemy-skill.php";
+    const formData = new FormData();
+    formData.append("id", form.id || "");
+    formData.append("enemy_id", form.enemy_id);
+    formData.append("name", form.name);
+    formData.append("description", form.description);
+    formData.append("type", form.type);
+    if (iconFile) {
+      formData.append("icon", iconFile);
+    } else {
+      formData.append("icon", form.icon);
+    }
 
     await fetch(`${BASE_URL}/src/includes/admin/enemy-skills/${url}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: formData,
     });
 
     setForm({
@@ -71,7 +96,10 @@ export default function EnemySkillManager() {
       name: "",
       description: "",
       type: "",
+      icon: "",
     });
+    setIconFile(null);
+    setIconPreview(null);
     setShowAddModal(false);
     setShowEditModal(false);
     fetchEnemySkills();
@@ -79,6 +107,8 @@ export default function EnemySkillManager() {
 
   const handleEdit = (skill) => {
     setForm(skill);
+    setIconPreview(skill.icon ? `${BASE_URL_upload_image}/enemy-skills/${skill.icon}` : null);
+    setIconFile(null);
     setShowEditModal(true);
   };
 
@@ -107,7 +137,10 @@ export default function EnemySkillManager() {
                   name: "",
                   description: "",
                   type: "",
+                  icon: "",
                 });
+                setIconFile(null);
+                setIconPreview(null);
                 setShowAddModal(true);
               }}
             >
@@ -131,6 +164,7 @@ export default function EnemySkillManager() {
                   <th scope="col" className="text-center">Tên kỹ năng</th>
                   <th scope="col" className="text-center">Loại</th>
                   <th scope="col" className="text-center">Mô tả</th>
+                  <th scope="col" className="text-center">Icon</th>
                   <th scope="col" className="text-center action-column">Hành động</th>
                 </tr>
               </thead>
@@ -143,9 +177,20 @@ export default function EnemySkillManager() {
                     <td className="text-center align-middle">{skill.type}</td>
                     <td className="align-middle">{skill.description}</td>
                     <td className="text-center align-middle">
+                      {skill.icon ? (
+                        <img
+                          src={`${BASE_URL_upload_image}/enemy-skills/${skill.icon}`}
+                          alt={skill.name}
+                          style={{ width: "50px", height: "50px", objectFit: "cover" }}
+                        />
+                      ) : (
+                        "N/A"
+                      )}
+                    </td>
+                    <td className="text-center align-middle">
                       <button
                         onClick={() => handleEdit(skill)}
-                        class sName="btn btn-outline-primary btn-sm action-btn"
+                        className="btn btn-outline-primary btn-sm action-btn"
                       >
                         Sửa
                       </button>
@@ -224,9 +269,11 @@ export default function EnemySkillManager() {
                       <option value="" disabled>
                         Chọn loại
                       </option>
-                      <option value="passive">Passive</option>
-                      <option value="awakening">Awakening</option>
-                      <option value="ultimate">Ultimate</option>
+                      {skillTypes.map((type) => (
+                        <option key={type} value={type}>
+                          {type.charAt(0).toUpperCase() + type.slice(1)}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div className="mb-3">
@@ -239,6 +286,24 @@ export default function EnemySkillManager() {
                       placeholder="Nhập mô tả"
                       required
                     ></textarea>
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Icon (tuỳ chọn)</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="form-control form-control-sm"
+                    />
+                    {iconPreview && (
+                      <div className="mt-2">
+                        <img
+                          src={iconPreview}
+                          alt="Preview"
+                          style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="modal-footer">
@@ -320,9 +385,11 @@ export default function EnemySkillManager() {
                       <option value="" disabled>
                         Chọn loại
                       </option>
-                      <option value="passive">Passive</option>
-                      <option value="awakening">Awakening</option>
-                      <option value="ultimate">Ultimate</option>
+                      {skillTypes.map((type) => (
+                        <option key={type} value={type}>
+                          {type.charAt(0).toUpperCase() + type.slice(1)}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div className="mb-3">
@@ -335,6 +402,24 @@ export default function EnemySkillManager() {
                       placeholder="Nhập mô tả"
                       required
                     ></textarea>
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Icon (tuỳ chọn)</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="form-control form-control-sm"
+                    />
+                    {iconPreview && (
+                      <div className="mt-2">
+                        <img
+                          src={iconPreview}
+                          alt="Preview"
+                          style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="modal-footer">
@@ -517,7 +602,7 @@ export default function EnemySkillManager() {
             width: 140px; /* Adjusted for smaller screens */
           }
           .name-column {
-            width: 150px; /* Adjusted794c for smaller screens */
+            width: 150px; /* Adjusted for smaller screens */
           }
           .name-cell {
             padding-left: 10px; /* Adjusted padding for smaller screens */
