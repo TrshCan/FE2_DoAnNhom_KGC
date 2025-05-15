@@ -1,8 +1,11 @@
 <?php
 // Set CORS headers
-header("Access-Control-Allow-Origin: *"); // Restrict to your frontend origin
+ini_set('session.gc_maxlifetime', 3600);
+session_set_cookie_params(3600, '/', 'localhost', false, true);
+header("Access-Control-Allow-Origin: http://localhost:5173");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Credentials: true"); // Cho phép gửi cookie
 header("Content-Type: application/json");
 
 // Handle preflight OPTIONS request

@@ -1,18 +1,53 @@
 import { useState, useEffect } from 'react';
-import { FaTasks, FaBoxOpen, FaEnvelope, FaChevronUp, FaChevronDown, FaCity, FaUserFriends, FaDoorOpen } from 'react-icons/fa';
+import { FaTasks, FaBoxOpen, FaEnvelope, FaCog, FaCity, FaUserFriends, FaDoorOpen } from 'react-icons/fa';
 import '../assets/css/MainHall.css';
-import ArrowToggle from "../components/Arrow_Toggle"; // Adjust the path as necessary
-import illustration from '../assets/img/heroes/illustration/NPC_Illust_Luminesera.png'; // Adjust the path as necessary
+import ArrowToggle from '../components/Arrow_Toggle';
+import illustration from '../assets/img/heroes/illustration/NPC_Illust_Luminesera.png';
 import BASE_URL from '../components/BaseURL';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import SettingsPopup from '../components/Setting';
+import MailPopup from '../components/Mail';
+import QuestPopup from '../components/Quest';
+import InventoryPopup from '../components/Inventory';
 
 const MainHall = () => {
     const [showTopNav, setShowTopNav] = useState(true);
-    const username = "Something"; // Replace with actual username from session/user data
+    const username = 'Something'; // Thay bằng username thực từ session
     const [showMailPopup, setShowMailPopup] = useState(false);
+    const [showSettingsPopup, setShowSettingsPopup] = useState(false);
+    const [showQuestPopup, setShowQuestPopup] = useState(false);
+    const [showInventoryPopup, setShowInventoryPopup] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [selectedMail, setSelectedMail] = useState(null);
     const [mails, setMails] = useState([]);
+    const [quests, setQuests] = useState([]);
+    const [items, setItems] = useState([]);
+    const [selectedQuest, setSelectedQuest] = useState(null);
     const [loading, setLoading] = useState(true);
-    console.log("MainHall rendered");
+    const navigate = useNavigate();
+
+    // Kiểm tra trạng thái đăng nhập khi component mount
+    useEffect(() => {
+        const checkSession = async () => {
+            try {
+                const response = await fetch(`${BASE_URL}/src/includes/check-session.php`, {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+                const data = await response.json();
+                if (!data.loggedIn) {
+                    toast.error('Vui lòng đăng nhập để vào game!');
+                    navigate('/login');
+                }
+            } catch (err) {
+                console.error('Error checking session:', err);
+                toast.error('❌ Kết nối đến máy chủ thất bại.');
+                navigate('/login');
+            }
+        };
+        checkSession();
+    }, [navigate]);
 
     const fetchMails = async () => {
         try {
@@ -32,33 +67,101 @@ const MainHall = () => {
         }
     };
 
-    // Gọi API để lấy thư khi component được mount
+    const fetchQuests = async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/src/includes/quests.php`);
+            const data = await response.json();
+
+            if (data.success) {
+                setQuests(data.quests);
+            } else {
+                toast.error('❌ Không thể tải danh sách nhiệm vụ.');
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+            toast.error('❌ Kết nối đến máy chủ thất bại.');
+        }
+    };
+
+    const fetchItems = async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/src/includes/inventory.php`);
+            const data = await response.json();
+
+            if (data.success) {
+                setItems(data.items);
+            } else {
+                toast.error('❌ Không thể tải danh sách vật phẩm.');
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+            toast.error('❌ Kết nối đến máy chủ thất bại.');
+        }
+    };
+
     useEffect(() => {
         fetchMails();
+        fetchQuests();
+        fetchItems();
     }, []);
 
     const handleMailClick = (mail) => {
         setSelectedMail(mail);
     };
 
+    const handleQuestClick = (quest) => {
+        setSelectedQuest(quest);
+    };
+
+    const handleLogoutClick = async () => {
+        setIsLoggingOut(true);
+        try {
+            const response = await fetch(`${BASE_URL}/src/includes/logout.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                toast.success('👋 Đăng Xuất Thành Công!');
+                setTimeout(() => {
+                    navigate('/login');
+                }, 1000);
+            } else {
+                toast.error(`Lỗi khi đăng xuất: ${data.message || 'Unknown error'}`);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            toast.error(`❌ Đăng Xuất Thất Bại: ${error.message}`);
+        } finally {
+            setIsLoggingOut(false);
+        }
+    };
+
     return (
         <>
             <div className="mainhall-container unselectable">
-                {/* Top Left Avatar */}
                 <div className="top-left">
                     <div className="avatar-frame"></div>
                     <div className="avatar-img"></div>
-
                     <span className="username">{username}</span>
                 </div>
 
-                {/* Top Right Navigation */}
                 <div className={`top-right ${showTopNav ? 'show' : ''}`}>
-                    <div className="nav-item">
+                    <div className="nav-item" onClick={() => setShowSettingsPopup(true)}>
+                        <FaCog className="nav-icon" title="Setting" />
+                        <span className="nav-label">Setting</span>
+                    </div>
+                    <div className="nav-item" onClick={() => setShowQuestPopup(true)}>
                         <FaTasks className="nav-icon" title="Quest" />
                         <span className="nav-label">Quest</span>
                     </div>
-                    <div className="nav-item">
+                    <div className="nav-item" onClick={() => setShowInventoryPopup(true)}>
                         <FaBoxOpen className="nav-icon" title="Inventory" />
                         <span className="nav-label">Inventory</span>
                     </div>
@@ -68,14 +171,12 @@ const MainHall = () => {
                     </div>
                 </div>
 
-                {/* Toggle Arrow */}
                 <ArrowToggle showTopNav={showTopNav} setShowTopNav={setShowTopNav} />
 
                 <div className="illustration-container">
                     <img src={illustration} alt="Main Hall Illustration" className="illustration-image" />
                 </div>
 
-                {/* Bottom Navigation */}
                 <div className="bottom-nav">
                     <div className="nav-item">
                         <FaCity className="nav-icon" title="Barrack" />
@@ -91,49 +192,34 @@ const MainHall = () => {
                     </div>
                 </div>
             </div>
-            {/* Mail Popup */}
-            {showMailPopup && (
-                <div className="mail-popup unselectable">
-                    <div className="popup-content">
-                        <h3 className="popup-title">📧 Hòm Thư</h3>
 
-                        <div className="mail-list">
-                            {loading ? (
-                                <p>⏳ Đang tải thư...</p>
-                            ) : mails.length > 0 ? (
-                                mails.map((mail) => (
-                                    <div
-                                        key={mail.id}
-                                        className="mail-item"
-                                        onClick={() => handleMailClick(mail)}
-                                    >
-                                        <h4 className="mail-title">{mail.title}</h4>
-                                        {selectedMail?.id === mail.id && (
-                                            <div className="mail-content-expanded">
-
-                                                <p className="mail-content">{mail.content}</p>
-                                                {/* <p>{mail.content}</p> */}
-                                                <div className="mail-sender">
-                                                    <span className="mail-sender-label">From:</span>
-                                                    <span className="mail-sender-name">{mail.sender_email}</span>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))
-                            ) : (
-                                <p>📭 Không có thư nào.</p>
-                            )}
-                        </div>
-
-                        <div className="popup-buttons">
-                            <button className="close-btn" onClick={() => setShowMailPopup(false)}>
-                                Đóng
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <MailPopup
+                showMailPopup={showMailPopup}
+                setShowMailPopup={setShowMailPopup}
+                mails={mails}
+                loading={loading}
+                onMailClick={handleMailClick}
+                selectedMail={selectedMail}
+            />
+            <SettingsPopup
+                showSettingsPopup={showSettingsPopup}
+                setShowSettingsPopup={setShowSettingsPopup}
+                onLogout={handleLogoutClick}
+            />
+            <QuestPopup
+                showQuestPopup={showQuestPopup}
+                setShowQuestPopup={setShowQuestPopup}
+                quests={quests}
+                loading={loading}
+                onQuestClick={handleQuestClick}
+                selectedQuest={selectedQuest}
+            />
+            <InventoryPopup
+                showInventoryPopup={showInventoryPopup}
+                setShowInventoryPopup={setShowInventoryPopup}
+                items={items}
+                loading={loading}
+            />
         </>
     );
 };
