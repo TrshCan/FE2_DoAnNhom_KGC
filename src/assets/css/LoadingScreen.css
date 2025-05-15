@@ -1,5 +1,6 @@
 /* Fullscreen layout */
 .loading-screen {
+    background: url('../assets/video/loading.gif') no-repeat center center;
     position: relative;
     width: 100vw;
     height: 100vh;

@@ -93,7 +93,7 @@ const LoadingScreen = () => {
             clearInterval(messageInterval);
             audio.pause();
         };
-    }, [initStarted, volume, navigate, isLoggedIn]);
+    }, [initStarted, volume, navigate, isLoggedIn, audio]);
 
     const handleVolumeChange = (event) => {
         const newVolume = event.target.value;
