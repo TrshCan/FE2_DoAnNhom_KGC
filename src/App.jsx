@@ -1,10 +1,10 @@
+import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoadingScreen from './pages/LoadingScreen';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import MainHall from './pages/MainHall';
 import Barrack from './pages/Barrack';
-//admin
 import ClassesManager from './pages/admin/ClassesManager';
 import HeroManager from './pages/admin/HeroManager';
 import MailManager from './pages/admin/MailManager';
@@ -20,13 +20,13 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/loading" replace />} />
+      {/* .<Route path="/" element={<Navigate to="/loading" replace />} /> */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/mainhall" element={<MainHall />} />
       <Route path="/barrack" element={<Barrack />} />
       <Route path="/loading" element={<LoadingScreen/>} />
-      //admin
+      
       <Route path="/admin" element={<AdminDashboard />}>
         <Route index element={<UserManager />} /> {/* /admin mặc định */}
         <Route path="classes" element={<ClassesManager />} />

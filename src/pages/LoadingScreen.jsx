@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import React from 'react';
 import '../assets/css/LoadingScreen.css';
 import loadingMessagesJson from '../assets/json/messages.json';
 import bgVideo from '../assets/video/loading.gif';
