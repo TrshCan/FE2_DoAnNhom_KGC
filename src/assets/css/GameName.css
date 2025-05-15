@@ -1,0 +1,30 @@
+/* assets/css/GameName.css */
+
+.game-name-container {
+    position: absolute;
+    bottom: -100px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    animation: riseToMiddle 2s ease-out forwards;
+    animation-delay: 0.5s;
+}
+
+@keyframes riseToMiddle {
+    to {
+        bottom: 50%;
+        transform: translateY(50%);
+    }
+}
+
+.game-name {
+    font-size: 3rem;
+    font-weight: bold;
+    color: cyan;
+    text-shadow: 0 0 10px cyan, 0 0 20px cyan;
+    animation: blink 1s step-start infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
