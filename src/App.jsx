@@ -7,7 +7,9 @@ import MainHall from './pages/MainHall';
 import Barrack from './pages/Barrack';
 import Friend from './pages/Friend';
 import HeroCard from './pages/TestCard';
+import Arena from './components/Arena';
 import BASE_URL from './components/BaseURL';
+
 
 
 const ProtectedRoute = ({ children }) => {
@@ -61,6 +63,8 @@ const App = () => {
       <Route path="/friend" element={<Friend />} />
       <Route path="/barrack" element={<Barrack />} />
       <Route path="/test" element={<HeroCard />} />
+      <Route path='/arena' element={<Arena />}></Route>
+
       //admin
       <Route path="/admin" element={<AdminDashboard />}>
         <Route index element={<UserManager />} /> {/* /admin mặc định */}

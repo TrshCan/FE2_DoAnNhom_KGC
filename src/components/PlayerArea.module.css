@@ -1,0 +1,59 @@
+.playerArea {
+  height: 200px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.opponent {
+  background: rgba(50, 0, 0, 0.3);
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+}
+
+.info span {
+  background: #2ecc71;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.hand {
+  display: flex;
+  gap: 10px;
+}
+
+.endTurnButton {
+  align-self: flex-end;
+  padding: 8px 16px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.endTurnButton:disabled {
+  background: #7f8c8d;
+  cursor: not-allowed;
+}
+
+.endTurnButton:hover:not(:disabled) {
+  background: #c0392b;
+}
+
+.errorMessage {
+  background: #e74c3c;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin: 5px 0;
+  text-align: center;
+}
