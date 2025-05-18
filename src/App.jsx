@@ -26,7 +26,7 @@ const ProtectedRoute = ({ children }) => {
     checkSession();
   }, []);
 
-  // Nếu đang kiểm tra session, hiển thị loading tạm thời
+  // Nếu đang kiểm tra session, hiển thị loading tạm thởi
   if (isLoggedIn === null) {
     return <div>Loading...</div>;
   }
@@ -50,11 +50,10 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/loading" replace />} />
+      <Route path="/" element={<Navigate to={localStorage.getItem('token') ? '/loading' : '/login'} replace />} />
       <Route path="/loading" element={<LoadingScreen />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/loading" element={<LoadingScreen/>} />
       //admin
       <Route path="/admin" element={<AdminDashboard />}>
         <Route index element={<UserManager />} /> {/* /admin mặc định */}

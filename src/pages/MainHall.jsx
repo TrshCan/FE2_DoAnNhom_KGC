@@ -10,11 +10,10 @@ import SettingsPopup from '../components/Setting';
 import MailPopup from '../components/Mail';
 import QuestPopup from '../components/Quest';
 import InventoryPopup from '../components/Inventory';
-import bgm from '../assets/music/shelter.mp3';
 
 const MainHall = () => {
     const [showTopNav, setShowTopNav] = useState(true);
-    const username = 'Something'; // Thay bằng username thực từ session
+    const [username, setUsername] = useState('Loading...'); // Initialize with loading state
     const [showMailPopup, setShowMailPopup] = useState(false);
     const [showSettingsPopup, setShowSettingsPopup] = useState(false);
     const [showQuestPopup, setShowQuestPopup] = useState(false);
@@ -28,7 +27,7 @@ const MainHall = () => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    // Kiểm tra trạng thái đăng nhập khi component mount
+    // Check session on mount
     useEffect(() => {
         const checkSession = async () => {
             try {
@@ -38,12 +37,12 @@ const MainHall = () => {
                 });
                 const data = await response.json();
                 if (!data.loggedIn) {
-                    toast.error('Vui lòng đăng nhập để vào game!');
+                    toast.error('Please log in to access the game!');
                     navigate('/login');
                 }
             } catch (err) {
                 console.error('Error checking session:', err);
-                toast.error('❌ Kết nối đến máy chủ thất bại.');
+                toast.error('❌ Failed to connect to server.');
                 navigate('/login');
             }
         };
@@ -52,80 +51,72 @@ const MainHall = () => {
 
     const fetchMails = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/src/includes/mail.php`);
+            const response = await fetch(`${BASE_URL}/src/includes/mail.php`, { credentials: 'include' });
             const data = await response.json();
-
             if (data.success) {
                 setMails(data.mails);
             } else {
-                toast.error('❌ Không thể tải danh sách thư.');
+                toast.error('❌ Cannot load mails.');
             }
         } catch (error) {
             console.error('Fetch error:', error);
-            toast.error('❌ Kết nối đến máy chủ thất bại.');
-        } finally {
-            setLoading(false);
+            toast.error('❌ Failed to connect to server.');
         }
     };
 
     const fetchQuests = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/src/includes/quests.php`);
+            const response = await fetch(`${BASE_URL}/src/includes/quests.php`, { credentials: 'include' });
             const data = await response.json();
-
             if (data.success) {
                 setQuests(data.quests);
             } else {
-                toast.error('❌ Không thể tải danh sách nhiệm vụ.');
+                toast.error('❌ Cannot load quests.');
             }
         } catch (error) {
             console.error('Fetch error:', error);
-            toast.error('❌ Kết nối đến máy chủ thất bại.');
+            toast.error('❌ Failed to connect to server.');
         }
     };
 
     const fetchItems = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/src/includes/inventory.php`);
+            const response = await fetch(`${BASE_URL}/src/includes/inventory.php`, { credentials: 'include' });
             const data = await response.json();
-
             if (data.success) {
                 setItems(data.items);
             } else {
-                toast.error('❌ Không thể tải danh sách vật phẩm.');
+                toast.error('❌ Cannot load inventory.');
             }
         } catch (error) {
             console.error('Fetch error:', error);
-            toast.error('❌ Kết nối đến máy chủ thất bại.');
+            toast.error('❌ Failed to connect to server.');
         }
     };
+
     const fetchUserInfo = async () => {
         try {
-
             const userId = localStorage.getItem('user_id');
-            console.log(userId);
-
-            const response = await fetch(`/api/user.php?user_id=${userId}`);
+            const response = await fetch(`${BASE_URL}/api/user.php?user_id=${userId}`, { credentials: 'include' });
             const data = await response.json();
-            console.log("hello");
             if (data.success && data.username) {
                 setUsername(data.username);
             } else {
-                setUsername('❌ Không thể tải thông tin người dùng.');
+                setUsername('❌ Failed to load username.');
             }
         } catch (error) {
-            console.log("crash set username", error);
-            setUsername('❌ Kết nối đến máy chủ thất bại.');
+            console.error('Fetch user info error:', error);
+            setUsername('❌ Failed to connect to server.');
         }
     };
 
-
-
     useEffect(() => {
-        fetchMails();
-        fetchQuests();
-        fetchItems();
-        fetchUserInfo();
+        const fetchData = async () => {
+            setLoading(true);
+            await Promise.all([fetchMails(), fetchQuests(), fetchItems(), fetchUserInfo()]);
+            setLoading(false);
+        };
+        fetchData();
     }, []);
 
     const handleMailClick = (mail) => {
@@ -144,75 +135,69 @@ const MainHall = () => {
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
             });
-
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-
             const data = await response.json();
             if (data.success) {
-                toast.success('👋 Đăng Xuất Thành Công!');
-                setTimeout(() => {
-                    navigate('/login');
-                }, 1000);
+                toast.success('👋 Logged out successfully!');
+                navigate('/login');
             } else {
-                toast.error(`Lỗi khi đăng xuất: ${data.message || 'Unknown error'}`);
+                toast.error(`Logout error: ${data.message || 'Unknown error'}`);
             }
         } catch (error) {
             console.error('Logout error:', error);
-            toast.error(`❌ Đăng Xuất Thất Bại: ${error.message}`);
+            toast.error(`❌ Logout failed: ${error.message}`);
         } finally {
             setIsLoggingOut(false);
         }
     };
 
     return (
-        <>
-            <div className="mainhall-container unselectable">
-                <div className="top-left">
-                    <div className="avatar-frame"></div>
-                    <div className="avatar-img"></div>
-                    <span className="username">{username}</span>
+        <div className="mainhall-container unselectable">
+            <div className="top-left">
+                <div className="avatar-frame"></div>
+                <div className="avatar-img"></div>
+                <span className="username">{username}</span>
+            </div>
+
+            <div className={`top-right ${showTopNav ? 'show' : ''}`}>
+                <div className="nav-item" onClick={() => setShowSettingsPopup(true)}>
+                    <FaCog className="nav-icon" title="Setting" />
+                    <span className="nav-label">Setting</span>
                 </div>
-
-                <div className={`top-right ${showTopNav ? 'show' : ''}`}>
-                    <div className="nav-item" onClick={() => setShowSettingsPopup(true)}>
-                        <FaCog className="nav-icon" title="Setting" />
-                        <span className="nav-label">Setting</span>
-                    </div>
-                    <div className="nav-item" onClick={() => setShowQuestPopup(true)}>
-                        <FaTasks className="nav-icon" title="Quest" />
-                        <span className="nav-label">Quest</span>
-                    </div>
-                    <div className="nav-item" onClick={() => setShowInventoryPopup(true)}>
-                        <FaBoxOpen className="nav-icon" title="Inventory" />
-                        <span className="nav-label">Inventory</span>
-                    </div>
-                    <div className="nav-item" onClick={() => setShowMailPopup(true)}>
-                        <FaEnvelope className="nav-icon" title="Mail" />
-                        <span className="nav-label">Mail</span>
-                    </div>
+                <div className="nav-item" onClick={() => setShowQuestPopup(true)}>
+                    <FaTasks className="nav-icon" title="Quest" />
+                    <span className="nav-label">Quest</span>
                 </div>
-
-                <ArrowToggle showTopNav={showTopNav} setShowTopNav={setShowTopNav} />
-
-                <div className="illustration-container">
-                    <img src={illustration} alt="Main Hall Illustration" className="illustration-image" />
+                <div className="nav-item" onClick={() => setShowInventoryPopup(true)}>
+                    <FaBoxOpen className="nav-icon" title="Inventory" />
+                    <span className="nav-label">Inventory</span>
                 </div>
+                <div className="nav-item" onClick={() => setShowMailPopup(true)}>
+                    <FaEnvelope className="nav-icon" title="Mail" />
+                    <span className="nav-label">Mail</span>
+                </div>
+            </div>
 
-                <div className="bottom-nav">
-                    <div className="nav-item" onClick={() => window.location.href = '/barrack'}>
-                        <FaCity className="nav-icon" title="Barrack" />
-                        <span className="nav-label">Barrack</span>
-                    </div>
-                    <div className="nav-item active">
-                        <FaDoorOpen className="nav-icon gate-icon" title="Gate" />
-                        <span className="nav-label">Gate</span>
-                    </div>
-                    <div className="nav-item">
-                        <FaUserFriends className="nav-icon" title="Friend" />
-                        <span className="nav-label">Friend</span>
-                    </div>
+            <ArrowToggle showTopNav={showTopNav} setShowTopNav={setShowTopNav} />
+
+            <div className="illustration-container">
+                <img src={illustration} alt="Main Hall Illustration" className="illustration-image" />
+            </div>
+
+            <div className="bottom-nav">
+                <div className="nav-item" onClick={() => navigate('/barrack')}>
+                    <FaCity className="nav-icon" title="Barrack" />
+                    <span className="nav-label">Barrack</span>
+                </div>
+                <div className="nav-item active">
+                    <FaDoorOpen className="nav-icon gate-icon" title="Gate" />
+                    <span className="nav-label">Gate</span>
+                </div>
+                <div className="nav-item" onClick={() => navigate('/friends')}>
+                    <FaUserFriends className="nav-icon" title="Friend" />
+                    <span className="nav-label">Friend</span>
                 </div>
             </div>
 
@@ -243,7 +228,7 @@ const MainHall = () => {
                 items={items}
                 loading={loading}
             />
-        </>
+        </div>
     );
 };
 
