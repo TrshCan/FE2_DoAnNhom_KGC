@@ -1,48 +1,136 @@
+/* Hero Card Component */
 .hero-card-component {
-    width: 200px;
-    height: 300px;
-    margin: 10px;
+    width: 220px;
+    height: 320px;
+    margin: 15px;
     position: relative;
     overflow: hidden;
-    border-radius: 1rem;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
 }
 
 .hero-card-component:hover {
-    transform: scale(1.02);
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
-.hero-card-image {
+/* Gradient overlay for depth */
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background-size: cover;
-    background-position: center;
-    filter: brightness(0.85);
-}
-
-.corner {
-    position: absolute;
-    background-color: rgba(0,0,0,0.6);
-    color: white;
-    padding: 2px 6px;
-    font-size: 0.8rem;
-    border-radius: 5px;
     z-index: 1;
 }
 
-.top-left { top: 5px; left: 5px; }
-.top-right { top: 5px; right: 5px; }
-.bottom-left { bottom: 5px; left: 5px; }
-.bottom-right { bottom: 5px; right: 5px; }
-
-.hero-card-name {
-    position: absolute;
-    bottom: 10px;
+/* Card Image */
+.hero-card-image {
     width: 100%;
-    text-align: center;
-    font-weight: bold;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+}
+
+
+/* Card Stats */
+.hero-card-stats .corner {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.75);
+    color: #ffffff;
+    padding: 4px 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 4px;
+    z-index: 2;
+    transition: background 0.2s ease;
+}
+
+.hero-card-stats .corner:hover {
+    background: rgba(255, 215, 0, 0.8);
+}
+
+.top-left { top: 10px; left: 10px; }
+.top-right { top: 10px; right: 10px; }
+.bottom-left { bottom: 60px; left: 10px; } /* Adjusted to avoid name overlap */
+.bottom-right { bottom: 60px; right: 10px; }
+
+/* Card Name Container */
+.hero-card-name-container {
+    position: absolute;
     color: white;
-    text-shadow: 0 0 5px black;
+    bottom: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.85); /* Semi-transparent background for contrast */
+    padding: 8px 0;
+    left: 0;
+    z-index: 2;
+}
+
+/* Card Name */
+.hero-card-name {
+    margin: 0;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #f0f0f0;
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Cinzel', serif; /* Fantasy-themed font */
+    line-height: 1.2;
+}
+
+/* Modal Styling */
+.hero-modal .modal-content {
+    background: linear-gradient(135deg, #1c2526, #2e3b3e);
+    color: #f0f0f0;
+    border-radius: 10px;
+    border: 1px solid #ffd700;
+}
+
+.modal-header-custom {
+    background: #1a1a1a;
+    border-bottom: 1px solid #ffd700;
+}
+
+.modal-body-custom {
+    padding: 20px;
+}
+
+.modal-hero-image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-card-component {
+        width: 180px;
+        height: 260px;
+    }
+
+    .hero-card-name-container {
+        padding: 6px 0;
+    }
+
+    .hero-card-name {
+        font-size: 0.85rem;
+    }
+
+    .hero-card-stats .corner {
+        font-size: 0.7rem;
+        padding: 3px 6px;
+    }
+
+    .bottom-left, .bottom-right {
+        bottom: 50px; /* Adjusted for smaller cards */
+    }
 }

@@ -17,9 +17,9 @@ try {
     // Fetch user's heroes with their stats, and hero info (class & region)
     $stmt = $conn->prepare("
     SELECT uh.id AS user_hero_id, uh.level,
-           h.id AS hero_id, h.name, h.card,
+           h.id AS hero_id, h.name, h.card, h.illustration,
            c.name AS class, r.name AS region,
-           s.ATK, s.Spell, s.Spell_DEF, s.Physical_DEF, s.HP, s.MP
+           s.ATK, s.Spell, s.Spell_DEF, s.Physical_DEF, s.HP, s.MP, s.Mighty_Block
     FROM user_heroes uh
     JOIN heroes h ON uh.hero_id = h.id
     JOIN user_hero_stats s ON uh.id = s.user_hero_id

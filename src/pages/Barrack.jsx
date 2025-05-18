@@ -180,9 +180,10 @@ const Barrack = () => {
 
             <div className="barrack-content">
                 <div className="hero-grid">
-                    {heroes.length > 0 ? heroes.map((hero) => (
-                        <HeroCard key={hero.user_hero_id} hero={hero} />
-                    )) : (
+                    {heroes.length > 0 ? heroes.map((hero) => {
+                        console.error(`URL: ${BASE_URL}/src/assets/img/heroes/card/${hero.card}`);
+                        return <HeroCard key={hero.user_hero_id} hero={hero} />;
+                    }) : (
                         <div className="no-heroes">⚔️ No heroes recruited yet.</div>
                     )}
 
