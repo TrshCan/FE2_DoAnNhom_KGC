@@ -31,7 +31,7 @@ const MainHall = () => {
     useEffect(() => {
         const checkSession = async () => {
             try {
-                const response = await fetch(`${BASE_URL}/src/includes/check-session.php`, {
+                const response = await fetch(`/api/check-session.php`, {
                     method: 'GET',
                     credentials: 'include',
                 });
@@ -51,7 +51,7 @@ const MainHall = () => {
 
     const fetchMails = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/src/includes/mail.php`, { credentials: 'include' });
+            const response = await fetch(`/api/mail.php`, { credentials: 'include' });
             const data = await response.json();
             if (data.success) {
                 setMails(data.mails);
@@ -66,7 +66,7 @@ const MainHall = () => {
 
     const fetchQuests = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/src/includes/quests.php`, { credentials: 'include' });
+            const response = await fetch(`/api/quests.php`, { credentials: 'include' });
             const data = await response.json();
             if (data.success) {
                 setQuests(data.quests);
@@ -81,7 +81,7 @@ const MainHall = () => {
 
     const fetchItems = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/src/includes/inventory.php`, { credentials: 'include' });
+            const response = await fetch(`/api/inventory.php`, { credentials: 'include' });
             const data = await response.json();
             if (data.success) {
                 setItems(data.items);
@@ -97,7 +97,7 @@ const MainHall = () => {
     const fetchUserInfo = async () => {
         try {
             const userId = localStorage.getItem('user_id');
-            const response = await fetch(`${BASE_URL}/api/user.php?user_id=${userId}`, { credentials: 'include' });
+            const response = await fetch(`/api/user.php?user_id=${userId}`, { credentials: 'include' });
             const data = await response.json();
             if (data.success && data.username) {
                 setUsername(data.username);
@@ -130,7 +130,7 @@ const MainHall = () => {
     const handleLogoutClick = async () => {
         setIsLoggingOut(true);
         try {
-            const response = await fetch(`${BASE_URL}/src/includes/logout.php`, {
+            const response = await fetch(`/api/logout.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
@@ -195,7 +195,7 @@ const MainHall = () => {
                     <FaDoorOpen className="nav-icon gate-icon" title="Gate" />
                     <span className="nav-label">Gate</span>
                 </div>
-                <div className="nav-item" onClick={() => navigate('/friends')}>
+                <div className="nav-item" onClick={() => navigate('/friend')}>
                     <FaUserFriends className="nav-icon" title="Friend" />
                     <span className="nav-label">Friend</span>
                 </div>

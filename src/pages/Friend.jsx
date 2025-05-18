@@ -15,7 +15,7 @@ const FriendList = () => {
 
   const fetchFriends = async () => {
     const res = await fetch(
-      `${BASE_URL}/src/includes/friend.php?user_id=${currentUserId}`
+      `/api/friend.php?user_id=${currentUserId}`
     );
     const data = await res.json();
     setFriends(data);
@@ -23,7 +23,7 @@ const FriendList = () => {
 
   const fetchMessages = async (friend) => {
     const res = await fetch(
-      `${BASE_URL}/src/includes/messages.php?user1=${currentUserId}&user2=${friend.id}`
+      `/api/messages.php?user1=${currentUserId}&user2=${friend.id}`
     );
     const data = await res.json();
     const formatted = data.map((msg) => ({
@@ -47,7 +47,7 @@ const FriendList = () => {
     }
     try {
       const friendId = parseInt(newFriendId);
-      const res = await fetch(`${BASE_URL}/src/includes/friend.php`, {
+      const res = await fetch(`/api/friend.php`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -78,7 +78,7 @@ const FriendList = () => {
   };
 
   const handleDeleteFriend = async (friendId) => {
-    await fetch(`${BASE_URL}/src/includes/friend.php`, {
+    await fetch(`/api/friend.php`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ user_id: currentUserId, friend_id: friendId }),
@@ -89,7 +89,7 @@ const FriendList = () => {
 
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedFriend) return;
-    await fetch(`${BASE_URL}/src/includes/messages.php`, {
+    await fetch(`/api/messages.php`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

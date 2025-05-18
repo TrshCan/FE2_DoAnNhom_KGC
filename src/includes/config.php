@@ -12,4 +12,5 @@ define('DB_HOST', 'localhost');
 define('PORT', 3306);
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8mb4');
+define('DB_BASE_URL', 'http://localhost:5173');
 ?>

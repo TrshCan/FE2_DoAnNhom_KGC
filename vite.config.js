@@ -6,9 +6,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost/Repositories/FE2_DoAnNhom_KGC/src/includes',
+        target: 'http://localhost', // Your PHP server, usually Apache or XAMPP
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        rewrite: path => path.replace(/^\/api/, '/FE2_DoAnNhom_KGC/src/includes'),
       },
     },
   },

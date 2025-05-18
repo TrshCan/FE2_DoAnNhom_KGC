@@ -4,7 +4,11 @@ import LoadingScreen from './pages/LoadingScreen';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import MainHall from './pages/MainHall';
+import Barrack from './pages/Barrack';
+import Friend from './pages/Friend';
+import HeroCard from './pages/TestCard';
 import BASE_URL from './components/BaseURL';
+
 
 const ProtectedRoute = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(null); // null: đang kiểm tra, true: đã đăng nhập, false: chưa đăng nhập
@@ -12,7 +16,7 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/src/includes/check-session.php`, {
+        const response = await fetch(`/api/check-session.php`, {
           method: 'GET',
           credentials: 'include',
         });
@@ -54,6 +58,9 @@ const App = () => {
       <Route path="/loading" element={<LoadingScreen />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/friend" element={<Friend />} />
+      <Route path="/barrack" element={<Barrack />} />
+      <Route path="/test" element={<HeroCard />} />
       //admin
       <Route path="/admin" element={<AdminDashboard />}>
         <Route index element={<UserManager />} /> {/* /admin mặc định */}

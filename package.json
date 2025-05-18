@@ -1,6 +1,4 @@
 {
-  "name": "doannhom_fe2",
-  "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -10,8 +8,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "bootstrap": "^5.3.5",
+    "bootstrap": "^5.3.6",
     "react": "^19.0.0",
+    "react-bootstrap": "^2.10.10",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
     "react-notifications": "^1.7.4",
@@ -28,19 +27,10 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
-    "postcss": "^8.5.3",
-    "vite": "^6.3.1",
     "init": "^0.1.2",
-    "npx": "^10.2.2",
+    "npx": "^3.0.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^4.1.4",
     "vite": "^6.3.1"
-  
-  
   }
-  
-  
 }
-
-    
-

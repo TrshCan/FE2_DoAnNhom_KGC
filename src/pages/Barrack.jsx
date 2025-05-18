@@ -9,6 +9,7 @@ import SettingsPopup from '../components/Setting';
 import MailPopup from '../components/Mail';
 import QuestPopup from '../components/Quest';
 import InventoryPopup from '../components/Inventory';
+import HeroCard from '../components/HeroCard';
 
 const Barrack = () => {
     const [showTopNav, setShowTopNav] = useState(true);
@@ -29,7 +30,7 @@ const Barrack = () => {
 
     const fetchHeroes = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/src/includes/heroes.php?user_id=${localStorage.getItem('user_id')}`, {
+            const response = await fetch(`/api/heroes.php?user_id=${localStorage.getItem('user_id')}`, {
                 credentials: 'include',
             });
             const data = await response.json();
@@ -47,7 +48,7 @@ const Barrack = () => {
     const fetchUserInfo = async () => {
         try {
             const userId = localStorage.getItem('user_id');
-            const response = await fetch(`${BASE_URL}/api/user.php?user_id=${userId}`, { credentials: 'include' });
+            const response = await fetch(`/api/user.php?user_id=${userId}`, { credentials: 'include' });
             const data = await response.json();
             if (data.success && data.username) {
                 setUsername(data.username);
@@ -62,7 +63,7 @@ const Barrack = () => {
 
     const fetchMails = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/src/includes/mail.php`, { credentials: 'include' });
+            const response = await fetch(`/api/mail.php`, { credentials: 'include' });
             const data = await response.json();
             if (data.success) {
                 setMails(data.mails);
@@ -77,7 +78,7 @@ const Barrack = () => {
 
     const fetchQuests = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/src/includes/quests.php`, { credentials: 'include' });
+            const response = await fetch(`/api/quests.php`, { credentials: 'include' });
             const data = await response.json();
             if (data.success) {
                 setQuests(data.quests);
@@ -92,7 +93,7 @@ const Barrack = () => {
 
     const fetchItems = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/src/includes/inventory.php`, { credentials: 'include' });
+            const response = await fetch(`/api/inventory.php`, { credentials: 'include' });
             const data = await response.json();
             if (data.success) {
                 setItems(data.items);
@@ -125,7 +126,7 @@ const Barrack = () => {
     const handleLogoutClick = async () => {
         setIsLoggingOut(true);
         try {
-            const response = await fetch(`${BASE_URL}/src/includes/logout.php`, {
+            const response = await fetch(`/api/logout.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
@@ -180,25 +181,11 @@ const Barrack = () => {
             <div className="barrack-content">
                 <div className="hero-grid">
                     {heroes.length > 0 ? heroes.map((hero) => (
-                        <div key={hero.id} className="hero-card">
-                            <div
-                                className="hero-image"
-                                style={{
-                                    backgroundImage: `url(${BASE_URL}/src/assets/img/heroes/illustration/${hero.illustration})`,
-                                }}
-                            ></div>
-                            <div className="hero-info">
-                                <h3 className="hero-name">{hero.name}</h3>
-                                <div className="badges">
-                                    <span className="badge level">Lv. {hero.level}</span>
-                                    <span className="badge region">{hero.region}</span>
-                                    <span className="badge class">{hero.class}</span>
-                                </div>
-                            </div>
-                        </div>
+                        <HeroCard key={hero.user_hero_id} hero={hero} />
                     )) : (
                         <div className="no-heroes">⚔️ No heroes recruited yet.</div>
                     )}
+
                 </div>
             </div>
 
@@ -207,11 +194,11 @@ const Barrack = () => {
                     <FaCity className="nav-icon" title="Barrack" />
                     <span className="nav-label">Barrack</span>
                 </div>
-                <div className="nav-item" onClick={() => navigate('/gate')}>
+                <div className="nav-item" onClick={() => navigate('/mainhall')}>
                     <FaDoorOpen className="nav-icon gate-icon" title="Gate" />
                     <span className="nav-label">Gate</span>
                 </div>
-                <div className="nav-item" onClick={() => navigate('/friends')}>
+                <div className="nav-item" onClick={() => navigate('/friend')}>
                     <FaUserFriends className="nav-icon" title="Friend" />
                     <span className="nav-label">Friend</span>
                 </div>

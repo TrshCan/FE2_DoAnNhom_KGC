@@ -1,0 +1,182 @@
+.mainhall-container {
+  height: 100vh;
+  background: url("../video/mainhall_normal.gif") no-repeat center center fixed;
+  width: 100vw;
+  background-size: cover;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.top-left {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.2rem;
+}
+
+.avatar-frame {
+  background-image: url("../img/frames/Frame_10170.png"); /* Add frame image */
+  background-size: contain; /* Adjust frame size */
+  background-repeat: no-repeat;
+  padding: 10px; /* Adjust the padding if necessary */
+  border-radius: 10px; /* Adjust border radius for rounded frame */
+  width: 60px; /* Set a fixed width for the avatar */
+  height: 60px; /* Set a fixed height for the avatar */
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.avatar-img {
+  width: 60px; /* Adjust avatar size */
+  height: 60px; /* Adjust avatar size */
+  border-radius: 50%;
+  background-image: url("../img/avatar/avatar_1.png");
+  background-size: contain; /* Adjust frame size */
+  background-repeat: no-repeat;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 12px;
+  z-index: 1; /* Ensure avatar is above the frame */
+}
+
+.username {
+  font-size: 1.2rem;
+  color: white;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+  background-color: gray;
+  padding-left: 25px;
+  padding-top: 5px;
+  padding-bottom: 7px;
+  padding-right: 15px;
+  display: inline-block;
+  position: relative;
+  left: -30px;
+  border-radius: 10px;
+  border: 2px solid brown;
+  z-index: 0;
+}
+
+.top-right {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  display: flex;
+  gap: 15px;
+  font-size: 1.5rem;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease;
+  max-height: 0;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0px 7px;
+}
+
+.top-right.show {
+  max-height: 300px; /* Adjust this value depending on the number of items */
+  gap: 20px;
+  padding: 20px 7px;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  cursor: pointer;
+}
+
+.nav-icon {
+  transition: transform 0.2s;
+  font-size: 2rem;
+}
+
+.nav-icon:hover {
+  transform: scale(1.2);
+}
+
+.nav-label {
+  margin-top: 5px;
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+/* Arrow animation for top nav toggle */
+
+.arrow-container {
+  position: absolute;
+  background-image: url("../img/icons/Challenge_Board_03_0.png"); /* Adjust frame size */
+  background-repeat: no-repeat;
+  justify-content: center;
+  align-items: center;
+  background-size: contain;
+  height: 60px;
+  width: 60px;
+  top: 0;
+  right: 20px;
+
+  cursor: pointer;
+  transition: transform 0.3s ease, top 0.3s ease;
+}
+
+/* When toggled, move down and rotate */
+.arrow-container.active {
+  transform: translateY(235px);
+  height: 60px;
+  width: 60px;
+  top: 103px;
+}
+
+.bottom-nav {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0;
+  font-size: 1.5rem;
+}
+
+/* Active item highlighting (Gate will be highlighted by default) */
+.nav-item.active {
+  background: rgba(100, 100, 100, 0.8) !important;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+/* Special scaling for the gate icon */
+.gate-icon {
+  transform: scale(1.4);
+}
+
+.illustration-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0; /* Adjust as necessary */
+  height: 100%; /* Adjust the height based on your design */
+}
+
+.illustration-image {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain; /* This ensures the image scales properly without distorting */
+}
+
+.unselectable {
+  user-select: none;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+}
+

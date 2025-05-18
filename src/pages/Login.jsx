@@ -15,7 +15,7 @@ const Login = () => {
     useEffect(() => {
         const checkSession = async () => {
             try {
-                const response = await fetch(`${BASE_URL}/src/includes/check-session.php`, {
+                const response = await fetch(`/api/check-session.php`, {
                     method: 'GET',
                     credentials: 'include',
                 });
@@ -48,7 +48,7 @@ const Login = () => {
         }
 
         try {
-            const response = await fetch(`${BASE_URL}/src/includes/login.php`, {
+            const response = await fetch(`/api/login.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
@@ -76,7 +76,7 @@ const Login = () => {
                 setIsLoading(true);
                 setTimeout(() => {
                     navigate('/mainhall');
-                }, 3000); // Tăng thời gian để đọc thông báo
+                }, 1000); // Tăng thời gian để đọc thông báo
             } else {
                 toast.error(`🚫 ${data.message}`);
             }

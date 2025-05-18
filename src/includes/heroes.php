@@ -1,7 +1,4 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST, OPTIONS, GET");
-header("Access-Control-Allow-Headers: Content-Type");
 session_start();
 header('Content-Type: application/json');
 
@@ -16,32 +13,29 @@ if (!$user_id) {
     exit;
 }
 
-// Fetch all heroes
 try {
-    $heroesResult = $conn->query("SELECT * FROM heroes");
-    $allHeroes = $heroesResult->fetch_all(MYSQLI_ASSOC);
+    // Fetch user's heroes with their stats, and hero info (class & region)
+    $stmt = $conn->prepare("
+    SELECT uh.id AS user_hero_id, uh.level,
+           h.id AS hero_id, h.name, h.card,
+           c.name AS class, r.name AS region,
+           s.ATK, s.Spell, s.Spell_DEF, s.Physical_DEF, s.HP, s.MP
+    FROM user_heroes uh
+    JOIN heroes h ON uh.hero_id = h.id
+    JOIN user_hero_stats s ON uh.id = s.user_hero_id
+    JOIN classes c ON h.class_id = c.id
+    JOIN regions r ON h.region_id = r.id
+    WHERE uh.user_id = ?
+");
 
-    // Log image paths for debugging
-    foreach ($allHeroes as $hero) {
-        $imagePath = __DIR__ . "/assets/img/heroes/icon/{$hero['icon']}";
-        file_put_contents('debug.log', "Hero: {$hero['name']}, Icon: {$hero['icon']}, Path exists: " . (file_exists($imagePath) ? 'Yes' : 'No') . "\n", FILE_APPEND);
-    }
-
-    // Fetch user-owned heroes
-    $userHeroesStmt = $conn->prepare("SELECT hero_id FROM user_heroes WHERE user_id = ?");
-    $userHeroesStmt->bind_param('i', $user_id);
-    $userHeroesStmt->execute();
-    $userHeroesResult = $userHeroesStmt->get_result();
-    $userHeroes = [];
-
-    while ($row = $userHeroesResult->fetch_assoc()) {
-        $userHeroes[] = $row['hero_id'];
-    }
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $heroes = $result->fetch_all(MYSQLI_ASSOC);
 
     echo json_encode([
         'success' => true,
-        'heroes' => $allHeroes,
-        'user_heroes' => $userHeroes
+        'heroes' => $heroes
     ]);
 } catch (Exception $e) {
     echo json_encode(['success' => false, 'message' => 'Database error']);

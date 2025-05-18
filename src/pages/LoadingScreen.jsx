@@ -25,7 +25,7 @@ const LoadingScreen = () => {
     useEffect(() => {
         const checkSession = async () => {
             try {
-                const response = await fetch(`${BASE_URL}/src/includes/check-session.php`, {
+                const response = await fetch(`/api/check-session.php`, {
                     method: 'GET',
                     credentials: 'include',
                 });
@@ -132,7 +132,7 @@ const LoadingScreen = () => {
                             <div className="dropdown-link" onClick={() => {
                                 audio.pause();
                                 audio.currentTime = 0;
-                                setShowDropdown(false); navigate('/logout');
+                                setShowDropdown(true); navigate('/logout');
                             }}>
                                 <FaSignOutAlt /> Logout
                             </div>
