@@ -19,4 +19,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $loggedIn = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 
 echo json_encode(['success' => true, 'loggedIn' => $loggedIn]);
-exit();

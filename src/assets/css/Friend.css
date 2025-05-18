@@ -1,0 +1,475 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+body {
+  background: #2b2b2b;
+  font-family: 'VT323', monospace;
+  color: #f5f5f5;
+  margin: 0;
+  min-height: 100vh;
+  image-rendering: pixelated;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: none;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.app-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  background: #4a3728;
+  border-right: 4px solid #2b1e14;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+.sidebar:hover {
+  background: #5a4628;
+}
+
+.header {
+  background: #2b1e14;
+  border-bottom: 2px solid #1a120d;
+  padding: 8px 16px;
+  color: #f5f5f5;
+  font-size: 16px;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.header-title {
+  font-size: 16px;
+  margin: 0;
+}
+
+.add-friend-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.3s ease;
+}
+
+.add-friend-button:hover {
+  transform: scale(1.1);
+}
+
+.add-friend-icon {
+  width: 24px;
+  height: 24px;
+  color: #f5f5f5;
+}
+
+.add-friend-form {
+  background: #4a3728;
+  border: 2px solid #2b1e14;
+  border-radius: 8px; /* Bo góc nhẹ cho form thêm bạn */
+  padding: 16px;
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
+
+.add-friend-input-container {
+  display: flex;
+  align-items: center;
+}
+
+.friend-list {
+  flex: 1;
+  overflow-y: auto;
+  list-style: none;
+  padding: 8px;
+  margin: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 12px;
+  background: #4a3728;
+}
+
+.friend-item {
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  position: relative;
+  background: #4a3728;
+  opacity: 0;
+  animation: slideIn 0.5s ease-in-out forwards;
+  margin-bottom: 4px;
+  border-radius: 8px;
+}
+
+.friend-item:hover {
+  background: #5a4628;
+  transform: translateX(5px);
+  box-shadow: 0 0 10px rgba(212, 160, 23, 0.5);
+}
+
+.friend-item:hover .delete-button {
+  opacity: 1;
+}
+
+.friend-item-selected {
+  background: #5a4628;
+  box-shadow: 0 0 8px rgba(212, 160, 23, 0.3);
+}
+
+.friend-details {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.status-indicator {
+  width: 12px;
+  height: 12px;
+  margin-right: 8px;
+  border-radius: 50%;
+  border: 2px solid #2b1e14;
+}
+
+.online {
+  background: #00ff00;
+  animation: pulse-green 1.5s infinite;
+  box-shadow: 0 0 6px rgba(0, 255, 0, 0.7);
+}
+
+.offline {
+  background: #ff0000;
+  box-shadow: 0 0 6px rgba(255, 0, 0, 0.5);
+}
+
+.friend-info {
+  flex: 1;
+}
+
+.friend-name {
+  color: #f5f5f5;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.friend-last-message {
+  color: #d4a017;
+  font-size: 14px;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.friend-level {
+  color: #f5f5f5;
+  font-size: 14px;
+  background: #2b1e14;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
+.friend-icon {
+  color: #d4a017;
+}
+
+.no-friends {
+  color: rgba(245, 245, 245, 0.7);
+  text-align: center;
+  font-size: 16px;
+  padding: 16px;
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+  border-radius: 8px;
+}
+
+/* Chat Area Styles */
+.chat-container {
+  background: #3c5a3c;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.friend-status {
+  margin-left: 8px;
+  font-size: 14px;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.chat-message {
+  display: flex;
+  margin-bottom: 12px;
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.chat-bubble-you {
+  background: #d4a017;
+  color: #2b2b2b;
+  border: 2px solid #2b2b2b;
+  border-radius: 0;
+  padding: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  max-width: 320px;
+}
+
+.chat-bubble-friend {
+  background: #e0e0e0;
+  color: #2b2b2b;
+  border: 2px solid #2b2b2b;
+  border-radius: 0;
+  padding: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  max-width: 320px;
+}
+
+.message-timestamp {
+  font-size: 12px;
+  margin-top: 4px;
+  opacity: 0.7;
+}
+
+.no-messages {
+  color: rgba(245, 245, 245, 0.7);
+  text-align: center;
+  font-size: 16px;
+  margin: auto;
+}
+
+.chat-input-container {
+  display: flex;
+  padding: 16px;
+  border-top: 1px solid #2b2b2b;
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
+
+.chat-input-container:hover {
+  background: #3a533a;
+}
+
+/* Welcome Section Styles */
+.welcome-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-image {
+  width: 192px;
+  margin-bottom: 16px;
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+.welcome-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #f5f5f5;
+  margin-bottom: 8px;
+}
+
+.welcome-text {
+  color: rgba(245, 245, 245, 0.7);
+  text-align: center;
+  font-size: 16px;
+}
+
+/* Input and Button Styles */
+.input-field {
+  background: #e0e0e0;
+  border: 2px solid #2b2b2b;
+  color: #2b2b2b;
+  border-radius: 0;
+  font-size: 16px;
+  padding: 8px;
+  line-height: 1.2;
+  flex: 1;
+  transition: background 0.3s ease;
+}
+
+.input-field:focus {
+  background: #fff;
+  outline: none;
+}
+
+.input-field::placeholder {
+  color: #6b6b6b;
+  opacity: 1;
+}
+
+.button {
+  background: #d4a017;
+  border: 2px solid #2b2b2b;
+  color: #2b2b2b;
+  border-radius: 0;
+  font-size: 16px;
+  padding: 8px 16px;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.button:hover {
+  background: #b58900;
+  transform: scale(1.05);
+}
+
+.delete-button {
+  display: flex;
+  align-items: center;
+  background: #b32d2d;
+  border: 2px solid #2b1e14;
+  color: #f5f5f5;
+  border-radius: 4px;
+  font-size: 14px;
+  padding: 4px 8px;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease, opacity 0.3s ease;
+  opacity: 0;
+}
+
+.delete-button:hover {
+  background: #8b1e1e;
+  transform: scale(1.05);
+}
+
+.delete-button:active {
+  transform: scale(0.95);
+}
+
+.cancel-button {
+  background: #6b6b6b;
+  border: 2px solid #2b2b2b;
+  color: #f5f5f5;
+  border-radius: 0;
+  font-size: 16px;
+  padding: 8px 16px;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.cancel-button:hover {
+  background: #4b4b4b;
+  transform: scale(1.05);
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #000;
+  opacity: 0.6;
+}
+
+.modal {
+  background: #4a3728;
+  border: 4px solid #2b1e14;
+  border-radius: 8px; /* Bo góc cho modal */
+  padding: 16px;
+  width: 384px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #f5f5f5;
+  margin-bottom: 16px;
+}
+
+.modal-text {
+  color: #f5f5f5;
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+/* Keyframes for animations */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-green {
+  0% {
+    background: #00ff00;
+  }
+  50% {
+    background: #77ff77;
+  }
+  100% {
+    background: #00ff00;
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

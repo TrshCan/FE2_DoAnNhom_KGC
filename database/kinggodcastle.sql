@@ -37,6 +37,7 @@ CREATE TABLE `classes` (
 
 --
 -- Đang đổ dữ liệu cho bảng `classes`
+-- Dumping data for table `classes`
 --
 
 INSERT INTO `classes` (`id`, `name`, `description`) VALUES
@@ -617,11 +618,11 @@ ALTER TABLE `user_hero_stats`
   ADD KEY `user_hero_id` (`user_hero_id`);
 
 --
--- AUTO_INCREMENT cho các bảng đã đổ
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT cho bảng `classes`
+-- AUTO_INCREMENT for table `classes`
 --
 ALTER TABLE `classes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;

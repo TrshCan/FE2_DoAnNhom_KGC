@@ -21,4 +21,3 @@ session_destroy(); // Hủy phiên
 
 // Trả về phản hồi thành công
 echo json_encode(['success' => true, 'message' => 'Đăng xuất thành công']);
-exit();
