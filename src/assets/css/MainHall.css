@@ -41,8 +41,8 @@
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: 0;
-  left: 12px;
+  top: -11px;
+  left: 2px;
   z-index: 1; /* Ensure avatar is above the frame */
 }
 
@@ -65,10 +65,10 @@
 
 .top-right {
   position: absolute;
-  top: 0;
+  top: 0px !important;
   right: 10px;
   display: flex;
-  gap: 15px;
+  gap: 1px;
   font-size: 1.5rem;
   flex-direction: column;
   align-items: center;
@@ -80,9 +80,10 @@
 }
 
 .top-right.show {
-  max-height: 300px; /* Adjust this value depending on the number of items */
+  max-height: 330px; /* Adjust this value depending on the number of items */
   gap: 20px;
   padding: 20px 7px;
+  margin:0;
 }
 
 .nav-item {
@@ -132,7 +133,7 @@
   transform: translateY(235px);
   height: 60px;
   width: 60px;
-  top: 103px;
+  top: 95px;
 }
 
 .bottom-nav {
