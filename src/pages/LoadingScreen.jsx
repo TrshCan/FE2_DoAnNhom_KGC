@@ -48,6 +48,7 @@ const LoadingScreen = () => {
         }
     };
 
+
     useEffect(() => {
         if (!initStarted) return;
 
@@ -112,39 +113,32 @@ const LoadingScreen = () => {
                     <div className="dropdown-menu">
                         {!isLoggedIn ? (
                             <>
-                                <a onClick={() => navigate('/login')}>
+                                <div className="dropdown-link" onClick={() => {
+                                    audio.pause();
+                                    audio.currentTime = 0;
+                                    setShowDropdown(false); navigate('/login');
+                                }}>
                                     <FaSignInAlt /> Login
-                                </a>
-                                <a onClick={() => navigate('/register')}>
+                                </div>
+                                <div className="dropdown-link" onClick={() => {
+                                    audio.pause();
+                                    audio.currentTime = 0;
+                                    setShowDropdown(false); navigate('/register');
+                                }}>
                                     <FaUserPlus /> Register
-                                </a>
+                                </div>
                             </>
                         ) : (
-                            <a
-                                onClick={async () => {
-                                    try {
-                                        const response = await fetch(`${BASE_URL}/src/includes/logout.php`, {
-                                            method: 'POST',
-                                            headers: { 'Content-Type': 'application/json' },
-                                            credentials: 'include',
-                                        });
-                                        const data = await response.json();
-                                        if (data.success) {
-                                            setIsLoggedIn(false);
-                                            toast.success('👋 Đăng Xuất Thành Công!');
-                                            navigate('/login');
-                                        } else {
-                                            toast.error(`Lỗi khi đăng xuất: ${data.message}`);
-                                        }
-                                    } catch (error) {
-                                        toast.error(`❌ Đăng Xuất Thất Bại: ${error.message}`);
-                                    }
-                                }}
-                            >
+                            <div className="dropdown-link" onClick={() => {
+                                audio.pause();
+                                audio.currentTime = 0;
+                                setShowDropdown(false); navigate('/logout');
+                            }}>
                                 <FaSignOutAlt /> Logout
-                            </a>
+                            </div>
                         )}
                     </div>
+
                 )}
             </div>
 

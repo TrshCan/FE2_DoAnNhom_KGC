@@ -1,70 +1,76 @@
 import { useState, useEffect } from 'react';
-import { FaTasks, FaBoxOpen, FaEnvelope, FaCog, FaCity, FaUserFriends, FaDoorOpen } from 'react-icons/fa';
-import '../assets/css/MainHall.css';
-import ArrowToggle from '../components/Arrow_Toggle';
-import illustration from '../assets/img/heroes/illustration/NPC_Illust_Luminesera.png';
+import { FaTasks, FaBoxOpen, FaEnvelope, FaCog, FaChevronUp, FaChevronDown, FaCity, FaUserFriends, FaDoorOpen } from 'react-icons/fa';
+import '../assets/css/MainHall.css'; // Reuse MainHall styling
+import '../assets/css/Barrack.css'; // Add new specific Barrack styling
+import ArrowToggle from "../components/Arrow_Toggle";
 import BASE_URL from '../components/BaseURL';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 import SettingsPopup from '../components/Setting';
 import MailPopup from '../components/Mail';
 import QuestPopup from '../components/Quest';
 import InventoryPopup from '../components/Inventory';
 import bgm from '../assets/music/shelter.mp3';
 
-const MainHall = () => {
+const Barrack = () => {
     const [showTopNav, setShowTopNav] = useState(true);
-    const username = 'Something'; // Thay bằng username thực từ session
+    const [heroes, setHeroes] = useState([]);
+    const [username, setUsername] = useState('');
     const [showMailPopup, setShowMailPopup] = useState(false);
     const [showSettingsPopup, setShowSettingsPopup] = useState(false);
     const [showQuestPopup, setShowQuestPopup] = useState(false);
     const [showInventoryPopup, setShowInventoryPopup] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
-    const [selectedMail, setSelectedMail] = useState(null);
     const [mails, setMails] = useState([]);
     const [quests, setQuests] = useState([]);
     const [items, setItems] = useState([]);
-    const [selectedQuest, setSelectedQuest] = useState(null);
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
+    const [audio] = useState(new Audio(bgm));
+    audio.pause();
+    audio.currentTime = 0;
 
-    // Kiểm tra trạng thái đăng nhập khi component mount
-    useEffect(() => {
-        const checkSession = async () => {
-            try {
-                const response = await fetch(`${BASE_URL}/src/includes/check-session.php`, {
-                    method: 'GET',
-                    credentials: 'include',
-                });
-                const data = await response.json();
-                if (!data.loggedIn) {
-                    toast.error('Vui lòng đăng nhập để vào game!');
-                    navigate('/login');
-                }
-            } catch (err) {
-                console.error('Error checking session:', err);
-                toast.error('❌ Kết nối đến máy chủ thất bại.');
-                navigate('/login');
+    const fetchHeroes = async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/src/includes/heroes.php?user_id=${localStorage.getItem('user_id')}`);
+            const data = await response.json();
+            if (data.success) {
+                setHeroes(data.heroes);
+            } else {
+                toast.error('❌ Failed to load heroes.');
             }
-        };
-        checkSession();
-    }, [navigate]);
+        } catch (error) {
+            console.error(error);
+            toast.error('❌ Connection error.');
+        }
+    };
+
+    const fetchUserInfo = async () => {
+        try {
+            const userId = localStorage.getItem('user_id');
+            const response = await fetch(`/api/user.php?user_id=${userId}`);
+            const data = await response.json();
+            if (data.success && data.username) {
+                setUsername(data.username);
+            } else {
+                setUsername('❌ Failed to load username.');
+            }
+        } catch (error) {
+            console.log(error);
+            setUsername('❌ Connection error.');
+        }
+    };
 
     const fetchMails = async () => {
         try {
             const response = await fetch(`${BASE_URL}/src/includes/mail.php`);
             const data = await response.json();
-
             if (data.success) {
                 setMails(data.mails);
             } else {
-                toast.error('❌ Không thể tải danh sách thư.');
+                toast.error('❌ Cannot load mails.');
             }
         } catch (error) {
-            console.error('Fetch error:', error);
-            toast.error('❌ Kết nối đến máy chủ thất bại.');
-        } finally {
-            setLoading(false);
+            console.error(error);
+            toast.error('❌ Connection error.');
         }
     };
 
@@ -72,15 +78,14 @@ const MainHall = () => {
         try {
             const response = await fetch(`${BASE_URL}/src/includes/quests.php`);
             const data = await response.json();
-
             if (data.success) {
                 setQuests(data.quests);
             } else {
-                toast.error('❌ Không thể tải danh sách nhiệm vụ.');
+                toast.error('❌ Cannot load quests.');
             }
         } catch (error) {
-            console.error('Fetch error:', error);
-            toast.error('❌ Kết nối đến máy chủ thất bại.');
+            console.error(error);
+            toast.error('❌ Connection error.');
         }
     };
 
@@ -88,79 +93,42 @@ const MainHall = () => {
         try {
             const response = await fetch(`${BASE_URL}/src/includes/inventory.php`);
             const data = await response.json();
-
             if (data.success) {
                 setItems(data.items);
             } else {
-                toast.error('❌ Không thể tải danh sách vật phẩm.');
+                toast.error('❌ Cannot load inventory.');
             }
         } catch (error) {
-            console.error('Fetch error:', error);
-            toast.error('❌ Kết nối đến máy chủ thất bại.');
+            console.error(error);
+            toast.error('❌ Connection error.');
         }
     };
-    const fetchUserInfo = async () => {
-        try {
-
-            const userId = localStorage.getItem('user_id');
-            console.log(userId);
-
-            const response = await fetch(`/api/user.php?user_id=${userId}`);
-            const data = await response.json();
-            console.log("hello");
-            if (data.success && data.username) {
-                setUsername(data.username);
-            } else {
-                setUsername('❌ Không thể tải thông tin người dùng.');
-            }
-        } catch (error) {
-            console.log("crash set username", error);
-            setUsername('❌ Kết nối đến máy chủ thất bại.');
-        }
-    };
-
-
 
     useEffect(() => {
+        fetchHeroes();
+        fetchUserInfo();
         fetchMails();
         fetchQuests();
         fetchItems();
-        fetchUserInfo();
     }, []);
-
-    const handleMailClick = (mail) => {
-        setSelectedMail(mail);
-    };
-
-    const handleQuestClick = (quest) => {
-        setSelectedQuest(quest);
-    };
 
     const handleLogoutClick = async () => {
         setIsLoggingOut(true);
         try {
-            const response = await fetch(`${BASE_URL}/src/includes/logout.php`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
+            const response = await fetch(`${BASE_URL}/src/includes/logout.php`, { method: 'POST' });
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
             const data = await response.json();
             if (data.success) {
-                toast.success('👋 Đăng Xuất Thành Công!');
+                toast.success('👋 Logged out successfully!');
                 setTimeout(() => {
-                    navigate('/login');
+                    window.location.href = '/login';
                 }, 1000);
             } else {
-                toast.error(`Lỗi khi đăng xuất: ${data.message || 'Unknown error'}`);
+                toast.error('❌ Logout failed.');
             }
         } catch (error) {
-            console.error('Logout error:', error);
-            toast.error(`❌ Đăng Xuất Thất Bại: ${error.message}`);
+            console.error(error);
+            toast.error('❌ Logout error.');
         } finally {
             setIsLoggingOut(false);
         }
@@ -169,12 +137,14 @@ const MainHall = () => {
     return (
         <>
             <div className="mainhall-container unselectable">
+                {/* Top Left Avatar */}
                 <div className="top-left">
                     <div className="avatar-frame"></div>
                     <div className="avatar-img"></div>
                     <span className="username">{username}</span>
                 </div>
 
+                {/* Top Right Navigation */}
                 <div className={`top-right ${showTopNav ? 'show' : ''}`}>
                     <div className="nav-item" onClick={() => setShowSettingsPopup(true)}>
                         <FaCog className="nav-icon" title="Setting" />
@@ -194,18 +164,42 @@ const MainHall = () => {
                     </div>
                 </div>
 
+                {/* Toggle Arrow */}
                 <ArrowToggle showTopNav={showTopNav} setShowTopNav={setShowTopNav} />
 
-                <div className="illustration-container">
-                    <img src={illustration} alt="Main Hall Illustration" className="illustration-image" />
+                {/* HERO GRID */}
+                <div className="barrack-content">
+                    <div className="hero-grid">
+                        {heroes.length > 0 ? heroes.map((hero) => (
+                            <div key={hero.id} className="hero-card">
+                                <div
+                                    className="hero-image"
+                                    style={{
+                                        backgroundImage: `url(${BASE_URL}/src/assets/img/heroes/illustration/${hero.illustration})`,
+                                    }}
+                                ></div>
+                                <div className="hero-info">
+                                    <h3 className="hero-name">{hero.name}</h3>
+                                    <div className="badges">
+                                        <span className="badge level">Lv. {hero.level}</span>
+                                        <span className="badge region">{hero.region}</span>
+                                        <span className="badge class">{hero.class}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        )) : (
+                            <div className="no-heroes">⚔️ No heroes recruited yet.</div>
+                        )}
+                    </div>
                 </div>
 
+                {/* Bottom Navigation */}
                 <div className="bottom-nav">
-                    <div className="nav-item" onClick={() => window.location.href = '/barrack'}>
+                    <div className="nav-item active">
                         <FaCity className="nav-icon" title="Barrack" />
                         <span className="nav-label">Barrack</span>
                     </div>
-                    <div className="nav-item active">
+                    <div className="nav-item" onClick={() => window.location.href = '/gate'}>
                         <FaDoorOpen className="nav-icon gate-icon" title="Gate" />
                         <span className="nav-label">Gate</span>
                     </div>
@@ -216,13 +210,12 @@ const MainHall = () => {
                 </div>
             </div>
 
+            {/* Popups */}
             <MailPopup
                 showMailPopup={showMailPopup}
                 setShowMailPopup={setShowMailPopup}
                 mails={mails}
                 loading={loading}
-                onMailClick={handleMailClick}
-                selectedMail={selectedMail}
             />
             <SettingsPopup
                 showSettingsPopup={showSettingsPopup}
@@ -234,8 +227,6 @@ const MainHall = () => {
                 setShowQuestPopup={setShowQuestPopup}
                 quests={quests}
                 loading={loading}
-                onQuestClick={handleQuestClick}
-                selectedQuest={selectedQuest}
             />
             <InventoryPopup
                 showInventoryPopup={showInventoryPopup}
@@ -247,4 +238,4 @@ const MainHall = () => {
     );
 };
 
-export default MainHall;
+export default Barrack;
