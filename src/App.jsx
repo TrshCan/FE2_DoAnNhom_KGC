@@ -34,6 +34,18 @@ const ProtectedRoute = ({ children }) => {
   // Nếu đã đăng nhập, render component con; nếu không, chuyển hướng về /login
   return isLoggedIn ? children : <Navigate to="/login" replace />;
 };
+//admin
+import ClassesManager from './pages/admin/ClassesManager';
+import HeroManager from './pages/admin/HeroManager';
+import MailManager from './pages/admin/MailManager';
+import SundryManager from './pages/admin/SundryManager';
+import UserManager from './pages/admin/UserManager';
+import EnemySkillManager from './pages/admin/EnemySkillManager';
+import EnemyManager from './pages/admin/EnemyManager';
+import HeroSkillManager from './pages/admin/HeroSkillManager';
+import RegionManager from './pages/admin/RegionManager';
+import AdminDashboard from './pages/admin/AdminDashboard';
+
 
 const App = () => {
   return (
@@ -42,6 +54,22 @@ const App = () => {
       <Route path="/loading" element={<LoadingScreen />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/loading" element={<LoadingScreen/>} />
+      //admin
+      <Route path="/admin" element={<AdminDashboard />}>
+        <Route index element={<UserManager />} /> {/* /admin mặc định */}
+        <Route path="classes" element={<ClassesManager />} />
+        <Route path="hero-skills" element={<HeroSkillManager />} />
+        <Route path="heroes" element={<HeroManager />} />
+        <Route path="mails" element={<MailManager />} />
+        <Route path="sundries" element={<SundryManager />} />
+        <Route path="users" element={<UserManager />} />
+        <Route path="enemy-skills" element={<EnemySkillManager />} />
+        <Route path="enemies" element={<EnemyManager />} />
+        <Route path="regions" element={<RegionManager />} />
+      </Route>
+      {/* Add other routes here */}
+
       <Route
         path="/mainhall"
         element={
