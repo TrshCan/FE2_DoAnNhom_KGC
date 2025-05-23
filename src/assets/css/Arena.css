@@ -1,0 +1,80 @@
+/* styles/Arena.css */
+.arena {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 20px;
+  background-color: #f0f0f0;
+}
+
+.player-area, .opponent-area {
+  flex: 1;
+  padding: 15px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.card-wrapper {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.card-wrapper:hover {
+  transform: translateY(-5px);
+}
+
+.battle-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #d0d0d0;
+  border-radius: 8px;
+  margin: 10px 0;
+  padding: 20px;
+}
+
+.battle-cards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  margin-top: 20px;
+}
+
+.vs {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 20px;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 15px;
+}
+
+.controls button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.controls button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}

@@ -1,0 +1,306 @@
+.card-game-board {
+  width: 100vw; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  margin: 0; /* Remove margin to eliminate gaps */
+  padding: 20px; /* Keep padding for content spacing */
+  background-image: url('../img/battlefield.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 0; /* Remove border-radius for true full-screen */
+  box-shadow: none; /* Optional: remove shadow as it may not be visible in full-screen */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: fixed; /* Fix position to cover the entire viewport */
+  top: 0;
+  left: 0;
+  overflow-y: auto; /* Allow scrolling if content overflows vertically */
+  box-sizing: border-box; /* Ensure padding is included in width/height */
+}
+
+/* Game message */
+.game-message {
+  width: 100%;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 10px 0;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
+  text-shadow: 1px 1px 4px #000;
+}
+
+/* Area titles */
+h2, h3 {
+  width: 100%;
+  font-size: 1.3rem;
+  margin: 8px 0;
+  text-shadow: 1px 1px 4px #000;
+  text-align: center;
+}
+
+/* Select phase */
+.select-phase {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-selection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Player, Opponent, Battle Zone, and Deck areas */
+.player-area, .opponent-area, .game-deck, .battle-zone {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+  flex-grow: 1;
+  flex-basis: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Hands and battle field */
+.player-hand, .battle-field, .opponent-hand {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 5px 0;
+  min-height: 160px;
+}
+
+/* Battle field specific */
+.battle-field {
+  align-items: center;
+  gap: 20px;
+}
+
+.player-battle, .opponent-battle {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.vs {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #e74c3c;
+  text-shadow: 1px 1px 4px #000;
+}
+
+/* Empty field message */
+.empty-field {
+  color: #ddd;
+  font-style: italic;
+  font-size: 0.9rem;
+  align-self: center;
+  padding: 20px;
+}
+
+/* Card styling */
+.card {
+  width: 100px;
+  height: 140px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #f0e6d2, #fffbe6);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+  border: 3px solid #444;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px 8px;
+  user-select: none;
+  transition: transform 0.2s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  color: #222;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Playable card hover effect */
+.card.playable {
+  cursor: pointer;
+}
+
+.card.playable:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 6px 8px 15px rgba(0, 0, 0, 0.6);
+  border-color: #27ae60;
+}
+
+/* Selected card */
+.card.selected {
+  border-color: #e67e22;
+  transform: scale(1.1);
+}
+
+/* Opponent card styling */
+.card.opponent {
+  background: linear-gradient(145deg, #e6d2d2, #ffdbdb);
+  border-color: #c0392b;
+}
+
+/* Card back (face-down) */
+.card-back {
+  background: linear-gradient(145deg, #444, #222);
+  box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.1), 3px 3px 8px rgba(0, 0, 0, 0.8);
+  cursor: default;
+  border: 3px solid #222;
+}
+
+/* Card icon and stats */
+.card-icon {
+  font-size: 48px;
+  text-align: center;
+  user-select: none;
+}
+
+.card-stats {
+  display: flex;
+  justify-content: space-around;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.attack {
+  color: #c0392b;
+}
+
+.hp {
+  color: #27ae60;
+}
+
+/* Deck & discard */
+.game-deck {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.deck-discard {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+}
+
+.discard {
+  background: #e0e0e0;
+  border: 3px solid #888;
+  color: #444;
+  font-size: 20px;
+  cursor: default;
+  user-select: none;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+  width: 100px;
+  height: 140px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Buttons */
+.btn-start, .btn-end-turn, .btn-reset {
+  margin: 10px auto;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: block;
+}
+
+.btn-start {
+  background: #27ae60;
+}
+
+.btn-start:hover:not(:disabled) {
+  background: #2ecc71;
+  transform: translateY(-2px);
+}
+
+.btn-start:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+}
+
+.btn-end-turn {
+  background: #3498db;
+}
+
+.btn-end-turn:hover:not(:disabled) {
+  background: #2980b9;
+  transform: translateY(-2px);
+}
+
+.btn-end-turn:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+}
+
+.btn-reset {
+  background: #e67e22;
+}
+
+.btn-reset:hover {
+  background: #d35400;
+  transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .card-game-board {
+    padding: 10px;
+  }
+
+  .card {
+    width: 80px;
+    height: 120px;
+    font-size: 12px;
+  }
+
+  .card-icon {
+    font-size: 36px;
+  }
+
+  .card-stats {
+    font-size: 12px;
+  }
+
+  .player-hand, .battle-field, .opponent-hand, .card-selection {
+    gap: 8px;
+  }
+
+  h2, h3 {
+    font-size: 1.1rem;
+  }
+
+  .game-message {
+    font-size: 1rem;
+  }
+
+  .vs {
+    font-size: 1.5rem;
+  }
+
+  .discard {
+    font-size: 16px;
+  }
+}
