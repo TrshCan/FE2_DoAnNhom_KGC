@@ -93,6 +93,7 @@
   text-align: center;
   width: 100%;
   cursor: pointer;
+  z-index: 100;
 }
 
 .nav-icon {
@@ -124,6 +125,7 @@
   right: 20px;
   cursor: pointer;
   transition: transform 0.3s ease, top 0.3s ease;
+  z-index: 100;
 }
 
 /* When toggled, move down and rotate */
