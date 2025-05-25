@@ -21,6 +21,7 @@ body {
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="rgba(212, 160, 23, 0.1)" width="100" height="100"/></svg>');
   background-attachment: fixed;
   background-size: 100px 100px;
+  z-index: 0; /* Ensure app-container is below close-button */
 }
 
 .app-container::before {
@@ -69,6 +70,7 @@ body {
   flex-shrink: 0;
   transition: width 0.3s ease, background 0.3s ease;
   overflow-y: auto;
+  z-index: 2; /* Above chat-container */
 }
 
 .sidebar:hover {
@@ -323,6 +325,7 @@ body {
   flex-direction: column;
   min-width: 0;
   transition: background 0.3s ease;
+  z-index: 1; /* Below sidebar and close-button */
 }
 
 .chat-container:hover {
@@ -664,22 +667,23 @@ body {
 
 /* Close Button */
 .close-button {
-  position: absolute;
+  position: fixed; /* Anchor to viewport */
   top: 10px;
   right: 10px;
+  z-index: 1001; /* Above modal-overlay and chat-container */
   background: linear-gradient(45deg, #d9534f, #c9302c);
   color: white;
   border: 2px solid #2b1e14;
   padding: 8px 12px;
   cursor: pointer;
   font-size: 14px;
-  border-radius: 5px;
+  border-radius: 4px;
   transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
   box-shadow: 0 0 10px rgba(217, 83, 79, 0.5);
 }
 
 .close-button:hover {
-  background: linear-gradient(45deg, #c9302c, #b72828);
+  background: linear-gradient(45deg, #c9302c, #b82828);
   transform: scale(1.1);
   box-shadow: 0 0 15px rgba(217, 83, 79, 0.7);
 }
@@ -777,5 +781,34 @@ body {
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 767px) {
+  .sidebar {
+    width: 100%;
+    z-index: 2;
+  }
+  .chat-container {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: 100%;
+    transition: left 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    z-index: 1; /* Lowered to ensure close-button is above */
+  }
+  .chat-container.chat-active {
+    left: 0;
+    opacity: 1;
+    z-index: 1; /* Keep below close-button */
+  }
+  .close-button {
+    position: fixed; /* Ensure fixed position */
+    top: 10px;
+    right: 10px;
+    z-index: 1001; /* Above chat-container */
   }
 }
