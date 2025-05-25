@@ -4,7 +4,6 @@ session_start();
 ini_set('session.gc_maxlifetime', 3600);
 header("Content-Type: application/json");
 
-// Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
@@ -24,7 +23,6 @@ if (empty($email) || empty($password)) {
 
 $conn = (new Database())::$connection;
 
-// Check if user exists
 $stmt = $conn->prepare("SELECT id, password FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
