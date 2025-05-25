@@ -29,11 +29,15 @@ const Login = () => {
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok)
+      if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
       const data = await response.json();
-      if (data.success) {
+      console.log("Login response:", data); // Debug log
+      if (data.success && data.user_id) {
+        localStorage.setItem("currentUserId", parseInt(data.user_id));
+        console.log("Stored user_id:", localStorage.getItem("currentUserId")); // Verify storage
         toast.success("🧙‍♂️ Đăng nhập thành công! Cổng phép thuật đã mở...", {
           position: "top-center",
           autoClose: 3000,
@@ -50,19 +54,26 @@ const Login = () => {
         });
         setIsLoggedIn(true);
       } else {
-        toast.error(`🚫 ${data.message}`);
+        toast.error(`🚫 ${data.message || "Không nhận được ID người dùng!"}`);
       }
     } catch (error) {
       console.error("Fetch error:", error);
       toast.error("❌ Kết nối đến máy chủ thất bại. Hãy thử lại sau.");
     }
   };
+
   const handleStartGame = () => {
+    if (!localStorage.getItem("currentUserId")) {
+      toast.error("🚫 Không tìm thấy ID người dùng. Vui lòng đăng nhập lại!");
+      navigate("/login");
+      return;
+    }
     setIsLoading(true);
     setTimeout(() => {
       navigate("/loading");
     }, 2000);
   };
+
   return (
     <div className="auth-bg">
       {!isLoggedIn ? (

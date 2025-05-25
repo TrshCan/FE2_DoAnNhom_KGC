@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 02, 2025 at 04:53 AM
+-- Generation Time: May 25, 2025 at 11:38 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -120,22 +120,17 @@ CREATE TABLE `friends` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `friend_id` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` enum('pending','accepted') NOT NULL DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `friends`
 --
 
-INSERT INTO `friends` (`id`, `user_id`, `friend_id`, `created_at`) VALUES
-(17, 17, 4, '2025-05-02 02:00:20'),
-(19, 1, 4, '2025-05-02 02:06:56'),
-(20, 17, 1, '2025-05-02 02:08:16'),
-(21, 1, 17, '2025-05-02 02:08:37'),
-(22, 4, 1, '2025-05-02 02:14:49'),
-(23, 17, 17, '2025-05-02 02:17:06'),
-(24, 4, 4, '2025-05-02 02:18:40'),
-(25, 4, 17, '2025-05-02 02:19:16');
+INSERT INTO `friends` (`id`, `user_id`, `friend_id`, `created_at`, `status`) VALUES
+(35, 4, 18, '2025-05-25 09:01:34', 'accepted'),
+(36, 18, 4, '2025-05-25 09:01:43', 'accepted');
 
 -- --------------------------------------------------------
 
@@ -361,7 +356,15 @@ INSERT INTO `messages` (`id`, `sender_id`, `receiver_id`, `content`, `sent_at`) 
 (21, 4, 1, 'fdfsdf', '2025-05-02 02:19:00'),
 (22, 4, 17, 'fdsfsdf', '2025-05-02 02:19:20'),
 (23, 17, 4, 'xin chao', '2025-05-02 02:19:40'),
-(24, 4, 17, 'chào nha', '2025-05-02 02:19:56');
+(24, 4, 17, 'chào nha', '2025-05-02 02:19:56'),
+(25, 18, 4, 'dsadsadas', '2025-05-25 08:24:03'),
+(26, 4, 18, 'dsdsad', '2025-05-25 08:24:11'),
+(27, 18, 4, 'dsadasd', '2025-05-25 08:25:40'),
+(28, 4, 18, 'sdsadsad123', '2025-05-25 08:25:50'),
+(29, 18, 4, 'dsadasdas', '2025-05-25 09:10:57'),
+(30, 4, 18, 'fdfdsfsdf', '2025-05-25 09:20:16'),
+(31, 4, 18, 'dsdasdasdas12312321312', '2025-05-25 09:36:43'),
+(32, 18, 4, 'sadsadasdasdasd', '2025-05-25 09:36:51');
 
 -- --------------------------------------------------------
 
@@ -486,7 +489,8 @@ INSERT INTO `users` (`id`, `email`, `password`, `username`, `role`) VALUES
 (3, 'charlie@example.com', 'randompass789', 'charlie_chap', 'user'),
 (4, 'thachdao582@gmail.com', '$2y$10$Kk2b8AEDzAhApqADHN9qkOYYIK2IpSYkXQKUBI7H.8ZV2lZkHK6ki', 'thach', 'admin'),
 (6, 'daothach11@gmail.com', '123123', 'nick123', 'user'),
-(17, 'ngocthach@gmail.com', '$2y$10$DhmDfzH2IS6FSYBwl/59qeNzS42h8hHgNIVmGsRpI.BqUfJZP8XdG', 'thach11', 'user');
+(17, 'ngocthach@gmail.com', '$2y$10$DhmDfzH2IS6FSYBwl/59qeNzS42h8hHgNIVmGsRpI.BqUfJZP8XdG', 'thach11', 'user'),
+(18, 'Daothach001@gmail.com', '$2y$10$gdgVNbIiGiTkLyfjq7s22.6GINY5P.4ockt7TrY0DrypJYS/0VTVi', '_thhac.nqocc_', 'user');
 
 -- --------------------------------------------------------
 
@@ -798,7 +802,7 @@ ALTER TABLE `enemy_skills`
 -- AUTO_INCREMENT for table `friends`
 --
 ALTER TABLE `friends`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `heroes`
@@ -834,7 +838,7 @@ ALTER TABLE `mails`
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `regions`
@@ -858,7 +862,7 @@ ALTER TABLE `teams`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `user_heroes`

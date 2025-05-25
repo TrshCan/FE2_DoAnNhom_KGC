@@ -1,11 +1,14 @@
 <?php
-session_start();
-header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Content-Type: application/json");
 
-$response = ['loggedIn' => false];
-
-if (isset($_SESSION['user_id'])) {
-    $response['loggedIn'] = true;
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
 }
 
-echo json_encode($response);
+session_start();
+echo json_encode(['loggedIn' => isset($_SESSION['user_id'])]);
+exit;

@@ -1,4 +1,4 @@
 // BaseURL.jsx
-const BASE_URL = 'http://localhost/HTDOC_SQL/FE2';
+const BASE_URL = 'http://localhost/FE2_DoAnNhom_KGC1';
 
 export default BASE_URL;
