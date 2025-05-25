@@ -1,13 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
-import Modal from "react-modal";
-
+import { toast } from "react-toastify";
+import { Modal } from "react-bootstrap"; // Import Modal từ react-bootstrap
 import "../assets/css/Friend.css";
 import BASE_URL from "../components/BaseURL";
-
-// Bind modal to app element for accessibility
-Modal.setAppElement("#root");
 
 const FriendList = () => {
   const navigate = useNavigate();
@@ -30,11 +26,45 @@ const FriendList = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const messagesEndRef = useRef(null);
 
-  // List of common emojis for the picker
   const emojis = [
-    "😊", "😂", "😍", "😎", "🥳", "😢", "😡", "👍", "👎", "🙌",
-    "❤️", "🔥", "🌟", "🚀", "🎉", "🍎", "🍕", "🌈", "☀️", "🌙"
+    "😊",
+    "😂",
+    "😍",
+    "😎",
+    "🥳",
+    "😢",
+    "😡",
+    "👍",
+    "👎",
+    "🙌",
+    "❤️",
+    "🔥",
+    "🌟",
+    "🚀",
+    "🎉",
+    "🍎",
+    "🍕",
+    "🌈",
+    "☀️",
+    "🌙",
   ];
+
+  // Debug modal states
+  useEffect(() => {
+    console.log("Modal states:", {
+      showAddModal,
+      showReceivedModal,
+      showSentModal,
+      showDeleteModal,
+      showEmojiModal,
+    });
+  }, [
+    showAddModal,
+    showReceivedModal,
+    showSentModal,
+    showDeleteModal,
+    showEmojiModal,
+  ]);
 
   const fetchFriends = async () => {
     if (!currentUserId) return;
@@ -112,7 +142,9 @@ const FriendList = () => {
           setSelectedFriend(null);
           toast.error("🚫 Bạn chưa là bạn bè với người này!");
         } else {
-          toast.error("🚫 Lỗi khi tải tin nhắn: " + (data.error || "Không xác định"));
+          toast.error(
+            "🚫 Lỗi khi tải tin nhắn: " + (data.error || "Không xác định")
+          );
         }
       }
     } catch (error) {
@@ -169,6 +201,7 @@ const FriendList = () => {
       return;
     }
     try {
+      console.log(`Sending accept request for friendId: ${friendId}`);
       const res = await fetch(`/api/friend.php`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -191,7 +224,10 @@ const FriendList = () => {
       );
 
       if (acceptedFriend) {
-        const friendToSelect = { id: acceptedFriend.id, name: acceptedFriend.name };
+        const friendToSelect = {
+          id: acceptedFriend.id,
+          name: acceptedFriend.name,
+        };
         setSelectedFriend(friendToSelect);
         await fetchMessages(friendToSelect);
       }
@@ -215,6 +251,7 @@ const FriendList = () => {
       return;
     }
     try {
+      console.log(`Sending reject request for friendId: ${friendId}`);
       const res = await fetch(`/api/friend.php`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -367,29 +404,46 @@ const FriendList = () => {
       <button
         onClick={() => navigate("/mainhall")}
         className="close-button wax-seal-button"
-        style={{ position: "fixed", top: "10px", right: "10px", zIndex: 1001 }}
-        aria-label="Đóng cửa sổ bạn bè"
+        style={{ position: "fixed", top: "10px", right: "10px", zIndex: 2002 }}
       >
         ĐÓNG
       </button>
       <div
         className={`sidebar parchment-sidebar ${
-          showAddModal || showReceivedModal || showSentModal || showDeleteModal || showEmojiModal
+          showAddModal ||
+          showReceivedModal ||
+          showSentModal ||
+          showDeleteModal ||
+          showEmojiModal
             ? "sidebar-blur"
             : ""
         }`}
+        aria-hidden={
+          showAddModal ||
+          showReceivedModal ||
+          showSentModal ||
+          showDeleteModal ||
+          showEmojiModal
+        }
       >
         <div className="header parchment-header">
           <h3 className="header-title">DANH SÁCH BẠN BÈ</h3>
           <div className="header-buttons">
             <button
               onClick={() => {
-                console.log("Opening Add Friend Modal");
+                console.log("Opening Add Modal");
                 setShowAddModal(true);
               }}
               className="add-friend-button"
-              title="Thêm bạn bè"
-              aria-label="Mở modal thêm bạn bè"
+              tabIndex={
+                showAddModal ||
+                showReceivedModal ||
+                showSentModal ||
+                showDeleteModal ||
+                showEmojiModal
+                  ? "-1"
+                  : "0"
+              }
             >
               <i className="fas fa-user-plus add-friend-icon"></i>
               THÊM BẠN
@@ -398,60 +452,58 @@ const FriendList = () => {
         </div>
 
         <Modal
-          isOpen={showAddModal}
-          onRequestClose={() => {
-            setShowAddModal(false);
-            setErrorMessage("");
-          }}
-          className="modal parchment-modal"
-          overlayClassName="modal-overlay"
-          contentLabel="Thêm bạn bè"
+          show={showAddModal}
+          onHide={() => setShowAddModal(false)}
+          dialogClassName="modal parchment-modal"
+          aria-labelledby="add-friend-modal"
+          backdropClassName="modal-overlay"
+          centered // Đảm bảo Modal hiển thị ở giữa màn hình
         >
-          <div className="modal-content parchment-form">
-            <h2 className="modal-title">THÊM BẠN BÈ</h2>
-            <form onSubmit={handleAddFriend}>
-              <div className="add-friend-input-container">
-                <input
-                  type="text"
-                  value={newFriendId}
-                  onChange={(e) => setNewFriendId(e.target.value)}
-                  placeholder="ID BẠN BÈ..."
-                  className="input-field"
-                  aria-label="Nhập ID bạn bè"
-                />
-                <div className="modal-buttons">
-                  <button type="submit" className="button wax-seal-button" aria-label="Gửi lời mời kết bạn">
-                    GỬI LỜI MỜI
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowAddModal(false);
-                      setErrorMessage("");
-                    }}
-                    className="button cancel-button"
-                    aria-label="Hủy thêm bạn bè"
-                  >
-                    HỦY
-                  </button>
-                </div>
+          {console.log("Add Modal is rendering")}
+          <Modal.Body className="modal-content parchment-form">
+            <h2 className="modal-title" id="add-friend-modal">
+              THÊM BẠN BÈ
+            </h2>
+            <div className="add-friend-input-container">
+              <input
+                type="text"
+                value={newFriendId}
+                onChange={(e) => setNewFriendId(e.target.value)}
+                placeholder="ID BẠN BÈ..."
+                className="input-field"
+              />
+              <div className="modal-buttons">
+                <button
+                  onClick={handleAddFriend}
+                  className="button wax-seal-button"
+                >
+                  GỬI LỜI MỜI
+                </button>
+                <button
+                  onClick={() => setShowAddModal(false)}
+                  className="button cancel-button"
+                >
+                  HỦY
+                </button>
               </div>
-              {errorMessage && (
-                <p className="error-message" aria-live="polite">{errorMessage}</p>
-              )}
-            </form>
-          </div>
+            </div>
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+          </Modal.Body>
         </Modal>
 
         <Modal
-          isOpen={showReceivedModal}
-          onRequestClose={() => setShowReceivedModal(false)}
-          className="modal parchment-modal"
-          overlayClassName="modal-overlay"
-          contentLabel="Lời mời nhận được"
+          show={showReceivedModal}
+          onHide={() => setShowReceivedModal(false)}
+          dialogClassName="modal parchment-modal"
+          aria-labelledby="received-requests-modal"
+          backdropClassName="modal-overlay"
+          centered
         >
-          <div className="modal-content parchment-form">
-            <h2 className="modal-title">LỜI MỜI NHẬN ĐƯỢC</h2>
+          {console.log("Received Modal is rendering")}
+          <Modal.Body className="modal-content parchment-form">
+            <h2 className="modal-title" id="received-requests-modal">
+              LỜI MỜI NHẬN ĐƯỢC
+            </h2>
             <ul className="friend-list">
               {receivedRequests.length > 0 ? (
                 receivedRequests.map((request) => (
@@ -495,18 +547,22 @@ const FriendList = () => {
                 ĐÓNG
               </button>
             </div>
-          </div>
+          </Modal.Body>
         </Modal>
 
         <Modal
-          isOpen={showSentModal}
-          onRequestClose={() => setShowSentModal(false)}
-          className="modal parchment-modal"
-          overlayClassName="modal-overlay"
-          contentLabel="Lời mời đã gửi"
+          show={showSentModal}
+          onHide={() => setShowSentModal(false)}
+          dialogClassName="modal parchment-modal"
+          aria-labelledby="sent-requests-modal"
+          backdropClassName="modal-overlay"
+          centered
         >
-          <div className="modal-content parchment-form">
-            <h2 className="modal-title">LỜI MỜI ĐÃ GỬI</h2>
+          {console.log("Sent Modal is rendering")}
+          <Modal.Body className="modal-content parchment-form">
+            <h2 className="modal-title" id="sent-requests-modal">
+              LỜI MỜI ĐÃ GỬI
+            </h2>
             <ul className="friend-list">
               {sentRequests.length > 0 ? (
                 sentRequests.map((request) => (
@@ -515,7 +571,9 @@ const FriendList = () => {
                       <span className="status-indicator pending"></span>
                       <div className="friend-info">
                         <span className="friend-name">{request.name}</span>
-                        <p className="friend-last-message">Đang chờ chấp nhận</p>
+                        <p className="friend-last-message">
+                          Đang chờ chấp nhận
+                        </p>
                       </div>
                     </div>
                   </li>
@@ -533,20 +591,25 @@ const FriendList = () => {
                 ĐÓNG
               </button>
             </div>
-          </div>
+          </Modal.Body>
         </Modal>
 
         <Modal
-          isOpen={showDeleteModal}
-          onRequestClose={() => setShowDeleteModal(false)}
-          className="modal parchment-modal"
-          overlayClassName="modal-overlay"
-          contentLabel="Xác nhận xóa bạn"
+          show={showDeleteModal}
+          onHide={() => setShowDeleteModal(false)}
+          dialogClassName="modal parchment-modal"
+          aria-labelledby="delete-friend-modal"
+          backdropClassName="modal-overlay"
+          centered
         >
-          <div className="modal-content parchment-form">
-            <h2 className="modal-title">XÁC NHẬN XÓA BẠN</h2>
+          {console.log("Delete Modal is rendering")}
+          <Modal.Body className="modal-content parchment-form">
+            <h2 className="modal-title" id="delete-friend-modal">
+              XÁC NHẬN XÓA BẠN
+            </h2>
             <p>
-              Bạn có chắc chắn muốn xóa <strong>{friendToDelete?.name}</strong> khỏi danh sách bạn bè không?
+              Bạn có chắc chắn muốn xóa <strong>{friendToDelete?.name}</strong>{" "}
+              khỏi danh sách bạn bè không?
             </p>
             <div className="modal-buttons">
               <button
@@ -564,19 +627,23 @@ const FriendList = () => {
                 HỦY
               </button>
             </div>
-          </div>
+          </Modal.Body>
         </Modal>
 
         <Modal
-          isOpen={showEmojiModal}
-          onRequestClose={() => setShowEmojiModal(false)}
-          className="modal parchment-modal"
-          overlayClassName="modal-overlay"
-          contentLabel="Chọn Emoji"
+          show={showEmojiModal}
+          onHide={() => setShowEmojiModal(false)}
+          dialogClassName="modal parchment-modal"
+          aria-labelledby="emoji-modal"
+          backdropClassName="modal-overlay"
+          centered
         >
-          <div className="modal-content parchment-form">
-            <h2 className="modal-title">CHỌN EMOJI</h2>
-            <div className="emoji-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "10px" }}>
+          {console.log("Emoji Modal is rendering")}
+          <Modal.Body className="modal-content parchment-form">
+            <h2 className="modal-title" id="emoji-modal">
+              CHỌN EMOJI
+            </h2>
+            <div className="emoji-grid">
               {emojis.map((emoji, index) => (
                 <button
                   key={index}
@@ -590,9 +657,12 @@ const FriendList = () => {
                     cursor: "pointer",
                     transition: "background-color 0.2s",
                   }}
-                  onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#f0f0f0")}
-                  onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
-                  aria-label={`Chọn emoji ${emoji}`}
+                  onMouseOver={(e) =>
+                    (e.currentTarget.style.backgroundColor = "#f0f0f0")
+                  }
+                  onMouseOut={(e) =>
+                    (e.currentTarget.style.backgroundColor = "transparent")
+                  }
                 >
                   {emoji}
                 </button>
@@ -607,28 +677,44 @@ const FriendList = () => {
                 ĐÓNG
               </button>
             </div>
-          </div>
+          </Modal.Body>
         </Modal>
 
         <div className="sidebar-actions">
           <button
             onClick={() => {
-              console.log("Opening Received Requests Modal");
+              console.log("Opening Received Modal");
               setShowReceivedModal(true);
             }}
             className="received-requests-button"
-            aria-label="Xem lời mời nhận được"
+            tabIndex={
+              showAddModal ||
+              showReceivedModal ||
+              showSentModal ||
+              showDeleteModal ||
+              showEmojiModal
+                ? "-1"
+                : "0"
+            }
           >
             <i className="fas fa-envelope add-friend-icon"></i>
             LỜI MỜI NHẬN
           </button>
           <button
             onClick={() => {
-              console.log("Opening Sent Requests Modal");
+              console.log("Opening Sent Modal");
               setShowSentModal(true);
             }}
             className="sent-requests-button"
-            aria-label="Xem lời mời đã gửi"
+            tabIndex={
+              showAddModal ||
+              showReceivedModal ||
+              showSentModal ||
+              showDeleteModal ||
+              showEmojiModal
+                ? "-1"
+                : "0"
+            }
           >
             <i className="fas fa-paper-plane add-friend-icon"></i>
             LỜI MỜI ĐÃ GỬI
@@ -657,9 +743,20 @@ const FriendList = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => handleOpenDeleteModal(friend)}
+                  onClick={() => {
+                    console.log("Opening Delete Modal for friend:", friend);
+                    handleOpenDeleteModal(friend);
+                  }}
                   className="delete-button wax-seal-button"
-                  aria-label={`Xóa bạn ${friend.name}`}
+                  tabIndex={
+                    showAddModal ||
+                    showReceivedModal ||
+                    showSentModal ||
+                    showDeleteModal ||
+                    showEmojiModal
+                      ? "-1"
+                      : "0"
+                  }
                 >
                   XÓA BẠN
                 </button>
@@ -671,7 +768,11 @@ const FriendList = () => {
         </ul>
       </div>
 
-      <div className={`chat-container parchment-chat ${selectedFriend ? "chat-active" : ""}`}>
+      <div
+        className={`chat-container parchment-chat ${
+          selectedFriend ? "chat-active" : ""
+        }`}
+      >
         {selectedFriend ? (
           <>
             <div className="header parchment-header">
@@ -706,8 +807,15 @@ const FriendList = () => {
                   setShowEmojiModal(true);
                 }}
                 className="emoji-picker-button wax-seal-button mr-2"
-                title="Chọn Emoji"
-                aria-label="Mở modal chọn emoji"
+                tabIndex={
+                  showAddModal ||
+                  showReceivedModal ||
+                  showSentModal ||
+                  showDeleteModal ||
+                  showEmojiModal
+                    ? "-1"
+                    : "0"
+                }
               >
                 😊
               </button>
