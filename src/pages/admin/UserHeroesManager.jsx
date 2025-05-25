@@ -402,6 +402,7 @@ export default function UserHeroesManager() {
           padding-right: 15px;
         }
         .card {
+          min-width: 100%;
           border-radius: 8px;
           overflow: hidden;
         }

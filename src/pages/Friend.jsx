@@ -1,17 +1,18 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import Modal from "react-modal";
+
 import "../assets/css/Friend.css";
 import BASE_URL from "../components/BaseURL";
 
-// Bind modal to your appElement (required for accessibility)
+// Bind modal to app element for accessibility
 Modal.setAppElement("#root");
 
 const FriendList = () => {
   const navigate = useNavigate();
   const [currentUserId, setCurrentUserId] = useState(
-    parseInt(localStorage.getItem("currentUserId")) || null
+    parseInt(localStorage.getItem("userId")) || null
   );
   const [friends, setFriends] = useState([]);
   const [sentRequests, setSentRequests] = useState([]);
@@ -24,7 +25,7 @@ const FriendList = () => {
   const [showReceivedModal, setShowReceivedModal] = useState(false);
   const [showSentModal, setShowSentModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showEmojiModal, setShowEmojiModal] = useState(false); // New state for emoji modal
+  const [showEmojiModal, setShowEmojiModal] = useState(false);
   const [friendToDelete, setFriendToDelete] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const messagesEndRef = useRef(null);
@@ -39,7 +40,7 @@ const FriendList = () => {
     if (!currentUserId) return;
     try {
       const res = await fetch(
-        `${BASE_URL}/src/includes/friend.php?user_id=${currentUserId}&type=friends`
+        `/api/friend.php?user_id=${currentUserId}&type=friends`
       );
       const data = await res.json();
       console.log("Friends response:", data);
@@ -58,7 +59,7 @@ const FriendList = () => {
     if (!currentUserId) return;
     try {
       const res = await fetch(
-        `${BASE_URL}/src/includes/friend.php?user_id=${currentUserId}&type=sent_requests`
+        `/api/friend.php?user_id=${currentUserId}&type=sent_requests`
       );
       const data = await res.json();
       console.log("Sent requests response:", data);
@@ -77,7 +78,7 @@ const FriendList = () => {
     if (!currentUserId) return;
     try {
       const res = await fetch(
-        `${BASE_URL}/src/includes/friend.php?user_id=${currentUserId}&type=received_requests`
+        `/api/friend.php?user_id=${currentUserId}&type=received_requests`
       );
       const data = await res.json();
       console.log("Received requests response:", data);
@@ -95,7 +96,7 @@ const FriendList = () => {
   const fetchMessages = async (friend) => {
     try {
       const res = await fetch(
-        `${BASE_URL}/src/includes/messages.php?user1=${currentUserId}&user2=${friend.id}`
+        `/api/messages.php?user1=${currentUserId}&user2=${friend.id}`
       );
       const data = await res.json();
       console.log("Messages response:", data);
@@ -107,7 +108,7 @@ const FriendList = () => {
         }));
         setMessages((prev) => ({ ...prev, [friend.id]: formatted }));
       } else {
-        if (data.error.includes("Chỉ có thể xem tin nhắn")) {
+        if (data.error?.includes("Chỉ có thể xem tin nhắn")) {
           setSelectedFriend(null);
           toast.error("🚫 Bạn chưa là bạn bè với người này!");
         } else {
@@ -133,7 +134,7 @@ const FriendList = () => {
     }
     try {
       const friendId = parseInt(newFriendId);
-      const res = await fetch(`${BASE_URL}/src/includes/friend.php`, {
+      const res = await fetch(`/api/friend.php`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -168,8 +169,7 @@ const FriendList = () => {
       return;
     }
     try {
-      console.log(`Sending accept request for friendId: ${friendId}`);
-      const res = await fetch(`${BASE_URL}/src/includes/friend.php`, {
+      const res = await fetch(`/api/friend.php`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -180,8 +180,6 @@ const FriendList = () => {
       });
 
       const data = await res.json();
-      console.log("Accept request response:", data);
-
       if (!res.ok) {
         throw new Error(data.error || `HTTP error! Status: ${res.status}`);
       }
@@ -217,8 +215,7 @@ const FriendList = () => {
       return;
     }
     try {
-      console.log(`Sending reject request for friendId: ${friendId}`);
-      const res = await fetch(`${BASE_URL}/src/includes/friend.php`, {
+      const res = await fetch(`/api/friend.php`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -229,8 +226,6 @@ const FriendList = () => {
       });
 
       const data = await res.json();
-      console.log("Reject request response:", data);
-
       if (!res.ok) {
         throw new Error(data.error || `HTTP error! Status: ${res.status}`);
       }
@@ -251,7 +246,7 @@ const FriendList = () => {
 
   const handleDeleteFriend = async (friendId) => {
     try {
-      const res = await fetch(`${BASE_URL}/src/includes/friend.php`, {
+      const res = await fetch(`/api/friend.php`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_id: currentUserId, friend_id: friendId }),
@@ -293,7 +288,7 @@ const FriendList = () => {
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedFriend) return;
     try {
-      const res = await fetch(`${BASE_URL}/src/includes/messages.php`, {
+      const res = await fetch(`/api/messages.php`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -305,7 +300,7 @@ const FriendList = () => {
 
       const data = await res.json();
       if (!res.ok) {
-        if (data.error.includes("Chỉ có thể nhắn tin")) {
+        if (data.error?.includes("Chỉ có thể nhắn tin")) {
           setSelectedFriend(null);
           toast.error("🚫 Bạn chưa là bạn bè với người này!");
         } else {
@@ -345,7 +340,7 @@ const FriendList = () => {
     fetchReceivedRequests();
 
     const handleStorageChange = () => {
-      const newUserId = parseInt(localStorage.getItem("currentUserId"));
+      const newUserId = parseInt(localStorage.getItem("userId"));
       if (newUserId !== currentUserId) {
         setCurrentUserId(newUserId || null);
       }
@@ -368,21 +363,33 @@ const FriendList = () => {
 
   return (
     <div className="app-container">
+      <ToastContainer />
       <button
-        onClick={() => navigate('/mainhall')}
+        onClick={() => navigate("/mainhall")}
         className="close-button wax-seal-button"
-        style={{ position: 'fixed', top: '10px', right: '10px', zIndex: 1000 }}
+        style={{ position: "fixed", top: "10px", right: "10px", zIndex: 1001 }}
+        aria-label="Đóng cửa sổ bạn bè"
       >
         ĐÓNG
       </button>
-      <div className={`sidebar parchment-sidebar ${showAddModal || showReceivedModal || showSentModal || showDeleteModal || showEmojiModal ? 'sidebar-blur' : ''}`}>
+      <div
+        className={`sidebar parchment-sidebar ${
+          showAddModal || showReceivedModal || showSentModal || showDeleteModal || showEmojiModal
+            ? "sidebar-blur"
+            : ""
+        }`}
+      >
         <div className="header parchment-header">
           <h3 className="header-title">DANH SÁCH BẠN BÈ</h3>
           <div className="header-buttons">
             <button
-              onClick={() => setShowAddModal(true)}
+              onClick={() => {
+                console.log("Opening Add Friend Modal");
+                setShowAddModal(true);
+              }}
               className="add-friend-button"
               title="Thêm bạn bè"
+              aria-label="Mở modal thêm bạn bè"
             >
               <i className="fas fa-user-plus add-friend-icon"></i>
               THÊM BẠN
@@ -392,7 +399,10 @@ const FriendList = () => {
 
         <Modal
           isOpen={showAddModal}
-          onRequestClose={() => setShowAddModal(false)}
+          onRequestClose={() => {
+            setShowAddModal(false);
+            setErrorMessage("");
+          }}
           className="modal parchment-modal"
           overlayClassName="modal-overlay"
           contentLabel="Thêm bạn bè"
@@ -407,22 +417,27 @@ const FriendList = () => {
                   onChange={(e) => setNewFriendId(e.target.value)}
                   placeholder="ID BẠN BÈ..."
                   className="input-field"
+                  aria-label="Nhập ID bạn bè"
                 />
                 <div className="modal-buttons">
-                  <button type="submit" className="button wax-seal-button">
+                  <button type="submit" className="button wax-seal-button" aria-label="Gửi lời mời kết bạn">
                     GỬI LỜI MỜI
                   </button>
                   <button
                     type="button"
-                    onClick={() => setShowAddModal(false)}
+                    onClick={() => {
+                      setShowAddModal(false);
+                      setErrorMessage("");
+                    }}
                     className="button cancel-button"
+                    aria-label="Hủy thêm bạn bè"
                   >
                     HỦY
                   </button>
                 </div>
               </div>
               {errorMessage && (
-                <p className="error-message">{errorMessage}</p>
+                <p className="error-message" aria-live="polite">{errorMessage}</p>
               )}
             </form>
           </div>
@@ -453,12 +468,14 @@ const FriendList = () => {
                         onClick={() => handleAcceptRequest(request.id)}
                         className="button wax-seal-button"
                         style={{ marginRight: "5px" }}
+                        aria-label={`Chấp nhận lời mời từ ${request.name}`}
                       >
                         CHẤP NHẬN
                       </button>
                       <button
                         onClick={() => handleRejectRequest(request.id)}
                         className="delete-button wax-seal-button"
+                        aria-label={`Từ chối lời mời từ ${request.name}`}
                       >
                         TỪ CHỐI
                       </button>
@@ -473,6 +490,7 @@ const FriendList = () => {
               <button
                 onClick={() => setShowReceivedModal(false)}
                 className="button cancel-button"
+                aria-label="Đóng modal lời mời nhận được"
               >
                 ĐÓNG
               </button>
@@ -510,6 +528,7 @@ const FriendList = () => {
               <button
                 onClick={() => setShowSentModal(false)}
                 className="button cancel-button"
+                aria-label="Đóng modal lời mời đã gửi"
               >
                 ĐÓNG
               </button>
@@ -533,12 +552,14 @@ const FriendList = () => {
               <button
                 onClick={() => handleDeleteFriend(friendToDelete?.id)}
                 className="button wax-seal-button"
+                aria-label={`Xóa bạn ${friendToDelete?.name}`}
               >
                 XÓA BẠN
               </button>
               <button
                 onClick={() => setShowDeleteModal(false)}
                 className="button cancel-button"
+                aria-label="Hủy xóa bạn"
               >
                 HỦY
               </button>
@@ -555,7 +576,7 @@ const FriendList = () => {
         >
           <div className="modal-content parchment-form">
             <h2 className="modal-title">CHỌN EMOJI</h2>
-            <div className="emoji-grid">
+            <div className="emoji-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "10px" }}>
               {emojis.map((emoji, index) => (
                 <button
                   key={index}
@@ -571,6 +592,7 @@ const FriendList = () => {
                   }}
                   onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#f0f0f0")}
                   onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                  aria-label={`Chọn emoji ${emoji}`}
                 >
                   {emoji}
                 </button>
@@ -580,6 +602,7 @@ const FriendList = () => {
               <button
                 onClick={() => setShowEmojiModal(false)}
                 className="button cancel-button"
+                aria-label="Đóng modal chọn emoji"
               >
                 ĐÓNG
               </button>
@@ -589,15 +612,23 @@ const FriendList = () => {
 
         <div className="sidebar-actions">
           <button
-            onClick={() => setShowReceivedModal(true)}
+            onClick={() => {
+              console.log("Opening Received Requests Modal");
+              setShowReceivedModal(true);
+            }}
             className="received-requests-button"
+            aria-label="Xem lời mời nhận được"
           >
             <i className="fas fa-envelope add-friend-icon"></i>
             LỜI MỜI NHẬN
           </button>
           <button
-            onClick={() => setShowSentModal(true)}
+            onClick={() => {
+              console.log("Opening Sent Requests Modal");
+              setShowSentModal(true);
+            }}
             className="sent-requests-button"
+            aria-label="Xem lời mời đã gửi"
           >
             <i className="fas fa-paper-plane add-friend-icon"></i>
             LỜI MỜI ĐÃ GỬI
@@ -613,6 +644,7 @@ const FriendList = () => {
                 className={`friend-item ${
                   selectedFriend?.id === friend.id ? "friend-item-selected" : ""
                 }`}
+                aria-label={`Chọn bạn ${friend.name}`}
               >
                 <div
                   className="friend-details"
@@ -627,6 +659,7 @@ const FriendList = () => {
                 <button
                   onClick={() => handleOpenDeleteModal(friend)}
                   className="delete-button wax-seal-button"
+                  aria-label={`Xóa bạn ${friend.name}`}
                 >
                   XÓA BẠN
                 </button>
@@ -638,7 +671,7 @@ const FriendList = () => {
         </ul>
       </div>
 
-      <div className={`chat-container parchment-chat ${selectedFriend ? 'chat-active' : ''}`}>
+      <div className={`chat-container parchment-chat ${selectedFriend ? "chat-active" : ""}`}>
         {selectedFriend ? (
           <>
             <div className="header parchment-header">
@@ -668,9 +701,13 @@ const FriendList = () => {
             </div>
             <div className="chat-input-container flex items-center">
               <button
-                onClick={() => setShowEmojiModal(true)}
+                onClick={() => {
+                  console.log("Opening Emoji Modal");
+                  setShowEmojiModal(true);
+                }}
                 className="emoji-picker-button wax-seal-button mr-2"
                 title="Chọn Emoji"
+                aria-label="Mở modal chọn emoji"
               >
                 😊
               </button>
@@ -680,10 +717,12 @@ const FriendList = () => {
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="VIẾT TIN NHẮN..."
                 className="input-field flex-grow"
+                aria-label="Nhập tin nhắn"
               />
               <button
                 onClick={handleSendMessage}
                 className="button wax-seal-button ml-2"
+                aria-label="Gửi tin nhắn"
               >
                 GỬI
               </button>

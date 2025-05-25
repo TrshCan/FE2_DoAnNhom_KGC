@@ -491,6 +491,7 @@ export default function EnemySkillManager() {
         .card {
           border-radius: 8px;
           overflow: hidden;
+          min-width: 100%;
         }
         .card-body {
           padding: 1.5rem;

@@ -372,8 +372,8 @@ export default function ClassesManager() {
           padding-right: 15px;
         }
         .card {
+          min-width: 100%;
           border-radius: 8px;
-          overflow: hidden;
         }
         .card-body {
           padding: 1.5rem;

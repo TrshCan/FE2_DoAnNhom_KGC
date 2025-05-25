@@ -604,7 +604,7 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  backdrop-filter: blur(4px);
+
 }
 
 .modal {
@@ -614,7 +614,6 @@ body {
   padding: 20px;
   width: 400px;
   max-height: 80vh;
-  overflow-y: auto;
   box-shadow: 0 0 30px rgba(212, 160, 23, 0.6);
   animation: modalPop 0.5s ease-in-out;
 }

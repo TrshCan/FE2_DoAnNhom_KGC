@@ -86,7 +86,7 @@ const MainHall = () => {
 
   const fetchQuests = async () => {
     try {
-      const response = await fetch(`/api/quests.php`, { credentials: 'include' });
+      const response = await fetch(`/api/quest.php`, { credentials: 'include' });
       const data = await response.json();
       if (data.success) {
         setQuests(data.quests);

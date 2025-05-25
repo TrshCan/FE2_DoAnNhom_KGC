@@ -484,6 +484,7 @@ export default function HeroSkillManager() {
         }
         .card {
           border-radius: 8px;
+          min-width: 100%;
           overflow: hidden;
         }
         .card-body {
