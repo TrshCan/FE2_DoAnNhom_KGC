@@ -1,6 +1,6 @@
 import React from 'react';
 
-const InventoryPopup = ({ showInventoryPopup, setShowInventoryPopup, items, loading }) => {
+const InventoryPopup = ({ showInventoryPopup, setShowInventoryPopup, items = [], loading }) => {
   if (!showInventoryPopup) return null;
 
   return (
@@ -38,6 +38,7 @@ const InventoryPopup = ({ showInventoryPopup, setShowInventoryPopup, items, load
     </div>
   );
 };
+
 
 // Inline styles (move to Inventory.css for production)
 const popupStyle = {
