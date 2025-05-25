@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/src/includes/check-session.php`);
+        const response = await fetch(`api/check-session.php`);
         const data = await response.json();
         if (!data.loggedIn) {
           localStorage.removeItem("currentUserId");

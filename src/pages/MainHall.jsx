@@ -1,8 +1,5 @@
 import { useState, useEffect } from 'react';
 import { FaTasks, FaBoxOpen, FaEnvelope, FaCog, FaCity, FaUserFriends, FaDoorOpen } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { FaTasks, FaBoxOpen, FaEnvelope, FaChevronUp, FaChevronDown, FaCity, FaUserFriends, FaDoorOpen } from 'react-icons/fa';
 import '../assets/css/MainHall.css';
 import ArrowToggle from '../components/Arrow_Toggle';
 import illustration from '../assets/img/heroes/illustration/NPC_Illust_Luminesera.png';

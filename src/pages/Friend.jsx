@@ -24,9 +24,16 @@ const FriendList = () => {
   const [showReceivedModal, setShowReceivedModal] = useState(false);
   const [showSentModal, setShowSentModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEmojiModal, setShowEmojiModal] = useState(false); // New state for emoji modal
   const [friendToDelete, setFriendToDelete] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const messagesEndRef = useRef(null); // Ref for scrolling to the bottom
+  const messagesEndRef = useRef(null);
+
+  // List of common emojis for the picker
+  const emojis = [
+    "😊", "😂", "😍", "😎", "🥳", "😢", "😡", "👍", "👎", "🙌",
+    "❤️", "🔥", "🌟", "🚀", "🎉", "🍎", "🍕", "🌈", "☀️", "🌙"
+  ];
 
   const fetchFriends = async () => {
     if (!currentUserId) return;
@@ -126,7 +133,7 @@ const FriendList = () => {
     }
     try {
       const friendId = parseInt(newFriendId);
-      const res = await fetch(`/api/friend.php`, {
+      const res = await fetch(`${BASE_URL}/src/includes/friend.php`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -315,7 +322,11 @@ const FriendList = () => {
     }
   };
 
-  // Scroll to the bottom of the chat when messages update
+  const handleEmojiSelect = (emoji) => {
+    setNewMessage((prev) => prev + emoji);
+    setShowEmojiModal(false);
+  };
+
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -360,17 +371,18 @@ const FriendList = () => {
       <button
         onClick={() => navigate('/mainhall')}
         className="close-button wax-seal-button"
+        style={{ position: 'fixed', top: '10px', right: '10px', zIndex: 1000 }}
       >
         ĐÓNG
       </button>
-      <div className={`sidebar parchment-sidebar ${showAddModal || showReceivedModal || showSentModal || showDeleteModal ? 'sidebar-blur' : ''}`}>
+      <div className={`sidebar parchment-sidebar ${showAddModal || showReceivedModal || showSentModal || showDeleteModal || showEmojiModal ? 'sidebar-blur' : ''}`}>
         <div className="header parchment-header">
           <h3 className="header-title">DANH SÁCH BẠN BÈ</h3>
           <div className="header-buttons">
             <button
               onClick={() => setShowAddModal(true)}
               className="add-friend-button"
-              title="Thêm bạn bè" // Added tooltip
+              title="Thêm bạn bè"
             >
               <i className="fas fa-user-plus add-friend-icon"></i>
               THÊM BẠN
@@ -522,13 +534,54 @@ const FriendList = () => {
                 onClick={() => handleDeleteFriend(friendToDelete?.id)}
                 className="button wax-seal-button"
               >
-                XÓA Bạn
+                XÓA BẠN
               </button>
               <button
                 onClick={() => setShowDeleteModal(false)}
                 className="button cancel-button"
               >
                 HỦY
+              </button>
+            </div>
+          </div>
+        </Modal>
+
+        <Modal
+          isOpen={showEmojiModal}
+          onRequestClose={() => setShowEmojiModal(false)}
+          className="modal parchment-modal"
+          overlayClassName="modal-overlay"
+          contentLabel="Chọn Emoji"
+        >
+          <div className="modal-content parchment-form">
+            <h2 className="modal-title">CHỌN EMOJI</h2>
+            <div className="emoji-grid">
+              {emojis.map((emoji, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleEmojiSelect(emoji)}
+                  className="emoji-button"
+                  style={{
+                    fontSize: "24px",
+                    padding: "10px",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    transition: "background-color 0.2s",
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#f0f0f0")}
+                  onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                >
+                  {emoji}
+                </button>
+              ))}
+            </div>
+            <div className="modal-buttons">
+              <button
+                onClick={() => setShowEmojiModal(false)}
+                className="button cancel-button"
+              >
+                ĐÓNG
               </button>
             </div>
           </div>
@@ -575,7 +628,7 @@ const FriendList = () => {
                   onClick={() => handleOpenDeleteModal(friend)}
                   className="delete-button wax-seal-button"
                 >
-                  XÓA
+                  XÓA BẠN
                 </button>
               </li>
             ))
@@ -611,19 +664,26 @@ const FriendList = () => {
                   </div>
                 </div>
               ))}
-              <div ref={messagesEndRef} /> {/* Empty div for scrolling reference */}
+              <div ref={messagesEndRef} />
             </div>
-            <div className="chat-input-container">
+            <div className="chat-input-container flex items-center">
+              <button
+                onClick={() => setShowEmojiModal(true)}
+                className="emoji-picker-button wax-seal-button mr-2"
+                title="Chọn Emoji"
+              >
+                😊
+              </button>
               <input
                 type="text"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="VIẾT TIN NHẮN..."
-                className="input-field"
+                className="input-field flex-grow"
               />
               <button
                 onClick={handleSendMessage}
-                className="button wax-seal-button"
+                className="button wax-seal-button ml-2"
               >
                 GỬI
               </button>

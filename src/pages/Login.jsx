@@ -58,7 +58,8 @@ const Login = () => {
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
             const data = await response.json();
-            if (data.success) {
+            if (data.success&&data.user_id) {
+                localStorage.setItem("currentUserId", parseInt(data.user_id));
                 setIsLoggedIn(true);
                 toast.success('🧙‍♂️ Đăng nhập thành công! Cổng phép thuật đã mở...', {
                     position: 'top-center',
@@ -74,9 +75,10 @@ const Login = () => {
                     icon: '✨',
                 });
                 setIsLoading(true);
+                const redirectPath = data.role === 'admin' ? '/admin' : '/mainhall';
                 setTimeout(() => {
-                    navigate('/mainhall');
-                }, 1000); // Tăng thời gian để đọc thông báo
+                    navigate(redirectPath);
+                }, 1000); 
             } else {
                 toast.error(`🚫 ${data.message}`);
             }
