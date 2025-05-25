@@ -8,7 +8,7 @@ const Card = ({ card, onSelect, isSelected, isDead }) => {
       className={`card ${isSelected ? 'selected' : ''} ${isDead ? 'dead' : ''}`}
       onClick={() => !isDead && onSelect(card)}
     >
-      <img src={card.image} alt={card.name} />
+      <img src={card.illustration} alt={card.name} />
       <p>{card.name}</p>
       <p>HP: {card.hp} | ATK: {card.atk} | DEF: {card.def}</p>
     </div>

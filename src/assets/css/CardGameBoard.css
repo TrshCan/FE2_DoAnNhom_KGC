@@ -101,6 +101,26 @@ h3 {
   justify-content: center;
 }
 
+/* Card containers for battle zone and player hand */
+.battle-card-container,
+.player-card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* HP display styling */
+.hp-display {
+  font-size: 14px;
+  font-weight: 600;
+  color: #27ae60; /* Green to match .hp class */
+  text-shadow: 1px 1px 2px #000;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
 .vs {
   font-size: 2rem;
   font-weight: bold;
@@ -175,6 +195,13 @@ h3 {
   user-select: none;
 }
 
+.card-icon img {
+  width: 80px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
 .card-stats {
   display: flex;
   justify-content: space-around;
@@ -186,9 +213,7 @@ h3 {
   color: #c0392b;
 }
 
-.hp {
-  color: #27ae60;
-}
+/* Removed .hp class since HP is now in .hp-display */
 
 /* Deck & discard */
 .game-deck {
@@ -225,7 +250,9 @@ h3 {
 /* Buttons */
 .btn-start,
 .btn-end-turn,
-.btn-reset {
+.btn-reset,
+.btn-sync,
+.btn-debug {
   margin: 10px auto;
   padding: 10px 20px;
   font-size: 1rem;
@@ -274,6 +301,35 @@ h3 {
   transform: translateY(-2px);
 }
 
+.btn-sync {
+  background: #8e44ad;
+}
+
+.btn-sync:hover {
+  background: #9b59b6;
+  transform: translateY(-2px);
+}
+
+.btn-debug {
+  background: #e74c3c;
+}
+
+.btn-debug:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+}
+
+/* Countdown */
+.countdown {
+  width: 100%;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #e74c3c;
+  text-shadow: 1px 1px 4px #000;
+  margin: 10px 0;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .card-game-board {
@@ -283,6 +339,7 @@ h3 {
   .card {
     width: 80px;
     height: 120px;
+    padding: 8px 6px;
     font-size: 12px;
   }
 
@@ -290,8 +347,18 @@ h3 {
     font-size: 36px;
   }
 
+  .card-icon img {
+    width: 50px;
+    height: 70px;
+  }
+
   .card-stats {
     font-size: 12px;
+  }
+
+  .hp-display {
+    font-size: 12px;
+    padding: 3px 6px;
   }
 
   .player-hand,
@@ -299,6 +366,11 @@ h3 {
   .opponent-hand,
   .card-selection {
     gap: 8px;
+  }
+
+  .battle-card-container,
+  .player-card-container {
+    gap: 6px;
   }
 
   h2,
@@ -315,6 +387,30 @@ h3 {
   }
 
   .discard {
+    width: 70px;
+    height: 100px;
     font-size: 16px;
   }
+
+  .btn-start,
+  .btn-end-turn,
+  .btn-reset,
+  .btn-sync,
+  .btn-debug {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+
+  .countdown {
+    font-size: 1.2rem;
+  }
+}
+
+@keyframes hp-update {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+.hp-display.updated {
+  animation: hp-update 0.3s ease;
 }

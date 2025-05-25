@@ -1,7 +1,7 @@
 <?php
+session_start();
 // Set CORS headers
 ini_set('session.gc_maxlifetime', 3600);
-session_set_cookie_params(3600, '/', 'localhost', false, true);
 header("Content-Type: application/json");
 
 // Handle preflight OPTIONS request
@@ -11,8 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once './Database.php';
-
-session_start();
 
 // Get JSON input
 $data = json_decode(file_get_contents('php://input'), true);
