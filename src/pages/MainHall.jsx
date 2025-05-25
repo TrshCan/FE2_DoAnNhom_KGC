@@ -304,7 +304,7 @@ const MainHall = () => {
               onClick={handleFindMatch}
               disabled={loading || !username || username.includes('Failed') || !localStorage.getItem('userId')}
             >
-              Find Match
+              Find
             </button>
           )}
           {isFindingMatch && !roomId && (

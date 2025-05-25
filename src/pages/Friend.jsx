@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { Modal } from "react-bootstrap"; // Import Modal từ react-bootstrap
+import { toast, ToastContainer } from "react-toastify";
+import { Modal } from "react-bootstrap";
 import "../assets/css/Friend.css";
 import BASE_URL from "../components/BaseURL";
+import "react-toastify/dist/ReactToastify.css";
 
 const FriendList = () => {
   const navigate = useNavigate();
@@ -47,6 +48,8 @@ const FriendList = () => {
     "🌈",
     "☀️",
     "🌙",
+    "🐧",
+    "💀",
   ];
 
   // Debug modal states
@@ -346,7 +349,6 @@ const FriendList = () => {
       } else {
         setNewMessage("");
         await fetchMessages(selectedFriend);
-        toast.success("📨 Gửi tin nhắn thành công!");
       }
     } catch (error) {
       console.error("Send message error:", error);
@@ -457,7 +459,7 @@ const FriendList = () => {
           dialogClassName="modal parchment-modal"
           aria-labelledby="add-friend-modal"
           backdropClassName="modal-overlay"
-          centered // Đảm bảo Modal hiển thị ở giữa màn hình
+          centered
         >
           {console.log("Add Modal is rendering")}
           <Modal.Body className="modal-content parchment-form">
@@ -823,6 +825,12 @@ const FriendList = () => {
                 type="text"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && newMessage.trim()) {
+                    e.preventDefault();
+                    handleSendMessage();
+                  }
+                }}
                 placeholder="VIẾT TIN NHẮN..."
                 className="input-field flex-grow"
                 aria-label="Nhập tin nhắn"

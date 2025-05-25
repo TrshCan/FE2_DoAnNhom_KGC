@@ -25,6 +25,7 @@ const AdminDashboard = () => {
     { path: "/admin/xp-amounts", label: "Quản lý Xp-Amounts", icon: "📈" },
     { path: "/admin/inventory", label: "Quản lý Inventory", icon: "📦" },
     { path: "/admin/level-requirements", label: "Quản lý Level Requirements", icon: "📊" },
+    { path: "/admin/quests", label: "Quản lý Quest", icon: "X" },
   ];
 
   // Extract current page title

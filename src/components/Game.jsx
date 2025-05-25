@@ -154,18 +154,18 @@ const CardGameBoard = () => {
     setSelectedCards((prev) => {
       if (prev.some((c) => c.id === card.id)) {
         return prev.filter((c) => c.id !== card.id);
-      } else if (prev.length < 3) {
+      } else if (prev.length < 2) {
         return [...prev, card];
       } else {
-        setMessage('Bạn chỉ có thể chọn tối đa 3 lá bài!');
+        setMessage('Bạn chỉ có thể chọn tối đa 2 lá bài!');
         return prev;
       }
     });
   };
 
   const startGame = () => {
-    if (selectedCards.length !== 3) {
-      setMessage('Vui lòng chọn đúng 3 lá bài!');
+    if (selectedCards.length !== 2) {
+      setMessage('Vui lòng chọn đúng 2 lá bài!');
       return;
     }
     setHandCards([...selectedCards]);
@@ -289,7 +289,7 @@ const CardGameBoard = () => {
         roomId: data.roomId,
         username,
         userId,
-        cardCount: 3,
+        cardCount: 2,
       });
     });
 
@@ -297,7 +297,7 @@ const CardGameBoard = () => {
       console.log('opponentReady received:', data);
       if (data.success) {
         setOpponentReady(true);
-        setOpponentHand(Array(data.cardCount || 3).fill(null).map((_, i) => ({ id: `opponent-placeholder-${i}-${Date.now()}-${Math.random()}` })));
+        setOpponentHand(Array(data.cardCount || 2).fill(null).map((_, i) => ({ id: `opponent-placeholder-${i}-${Date.now()}-${Math.random()}` })));
       } else {
         setMessage(data.message || 'Đối thủ chưa sẵn sàng!');
       }
@@ -494,7 +494,7 @@ const CardGameBoard = () => {
         }
         if (opponentData) {
           setOpponentHand(
-            Array(opponentData.cardCount || 3).fill(null).map((_, i) => ({
+            Array(opponentData.cardCount || 2).fill(null).map((_, i) => ({
               id: `opponent-placeholder-${i}-${Date.now()}-${Math.random()}`,
             }))
           );
@@ -531,7 +531,7 @@ const CardGameBoard = () => {
           }
           if (opponentData) {
             setOpponentHand(
-              Array(opponentData.cardCount || 3).fill(null).map((_, i) => ({
+              Array(opponentData.cardCount || 2).fill(null).map((_, i) => ({
                 id: `opponent-placeholder-${i}-${Date.now()}-${Math.random()}`,
               }))
             );
@@ -585,7 +585,7 @@ const CardGameBoard = () => {
     }
 
     if (gamePhase === 'select') {
-      if (selectedCards.length === 3 && !opponentReady) {
+      if (selectedCards.length === 2 && !opponentReady) {
         setMessage('Đang đợi đối thủ sẵn sàng...');
       } else {
         setMessage(`Chọn 3 lá bài để bắt đầu trận đấu! (${selectedCards.length}/3)`);
@@ -631,7 +631,7 @@ const CardGameBoard = () => {
 
   // Opponent timeout in select phase
   useEffect(() => {
-    if (gamePhase === 'select' && selectedCards.length === 3 && !opponentReady) {
+    if (gamePhase === 'select' && selectedCards.length === 2 && !opponentReady) {
       const timeout = setTimeout(() => {
         setMessage('Đối thủ chưa sẵn sàng sau 30 giây. Vui lòng thử lại.');
         navigate('/mainhall');
@@ -669,7 +669,7 @@ const CardGameBoard = () => {
                 card={card}
                 onClick={() => selectCard(card)}
                 isPlayable={
-                  selectedCards.length < 3 || selectedCards.some((c) => c.id === card.id)
+                  selectedCards.length < 2 || selectedCards.some((c) => c.id === card.id)
                 }
                 isSelected={selectedCards.some((c) => c.id === card.id)}
               />
@@ -678,7 +678,7 @@ const CardGameBoard = () => {
           <button
             className="btn-start"
             onClick={startGame}
-            disabled={selectedCards.length !== 3}
+            disabled={selectedCards.length !== 2}
             aria-label="Sẵn sàng"
           >
             Sẵn Sàng

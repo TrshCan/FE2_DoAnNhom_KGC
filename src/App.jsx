@@ -58,6 +58,7 @@ import ItemEffectsManager from './pages/admin/ItemEffectsManager';
 import XpAmountsManager from './pages/admin/XpAmountsManager';
 import InventoryManager from './pages/admin/InventoryManager';
 import LevelRequirementsManager from './pages/admin/LevelRequirementsManager';
+import QuestsManager from './pages/admin/QuestsManager';
 
 
 
@@ -90,6 +91,7 @@ const App = () => {
         <Route path="xp-amounts" element={<XpAmountsManager />} />
         <Route path="inventory" element={<InventoryManager />} />
         <Route path="level-requirements" element={<LevelRequirementsManager />} />
+        <Route path="quests" element={<QuestsManager />} />
       </Route>
       {/* Add other routes here */}
 
