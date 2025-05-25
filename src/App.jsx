@@ -49,6 +49,12 @@ import EnemyManager from './pages/admin/EnemyManager';
 import HeroSkillManager from './pages/admin/HeroSkillManager';
 import RegionManager from './pages/admin/RegionManager';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import UserHeroesManager from './pages/admin/UserHeroesManager';
+import ItemEffectsManager from './pages/admin/ItemEffectsManager';
+import XpAmountsManager from './pages/admin/XpAmountsManager';
+import InventoryManager from './pages/admin/InventoryManager';
+import LevelRequirementsManager from './pages/admin/LevelRequirementsManager';
+
 
 
 const App = () => {
@@ -64,6 +70,7 @@ const App = () => {
       //admin
       <Route path="/admin" element={<AdminDashboard />}>
         <Route index element={<UserManager />} /> {/* /admin mặc định */}
+        <Route path="user-heroes" element={<UserHeroesManager />} />
         <Route path="classes" element={<ClassesManager />} />
         <Route path="hero-skills" element={<HeroSkillManager />} />
         <Route path="heroes" element={<HeroManager />} />
@@ -73,6 +80,10 @@ const App = () => {
         <Route path="enemy-skills" element={<EnemySkillManager />} />
         <Route path="enemies" element={<EnemyManager />} />
         <Route path="regions" element={<RegionManager />} />
+        <Route path="item-effects" element={<ItemEffectsManager />} />
+        <Route path="xp-amounts" element={<XpAmountsManager />} />
+        <Route path="inventory" element={<InventoryManager />} />
+        <Route path="level-requirements" element={<LevelRequirementsManager />} />
       </Route>
       {/* Add other routes here */}
 
