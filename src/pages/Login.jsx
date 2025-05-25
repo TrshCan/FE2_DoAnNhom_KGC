@@ -23,9 +23,11 @@ const Login = () => {
                 if (data.loggedIn) {
                     setIsLoggedIn(true);
                     setIsLoading(true);
-                    toast.success('🧙‍♂️ Bạn đã đăng nhập! Chuyển đến sảnh chính...');
+                    toast.success('🧙‍♂️ Bạn đã đăng nhập! Chuyển đến trang chính...');
+                    // Kiểm tra role từ session hoặc API
+                    const role = data.role || 'user'; // Giả sử API check-session trả về role
                     setTimeout(() => {
-                        navigate('/mainhall');
+                        navigate(role === 'admin' ? '/admin' : '/mainhall');
                     }, 2000);
                 }
             } catch (err) {
@@ -52,7 +54,7 @@ const Login = () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
-                credentials: 'include', // Gửi cookie session
+                credentials: 'include',
             });
 
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -74,9 +76,11 @@ const Login = () => {
                     icon: '✨',
                 });
                 setIsLoading(true);
+                // Chuyển hướng dựa trên role
+                const redirectPath = data.role === 'admin' ? '/admin' : '/mainhall';
                 setTimeout(() => {
-                    navigate('/mainhall');
-                }, 1000); // Tăng thời gian để đọc thông báo
+                    navigate(redirectPath);
+                }, 1000);
             } else {
                 toast.error(`🚫 ${data.message}`);
             }

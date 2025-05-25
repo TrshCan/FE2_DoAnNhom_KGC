@@ -7,11 +7,25 @@ import MainHall from './pages/MainHall';
 import Barrack from './pages/Barrack';
 import Friend from './pages/Friend';
 import HeroCard from './pages/TestCard';
-import BASE_URL from './components/BaseURL';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import ClassesManager from './pages/admin/ClassesManager';
+import HeroManager from './pages/admin/HeroManager';
+import MailManager from './pages/admin/MailManager';
+import SundryManager from './pages/admin/SundryManager';
+import UserManager from './pages/admin/UserManager';
+import EnemySkillManager from './pages/admin/EnemySkillManager';
+import EnemyManager from './pages/admin/EnemyManager';
+import HeroSkillManager from './pages/admin/HeroSkillManager';
+import RegionManager from './pages/admin/RegionManager';
+import UserHeroesManager from './pages/admin/UserHeroesManager';
+import ItemEffectsManager from './pages/admin/ItemEffectsManager';
+import XpAmountsManager from './pages/admin/XpAmountsManager';
+import InventoryManager from './pages/admin/InventoryManager';
+import LevelRequirementsManager from './pages/admin/LevelRequirementsManager';
 
-
-const ProtectedRoute = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(null); // null: đang kiểm tra, true: đã đăng nhập, false: chưa đăng nhập
+const ProtectedRoute = ({ children, requireAdmin = false }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
     const checkSession = async () => {
@@ -22,40 +36,30 @@ const ProtectedRoute = ({ children }) => {
         });
         const data = await response.json();
         setIsLoggedIn(data.loggedIn);
+        setRole(data.role);
       } catch (err) {
         console.error('Error checking session:', err);
-        setIsLoggedIn(false); // Nếu lỗi, coi như chưa đăng nhập
+        setIsLoggedIn(false);
+        setRole(null);
       }
     };
     checkSession();
   }, []);
 
-  // Nếu đang kiểm tra session, hiển thị loading tạm thởi
   if (isLoggedIn === null) {
     return <div>Loading...</div>;
   }
 
-  // Nếu đã đăng nhập, render component con; nếu không, chuyển hướng về /login
-  return isLoggedIn ? children : <Navigate to="/login" replace />;
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (requireAdmin && role !== 'admin') {
+    return <Navigate to="/mainhall" replace />;
+  }
+
+  return children;
 };
-//admin
-import ClassesManager from './pages/admin/ClassesManager';
-import HeroManager from './pages/admin/HeroManager';
-import MailManager from './pages/admin/MailManager';
-import SundryManager from './pages/admin/SundryManager';
-import UserManager from './pages/admin/UserManager';
-import EnemySkillManager from './pages/admin/EnemySkillManager';
-import EnemyManager from './pages/admin/EnemyManager';
-import HeroSkillManager from './pages/admin/HeroSkillManager';
-import RegionManager from './pages/admin/RegionManager';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import UserHeroesManager from './pages/admin/UserHeroesManager';
-import ItemEffectsManager from './pages/admin/ItemEffectsManager';
-import XpAmountsManager from './pages/admin/XpAmountsManager';
-import InventoryManager from './pages/admin/InventoryManager';
-import LevelRequirementsManager from './pages/admin/LevelRequirementsManager';
-
-
 
 const App = () => {
   return (
@@ -67,9 +71,15 @@ const App = () => {
       <Route path="/friend" element={<Friend />} />
       <Route path="/barrack" element={<Barrack />} />
       <Route path="/test" element={<HeroCard />} />
-      //admin
-      <Route path="/admin" element={<AdminDashboard />}>
-        <Route index element={<UserManager />} /> {/* /admin mặc định */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute requireAdmin={true}>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<UserManager />} />
         <Route path="user-heroes" element={<UserHeroesManager />} />
         <Route path="classes" element={<ClassesManager />} />
         <Route path="hero-skills" element={<HeroSkillManager />} />
@@ -85,8 +95,6 @@ const App = () => {
         <Route path="inventory" element={<InventoryManager />} />
         <Route path="level-requirements" element={<LevelRequirementsManager />} />
       </Route>
-      {/* Add other routes here */}
-
       <Route
         path="/mainhall"
         element={

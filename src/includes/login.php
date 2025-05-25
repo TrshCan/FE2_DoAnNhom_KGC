@@ -27,19 +27,26 @@ if (empty($email) || empty($password)) {
 $conn = (new Database())::$connection;
 
 // Check if user exists
-$stmt = $conn->prepare("SELECT id, password FROM users WHERE email = ?");
+$stmt = $conn->prepare("SELECT id, password, role FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
 
-$response = ['success' => false, 'message' => 'Invalid credentials', 'user_id' => false];
+$response = ['success' => false, 'message' => 'Invalid credentials', 'user_id' => false, 'role' => null];
 
 if ($result && $result->num_rows > 0) {
     $user = $result->fetch_assoc();
     if (password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['id'];
-        $response = ['success' => true, 'message' => 'Login successful', 'user_id' => $user['id']];
+        $_SESSION['role'] = $user['role']; // Lưu role vào session
+        $response = [
+            'success' => true,
+            'message' => 'Login successful',
+            'user_id' => $user['id'],
+            'role' => $user['role'] // Trả về role trong JSON
+        ];
     }
 }
 
 echo json_encode($response);
+?>

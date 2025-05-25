@@ -1,9 +1,14 @@
-import React, { useState } from "react";
-import { Outlet, Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminDashboard = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
+  const [userInfo, setUserInfo] = useState({ username: '', email: '' });
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const menuItems = [
     { path: "/admin/users", label: "Quản lý User", icon: "👥" },
@@ -24,6 +29,65 @@ const AdminDashboard = () => {
 
   // Extract current page title
   const currentPageTitle = menuItems.find(item => location.pathname === item.path)?.label || "Quản lý User";
+
+  // Fetch user info on mount
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await fetch('/api/get-user-info.php', {
+          method: 'GET',
+          credentials: 'include',
+        });
+        const data = await response.json();
+        if (data.success && data.user) {
+          setUserInfo({
+            username: data.user.username,
+            email: data.user.email,
+          });
+        } else {
+          toast.error(`🚫 ${data.message || 'Không thể lấy thông tin người dùng.'}`);
+        }
+      } catch (error) {
+        console.error('Fetch user info error:', error);
+        toast.error('❌ Kết nối đến máy chủ thất bại.');
+      }
+    };
+    fetchUserInfo();
+  }, []);
+
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('/api/logout.php', {
+        method: 'POST',
+        credentials: 'include',
+      });
+      const data = await response.json();
+      if (data.success) {
+        toast.success('🧙‍♂️ Đăng xuất thành công! Chuyển hướng về trang đăng nhập...', {
+          position: 'top-center',
+          autoClose: 2000,
+          style: {
+            backgroundColor: '#6a0dad',
+            color: '#fff4f4',
+            fontSize: '16px',
+            fontWeight: 'bold',
+            borderRadius: '12px',
+            boxShadow: '0 0 10px #ffb347',
+          },
+          icon: '✨',
+        });
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
+      } else {
+        toast.error(`🚫 ${data.message || 'Đăng xuất thất bại. Vui lòng thử lại.'}`);
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast.error('❌ Kết nối đến máy chủ thất bại.');
+    }
+  };
 
   return (
     <div style={{ 
@@ -75,12 +139,8 @@ const AdminDashboard = () => {
               fontSize: "0.8rem",
               transition: "background 0.2s ease"
             }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.background = "#5a6268";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.background = "#495057";
-            }}
+            onMouseOver={(e) => { e.currentTarget.style.background = "#5a6268"; }}
+            onMouseOut={(e) => { e.currentTarget.style.background = "#495057"; }}
           >
             {collapsed ? "→" : "←"}
           </button>
@@ -160,20 +220,60 @@ const AdminDashboard = () => {
           width: "100%",
           boxSizing: "border-box"
         }}>
-          <h1 style={{ margin: 0, fontSize: "1.2rem", fontWeight: "500" }}>{currentPageTitle}</h1>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div style={{ 
-              width: "40px", 
-              height: "40px", 
-              borderRadius: "50%", 
-              backgroundColor: "#e9ecef", 
-              display: "flex", 
-              alignItems: "center", 
-              justifyContent: "center",
-              cursor: "pointer"
-            }}>
+          <h1 style={{ margin: 0, fontSize: "1.2rem", fontWeight: 500 }}>{currentPageTitle}</h1>
+          <div style={{ display: "flex", alignItems: "center", gap: "15px", position: "relative" }}>
+            <div 
+              style={{ 
+                width: "40px", 
+                height: "40px", 
+                borderRadius: "50%", 
+                backgroundColor: "#e9ecef", 
+                display: "flex", 
+                alignItems: "center", 
+                justifyContent: "center",
+                cursor: "pointer"
+              }}
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+            >
               <span style={{ fontSize: "1.2rem" }}>👤</span>
+              {showTooltip && (
+                <div style={{
+                  position: "absolute",
+                  top: "50px",
+                  right: 0,
+                  backgroundColor: "#343a40",
+                  color: "white",
+                  padding: "10px",
+                  borderRadius: "5px",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                  zIndex: 1000,
+                  minWidth: "200px",
+                  textAlign: "left",
+                  fontSize: "0.9rem"
+                }}>
+                  <p style={{ margin: "5px 0" }}><strong>Tên:</strong> {userInfo.username || 'N/A'}</p>
+                  <p style={{ margin: "5px 0" }}><strong>Email:</strong> {userInfo.email || 'N/A'}</p>
+                </div>
+              )}
             </div>
+            <button
+              onClick={handleLogout}
+              style={{
+                background: "#dc3545",
+                color: "white",
+                border: "none",
+                padding: "8px 16px",
+                borderRadius: "5px",
+                cursor: "pointer",
+                fontSize: "0.9rem",
+                transition: "background 0.2s ease"
+              }}
+              onMouseOver={(e) => { e.currentTarget.style.background = "#c82333"; }}
+              onMouseOut={(e) => { e.currentTarget.style.background = "#dc3545"; }}
+            >
+              Đăng xuất
+            </button>
           </div>
         </header>
 
