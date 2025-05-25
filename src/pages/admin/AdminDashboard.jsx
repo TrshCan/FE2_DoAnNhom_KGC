@@ -7,6 +7,7 @@ const AdminDashboard = () => {
 
   const menuItems = [
     { path: "/admin/users", label: "Quản lý User", icon: "👥" },
+    { path: "/admin/user-heroes", label: "Quản lý User-Hero", icon: "🦸‍♂️" },
     { path: "/admin/mails", label: "Quản lý Mail", icon: "✉️" },
     { path: "/admin/classes", label: "Quản lý Classes", icon: "🏫" },
     { path: "/admin/heroes", label: "Quản lý Hero", icon: "🦸" },
@@ -15,13 +16,24 @@ const AdminDashboard = () => {
     { path: "/admin/enemy-skills", label: "Quản lý Enemy Skill", icon: "💥" },
     { path: "/admin/regions", label: "Quản lý Region", icon: "🗺️" },
     { path: "/admin/sundries", label: "Quản lý Sundry", icon: "🧰" },
+    { path: "/admin/item-effects", label: "Quản lý Item-Effect", icon: "✨" },
+    { path: "/admin/xp-amounts", label: "Quản lý Xp-Amounts", icon: "📈" },
+    { path: "/admin/inventory", label: "Quản lý Inventory", icon: "📦" },
+    { path: "/admin/level-requirements", label: "Quản lý Level Requirements", icon: "📊" },
   ];
 
   // Extract current page title
-  const currentPageTitle = menuItems.find(item => location.pathname === item.path)?.label || "Dashboard";
+  const currentPageTitle = menuItems.find(item => location.pathname === item.path)?.label || "Quản lý User";
 
   return (
-    <div style={{ display: "flex", height: "100vh", fontFamily: "'Segoe UI', 'Roboto', sans-serif" }}>
+    <div style={{ 
+      display: "flex", 
+      height: "100vh", 
+      width: "100vw", 
+      minWidth: "100vw", 
+      fontFamily: "'Segoe UI', 'Roboto', sans-serif",
+      boxSizing: "border-box"
+    }}>
       {/* Sidebar */}
       <div 
         style={{ 
@@ -75,7 +87,13 @@ const AdminDashboard = () => {
         </div>
 
         {/* Navigation */}
-        <nav style={{ flex: 1, padding: "15px 0" }}>
+        <nav style={{ 
+          flex: 1, 
+          padding: "15px 0", 
+          overflowY: "auto", 
+          scrollbarWidth: "thin",
+          scrollbarColor: "#495057 #343a40"
+        }}>
           <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
             {menuItems.map((item) => (
               <li key={item.path}>
@@ -125,7 +143,10 @@ const AdminDashboard = () => {
         display: "flex", 
         flexDirection: "column",
         backgroundColor: "#f8f9fa",
-        height: "100vh"
+        height: "100vh",
+        width: "100%",
+        minWidth: 0,
+        boxSizing: "border-box"
       }}>
         {/* Header */}
         <header style={{ 
@@ -135,7 +156,9 @@ const AdminDashboard = () => {
           display: "flex",
           alignItems: "center",
           padding: "0 20px",
-          justifyContent: "space-between"
+          justifyContent: "space-between",
+          width: "100%",
+          boxSizing: "border-box"
         }}>
           <h1 style={{ margin: 0, fontSize: "1.2rem", fontWeight: "500" }}>{currentPageTitle}</h1>
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -155,8 +178,17 @@ const AdminDashboard = () => {
         </header>
 
         {/* Content area */}
-        <main style={{ flex: 1, padding: "30px", overflow: "auto" }}>
-          <Outlet />
+        <main style={{ 
+          flex: 1, 
+          padding: "30px", 
+          overflow: "auto",
+          width: "100%",
+          minWidth: "100%",
+          boxSizing: "border-box"
+        }}>
+          <div style={{ width: "100%", minWidth: "100%" }}>
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

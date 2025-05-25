@@ -1,3 +1,3 @@
 <?php
-define('BASE_URL_upload_image', '../../../assets/img/admin');
+define('BASE_URL_upload_image', '../../../assets/img/');
 ?>
