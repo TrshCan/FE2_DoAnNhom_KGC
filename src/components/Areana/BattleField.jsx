@@ -1,39 +1,40 @@
 import React from "react";
+import "../../assets/css/Arena.css"; // Import your CSS styles
 
 const Battlefield = () => {
   return (
     <div
-      className="w-full h-screen bg-cover bg-center relative flex flex-col justify-between items-center"
+      className="w-full h-screen bg-center bg-cover relative flex items-center justify-center"
       style={{
-        backgroundImage: "url('../src/assets/img/battlefield.jpg')", // Đổi URL theo hình bạn có
+        backgroundImage: "url('../src/assets/img/battlefield.jpg')",
       }}
     >
-      {/* Enemy Area */}
-      <div className="w-full flex justify-center mt-10">
-        <div className="flex space-x-4">
+      <div className="arena-container">
+        {/* Enemy Area */}
+        <div className="card-row top">
           {Array.from({ length: 5 }).map((_, index) => (
             <div
-              key={index}
-              className="w-24 h-36 bg-gray-300 rounded shadow-md border-2 border-red-500 hover:scale-105 transition"
+              key={`enemy-${index}`}
+              className="card-slot enemy"
             >
-              {/* Enemy card slot */}
+              {/* Enemy card */}
             </div>
           ))}
         </div>
-      </div>
 
-      {/* Middle Arena Line */}
-      <div className="w-full border-t-4 border-yellow-500 my-10" />
+        {/* VS Zone */}
+        <div className="vs-zone">
+          <div className="vs-circle">VS</div>
+        </div>
 
-      {/* Player Area */}
-      <div className="w-full flex justify-center mb-10">
-        <div className="flex space-x-4">
+        {/* Player Area */}
+        <div className="card-row bottom">
           {Array.from({ length: 5 }).map((_, index) => (
             <div
-              key={index}
-              className="w-24 h-36 bg-gray-100 rounded shadow-md border-2 border-blue-500 hover:scale-105 transition"
+              key={`player-${index}`}
+              className="card-slot player"
             >
-              {/* Player card slot */}
+              {/* Player card */}
             </div>
           ))}
         </div>

@@ -64,9 +64,9 @@ const App = () => {
       <Route path="/friend" element={<Friend />} />
       <Route path="/barrack" element={<Barrack />} />
       <Route path="/test" element={<HeroCard />} />
-      <Route path='/sandau' element={<Game />}></Route>
+      <Route path='/arena' element={<Game />}></Route>
 
-      //admin
+      {/* admin */}
       <Route path="/admin" element={<AdminDashboard />}>
         <Route index element={<UserManager />} /> {/* /admin mặc định */}
         <Route path="classes" element={<ClassesManager />} />

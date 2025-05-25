@@ -3,7 +3,7 @@
   height: 100vh; /* Full viewport height */
   margin: 0; /* Remove margin to eliminate gaps */
   padding: 20px; /* Keep padding for content spacing */
-  background-image: url('../img/battlefield.png');
+  background-image: url("../img/battlefield.png");
   background-size: cover;
   background-position: center;
   border-radius: 0; /* Remove border-radius for true full-screen */
@@ -12,7 +12,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   color: #fff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   position: fixed; /* Fix position to cover the entire viewport */
   top: 0;
   left: 0;
@@ -34,7 +34,8 @@
 }
 
 /* Area titles */
-h2, h3 {
+h2,
+h3 {
   width: 100%;
   font-size: 1.3rem;
   margin: 8px 0;
@@ -59,7 +60,10 @@ h2, h3 {
 }
 
 /* Player, Opponent, Battle Zone, and Deck areas */
-.player-area, .opponent-area, .game-deck, .battle-zone {
+.player-area,
+.opponent-area,
+.game-deck,
+.battle-zone {
   background: rgba(0, 0, 0, 0.5);
   border-radius: 12px;
   padding: 15px;
@@ -72,7 +76,9 @@ h2, h3 {
 }
 
 /* Hands and battle field */
-.player-hand, .battle-field, .opponent-hand {
+.player-hand,
+.battle-field,
+.opponent-hand {
   display: flex;
   gap: 12px;
   justify-content: center;
@@ -88,7 +94,8 @@ h2, h3 {
   gap: 20px;
 }
 
-.player-battle, .opponent-battle {
+.player-battle,
+.opponent-battle {
   flex: 1;
   display: flex;
   justify-content: center;
@@ -112,8 +119,8 @@ h2, h3 {
 
 /* Card styling */
 .card {
-  width: 100px;
-  height: 140px;
+  width: 120px;
+  height: 180px;
   border-radius: 12px;
   background: linear-gradient(145deg, #f0e6d2, #fffbe6);
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
@@ -155,7 +162,8 @@ h2, h3 {
 /* Card back (face-down) */
 .card-back {
   background: linear-gradient(145deg, #444, #222);
-  box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.1), 3px 3px 8px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.1),
+    3px 3px 8px rgba(0, 0, 0, 0.8);
   cursor: default;
   border: 3px solid #222;
 }
@@ -215,7 +223,9 @@ h2, h3 {
 }
 
 /* Buttons */
-.btn-start, .btn-end-turn, .btn-reset {
+.btn-start,
+.btn-end-turn,
+.btn-reset {
   margin: 10px auto;
   padding: 10px 20px;
   font-size: 1rem;
@@ -284,11 +294,15 @@ h2, h3 {
     font-size: 12px;
   }
 
-  .player-hand, .battle-field, .opponent-hand, .card-selection {
+  .player-hand,
+  .battle-field,
+  .opponent-hand,
+  .card-selection {
     gap: 8px;
   }
 
-  h2, h3 {
+  h2,
+  h3 {
     font-size: 1.1rem;
   }
 
