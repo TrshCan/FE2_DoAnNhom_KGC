@@ -46,6 +46,24 @@ const HeroCard = ({ hero }) => {
                         />
                     </div>
                     <p><strong>Level:</strong> {hero.level}</p>
+                    {hero.xp_for_next_level > 0 ? (
+                        <>
+                            <div className="xp-bar">
+                                <div
+                                    className="xp-progress"
+                                    style={{
+                                        width: `${(hero.xp / hero.xp_for_next_level) * 100}%`,
+                                    }}
+                                ></div>
+                            </div>
+                            <p>
+                                <strong>XP:</strong> {hero.xp} / {hero.xp_for_next_level} (
+                                {hero.xp_to_next_level} to next level)
+                            </p>
+                        </>
+                    ) : (
+                        <p><strong>XP:</strong> Max Level Reached!</p>
+                    )}
                     <p><strong>Region:</strong> {hero.region}</p>
                     <p><strong>Class:</strong> {hero.class}</p>
                     <hr />

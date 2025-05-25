@@ -3,17 +3,23 @@ import { FaTasks, FaBoxOpen, FaEnvelope, FaCog, FaCity, FaUserFriends, FaDoorOpe
 import '../assets/css/MainHall.css';
 import ArrowToggle from '../components/Arrow_Toggle';
 import illustration from '../assets/img/heroes/illustration/NPC_Illust_Luminesera.png';
-import BASE_URL from '../components/BaseURL';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import SettingsPopup from '../components/Setting';
 import MailPopup from '../components/Mail';
 import QuestPopup from '../components/Quest';
 import InventoryPopup from '../components/Inventory';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:4000', {
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 1000,
+});
 
 const MainHall = () => {
     const [showTopNav, setShowTopNav] = useState(true);
-    const [username, setUsername] = useState('Loading...'); // Initialize with loading state
+    const [username, setUsername] = useState('Loading...');
     const [showMailPopup, setShowMailPopup] = useState(false);
     const [showSettingsPopup, setShowSettingsPopup] = useState(false);
     const [showQuestPopup, setShowQuestPopup] = useState(false);
@@ -25,9 +31,15 @@ const MainHall = () => {
     const [items, setItems] = useState([]);
     const [selectedQuest, setSelectedQuest] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [matchStatus, setMatchStatus] = useState('');
+    const [opponent, setOpponent] = useState(null);
+    const [roomId, setRoomId] = useState(null);
+    const [opponentReady, setOpponentReady] = useState(false);
+    const [isReady, setIsReady] = useState(false);
+    const [isFindingMatch, setIsFindingMatch] = useState(false);
+    const [showAnnouncement, setShowAnnouncement] = useState(false); // New state to control announcement visibility
     const navigate = useNavigate();
 
-    // Check session on mount
     useEffect(() => {
         const checkSession = async () => {
             try {
@@ -119,6 +131,75 @@ const MainHall = () => {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        socket.on('waitingForMatch', (data) => {
+            setMatchStatus(data.message);
+            setIsFindingMatch(true);
+            setShowAnnouncement(true); // Show announcement
+        });
+
+        socket.on('matchFound', (data) => {
+            setRoomId(data.roomId);
+            const opponentData = data.players.find(player => player.id !== socket.id);
+            setOpponent(opponentData);
+            setMatchStatus(`Matched with ${opponentData.username}!`);
+            setIsFindingMatch(false);
+            setShowAnnouncement(true); // Show announcement
+        });
+
+        socket.on('opponentReady', (data) => {
+            setOpponentReady(true);
+            toast.info(data.message);
+        });
+
+        socket.on('playerDisconnected', (data) => {
+            setMatchStatus(data.message);
+            setOpponent(null);
+            setRoomId(null);
+            setOpponentReady(false);
+            setIsReady(false);
+            setIsFindingMatch(false);
+            toast.error(data.message);
+        });
+
+        socket.on('matchCancelled', (data) => {
+            setMatchStatus(data.message);
+            setIsFindingMatch(false);
+            setShowAnnouncement(true); // Show announcement
+            setTimeout(() => setShowAnnouncement(false), 2000); // Hide after 5 seconds
+        });
+
+        return () => {
+            socket.off('waitingForMatch');
+            socket.off('matchFound');
+            socket.off('opponentReady');
+            socket.off('playerDisconnected');
+            socket.off('matchCancelled');
+        };
+    }, []);
+
+    const handleFindMatch = () => {
+        if (!username || username.includes('Failed')) {
+            toast.error('Please load your username before finding a match.');
+            return;
+        }
+        setMatchStatus('Finding a match...');
+        setIsFindingMatch(true);
+        socket.emit('findMatch', { username });
+    };
+
+    const handleCancelMatch = () => {
+        socket.emit('cancelMatch');
+        setIsFindingMatch(false);
+        setMatchStatus('Matchmaking cancelled.');
+    };
+
+    const handleReadyClick = () => {
+        setIsReady(true);
+        socket.emit('playerReady', { roomId, username });
+        toast.success('You are ready!');
+    };
+
     const handleMailClick = (mail) => {
         setSelectedMail(mail);
     };
@@ -184,6 +265,35 @@ const MainHall = () => {
 
             <div className="illustration-container">
                 <img src={illustration} alt="Main Hall Illustration" className="illustration-image" />
+                <div className="matchmaking-container">
+                    {!roomId && !isFindingMatch && (
+                        <button className="find-match-btn" onClick={handleFindMatch}>
+                            Find Match
+                        </button>
+                    )}
+                    {isFindingMatch && !roomId && (
+                        <button className="cancel-match-btn" onClick={handleCancelMatch}>
+                            Cancel
+                        </button>
+                    )}
+                    {matchStatus && showAnnouncement && ( // Only show if announcement is active
+                        <div className="match-status">
+                            <p>{matchStatus}</p>
+                            {opponent && (
+                                <div className="match-info">
+                                    <p>Opponent: {opponent.username}</p>
+                                    {!isReady && (
+                                        <button className="ready-btn" onClick={handleReadyClick}>
+                                            Ready
+                                        </button>
+                                    )}
+                                    {isReady && <p>You are ready!</p>}
+                                    {opponentReady && <p>{opponent.username} is ready!</p>}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
 
             <div className="bottom-nav">
