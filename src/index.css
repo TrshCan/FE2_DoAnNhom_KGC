@@ -66,3 +66,141 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* Duel board layout */
+.duel-board {
+  width: 100%;
+  max-width: 1000px;
+  height: 700px;
+  display: flex;
+  flex-direction: column;
+  background-color: #0d3b0d;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+.opponent-area, .player-area {
+  height: 25%;
+  padding: 10px;
+}
+
+.game-field {
+  height: 50%;
+  background-color: #006400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 2px solid gold;
+  border-bottom: 2px solid gold;
+}
+
+/* Card styles */
+.card {
+  width: 250px;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+  border-radius: 10px;
+  padding: 15px;
+  color: black;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.card-header h3 {
+  font-size: 18px;
+  color: #333;
+}
+
+.card-type {
+  font-size: 14px;
+  color: #666;
+}
+
+.card-stats {
+  display: flex;
+  justify-content: space-around;
+  margin: 15px 0;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat span {
+  display: block;
+  font-size: 12px;
+  color: #666;
+}
+
+.stat strong {
+  font-size: 18px;
+  color: #333;
+}
+
+.card-divider {
+  height: 2px;
+  background-color: #ccc;
+  margin: 10px 0;
+}
+
+.card-description {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #333;
+}
+
+/* Phase buttons styles */
+.phase-buttons-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.player-name, .player-rank {
+  font-weight: bold;
+}
+
+.life-points {
+  font-size: 24px;
+  font-weight: bold;
+  color: gold;
+  min-width: 80px;
+  text-align: center;
+}
+
+.phase-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.phase-button {
+  padding: 5px 10px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.phase-button:hover {
+  background-color: #555;
+}
+
+.phase-button.active {
+  background-color: gold;
+  color: black;
+  font-weight: bold;
+}

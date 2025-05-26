@@ -1,0 +1,29 @@
+.card {
+    width: 120px;
+    height: 180px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    background-color: white;
+    cursor: pointer;
+    transition: transform 0.2s;
+    text-align: center;
+  }
+  
+  .card img {
+    width: 100%;
+    height: 60%;
+    object-fit: cover;
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
+  }
+  
+  .card.selected {
+    border-color: #ff0000;
+  }
+  
+  .card.dead {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }

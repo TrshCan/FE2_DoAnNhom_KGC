@@ -1,0 +1,71 @@
+.arena-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 90%;
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+  position: relative;
+}
+
+.card-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  z-index: 1;
+}
+
+.card-row.top {
+  margin-bottom: 80px;
+}
+
+.card-row.bottom {
+  margin-top: 80px;
+}
+
+.card-slot {
+  width: 96px;
+  height: 144px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(3px);
+  border: 2px solid;
+  transition: transform 0.2s ease-in-out;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.card-slot:hover {
+  transform: scale(1.1);
+}
+
+.card-slot.enemy {
+  border-color: #ff4d4d;
+}
+
+.card-slot.player {
+  border-color: #4da6ff;
+}
+
+.vs-zone {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.vs-circle {
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, #ffdd57, #f39c12);
+  color: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 28px;
+  box-shadow: 0 0 30px rgba(255, 221, 87, 0.6);
+  border: 4px solid white;
+}

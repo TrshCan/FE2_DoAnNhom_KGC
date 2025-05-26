@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th4 20, 2025 lúc 11:53 AM
--- Phiên bản máy phục vụ: 10.4.32-MariaDB
--- Phiên bản PHP: 8.3.17
+-- Host: 127.0.0.1
+-- Generation Time: May 25, 2025 at 11:38 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -51,7 +51,92 @@ INSERT INTO `classes` (`id`, `name`, `description`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `heroes`
+-- Table structure for table `enemies`
+--
+
+CREATE TABLE `enemies` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `region_id` int(11) DEFAULT NULL,
+  `class_id` int(11) DEFAULT NULL,
+  `title` varchar(100) DEFAULT NULL,
+  `description` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `enemy_base_stats`
+--
+
+CREATE TABLE `enemy_base_stats` (
+  `id` int(11) NOT NULL,
+  `enemy_id` int(11) NOT NULL,
+  `ATK` int(11) DEFAULT 0,
+  `Spell` int(11) DEFAULT 0,
+  `ATK_SPEED` decimal(5,2) DEFAULT 1.00,
+  `MP` int(11) DEFAULT 0,
+  `HP` int(11) DEFAULT 0,
+  `Damage_Dealt` int(11) DEFAULT 0,
+  `Normal_Attack_Amplification` decimal(5,2) DEFAULT 1.00,
+  `Skill_Amplification` decimal(5,2) DEFAULT 1.00,
+  `Special_Damage` int(11) DEFAULT 0,
+  `Physical_CRIT_Damage` decimal(5,2) DEFAULT 1.50,
+  `Spell_CRIT_Damage` decimal(5,2) DEFAULT 1.50,
+  `Physical_CRIT_Chance` decimal(5,2) DEFAULT 0.05,
+  `Spell_CRIT_Chance` decimal(5,2) DEFAULT 0.05,
+  `Physical_DEF` int(11) DEFAULT 0,
+  `Spell_DEF` int(11) DEFAULT 0,
+  `Mighty_Block` int(11) DEFAULT 0,
+  `Damage_Taken` int(11) DEFAULT 0,
+  `EVA` decimal(5,2) DEFAULT 0.05,
+  `Outgoing_Healing` int(11) DEFAULT 0,
+  `Guard` int(11) DEFAULT 0,
+  `Physical_HP_Drain` decimal(5,2) DEFAULT 0.00,
+  `Spell_HP_Drain` decimal(5,2) DEFAULT 0.00,
+  `Execution_Rate` decimal(5,2) DEFAULT 0.00
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `enemy_skills`
+--
+
+CREATE TABLE `enemy_skills` (
+  `id` int(11) NOT NULL,
+  `enemy_id` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `type` enum('passive','awakening','ultimate') DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `friends`
+--
+
+CREATE TABLE `friends` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `friend_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` enum('pending','accepted') NOT NULL DEFAULT 'pending'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `friends`
+--
+
+INSERT INTO `friends` (`id`, `user_id`, `friend_id`, `created_at`, `status`) VALUES
+(35, 4, 18, '2025-05-25 09:01:34', 'accepted'),
+(36, 18, 4, '2025-05-25 09:01:43', 'accepted');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `heroes`
 --
 
 CREATE TABLE `heroes` (
@@ -250,7 +335,42 @@ INSERT INTO `mails` (`id`, `title`, `content`, `sender_email`, `receiver_email`,
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `regions`
+-- Table structure for table `messages`
+--
+
+CREATE TABLE `messages` (
+  `id` int(11) NOT NULL,
+  `sender_id` int(11) NOT NULL,
+  `receiver_id` int(11) NOT NULL,
+  `content` text NOT NULL,
+  `sent_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `messages`
+--
+
+INSERT INTO `messages` (`id`, `sender_id`, `receiver_id`, `content`, `sent_at`) VALUES
+(18, 17, 17, 'cxcxzc', '2025-05-02 02:17:10'),
+(19, 17, 4, 'xczxczxccdffdg', '2025-05-02 02:18:15'),
+(20, 4, 4, 'gffdg', '2025-05-02 02:18:45'),
+(21, 4, 1, 'fdfsdf', '2025-05-02 02:19:00'),
+(22, 4, 17, 'fdsfsdf', '2025-05-02 02:19:20'),
+(23, 17, 4, 'xin chao', '2025-05-02 02:19:40'),
+(24, 4, 17, 'chào nha', '2025-05-02 02:19:56'),
+(25, 18, 4, 'dsadsadas', '2025-05-25 08:24:03'),
+(26, 4, 18, 'dsdsad', '2025-05-25 08:24:11'),
+(27, 18, 4, 'dsadasd', '2025-05-25 08:25:40'),
+(28, 4, 18, 'sdsadsad123', '2025-05-25 08:25:50'),
+(29, 18, 4, 'dsadasdas', '2025-05-25 09:10:57'),
+(30, 4, 18, 'fdfdsfsdf', '2025-05-25 09:20:16'),
+(31, 4, 18, 'dsdasdasdas12312321312', '2025-05-25 09:36:43'),
+(32, 18, 4, 'sadsadasdasdasd', '2025-05-25 09:36:51');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `regions`
 --
 
 CREATE TABLE `regions` (
@@ -368,14 +488,10 @@ INSERT INTO `users` (`id`, `email`, `password`, `username`, `role`) VALUES
 (1, 'alice@example.com', 'securepassword123', 'alice_wonder', 'user'),
 (2, 'admin@email.com', 'root', 'bob_builder', 'admin'),
 (3, 'charlie@example.com', 'randompass789', 'charlie_chap', 'user'),
-(6, 'nbaonguyen2@gmail.com', '$2y$10$zM9w8eB9V0tJNzh6x58pCOzc./O4h94vVa7aVAr90z8ji53z3qVse', 'nbaonguyen2', 'user'),
-(8, 'kaitokip@gmail.com', '$2y$10$7lRhNYnu8Dku5FfEyeJYVu3oklvTtGsrtM2qM1mXZVe5tWgmlFNB2', 'kaitokid', 'user'),
-(9, '', '$2y$10$OHuEZIx8JRBzoudbxyx7c.3IEPN9lMhB9YIIftJazYI5WS0cLOxFO', '', 'user'),
-(10, 'nnnn@gmail.com', '$2y$10$U5N3IfTpEM1UOLuaXn2ft.BmOZJ9jTKNjdpiKFogkZTXv2Mqo7qMe', 'nnnn', 'user'),
-(11, 'conmemay@gmail.com', '$2y$10$J/.Vzw8DEVr49wI7h.vJteZPWOuT9W1.LuwZt9JTXcOgUxbf8vBHe', 'conmemay', 'user'),
-(12, 'mm@gmail.com', '$2y$10$r73.9UDcrc1cttZLx2QPNe2ix3oXbv.1bl2HEkTDdRWVFV5.Ed3oq', 'mm', 'user'),
-(13, 'mmbeo@gmail.com', '$2y$10$XyrdG43V7ufLjbPy95seXuBjdWd2mB4Vc9aNy0P0Lh0Z.sPzMyMIG', 'memaybeo', 'user'),
-(14, 'hehe@gmail.com', '$2y$10$wOl1vc6JBr3n46GjVopH3OGn5UacZSGRXI6YnK7ytttp71BlW1eb.', 'hehe', 'user');
+(4, 'thachdao582@gmail.com', '$2y$10$Kk2b8AEDzAhApqADHN9qkOYYIK2IpSYkXQKUBI7H.8ZV2lZkHK6ki', 'thach', 'admin'),
+(6, 'daothach11@gmail.com', '123123', 'nick123', 'user'),
+(17, 'ngocthach@gmail.com', '$2y$10$DhmDfzH2IS6FSYBwl/59qeNzS42h8hHgNIVmGsRpI.BqUfJZP8XdG', 'thach11', 'user'),
+(18, 'Daothach001@gmail.com', '$2y$10$gdgVNbIiGiTkLyfjq7s22.6GINY5P.4ockt7TrY0DrypJYS/0VTVi', '_thhac.nqocc_', 'user');
 
 -- --------------------------------------------------------
 
@@ -628,7 +744,31 @@ ALTER TABLE `classes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT cho bảng `heroes`
+-- AUTO_INCREMENT for table `enemies`
+--
+ALTER TABLE `enemies`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `enemy_base_stats`
+--
+ALTER TABLE `enemy_base_stats`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `enemy_skills`
+--
+ALTER TABLE `enemy_skills`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `friends`
+--
+ALTER TABLE `friends`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+
+--
+-- AUTO_INCREMENT for table `heroes`
 --
 ALTER TABLE `heroes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
@@ -658,7 +798,13 @@ ALTER TABLE `mails`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT cho bảng `regions`
+-- AUTO_INCREMENT for table `messages`
+--
+ALTER TABLE `messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+
+--
+-- AUTO_INCREMENT for table `regions`
 --
 ALTER TABLE `regions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
@@ -679,7 +825,7 @@ ALTER TABLE `teams`
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT cho bảng `user_heroes`

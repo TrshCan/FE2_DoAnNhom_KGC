@@ -36,7 +36,6 @@
     z-index: 0;
 }
 
-
 /* Card Stats */
 .hero-card-stats .corner {
     position: absolute;
@@ -91,6 +90,7 @@
     color: #f0f0f0;
     border-radius: 10px;
     border: 1px solid #ffd700;
+    font-family: 'Cinzel', serif; /* Apply Cinzel font to modal content */
 }
 
 .modal-header-custom {
@@ -108,6 +108,23 @@
     object-fit: cover;
     border-radius: 8px;
     margin-bottom: 15px;
+}
+
+/* XP Bar Styling */
+.xp-bar {
+    width: 100%;
+    height: 20px;
+    background: #1a1a1a; /* Dark background to match theme */
+    border: 1px solid #ffd700; /* Gold border */
+    border-radius: 8px; /* Slightly smaller radius for consistency */
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.xp-progress {
+    height: 100%;
+    background: #ffd700; /* Gold fill to match theme */
+    transition: width 0.3s ease; /* Smooth progress animation */
 }
 
 /* Responsive Design */
@@ -132,5 +149,13 @@
 
     .bottom-left, .bottom-right {
         bottom: 50px; /* Adjusted for smaller cards */
+    }
+
+    .modal-hero-image {
+        max-height: 300px;
+    }
+
+    .xp-bar {
+        height: 15px; /* Slightly smaller for mobile */
     }
 }

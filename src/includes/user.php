@@ -20,7 +20,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($row = $result->fetch_assoc()) {
-    echo json_encode(['success' => true, 'username' => $row['username']]);
+    echo json_encode(['success' => true, 'username' => $row['username'], 'user_id' => $user_id]);
 } else {
     echo json_encode(['success' => false, 'message' => 'User not found']);
 }

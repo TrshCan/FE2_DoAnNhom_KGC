@@ -2,18 +2,39 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const QuestPopup = ({ showQuestPopup, setShowQuestPopup, quests, loading, onQuestClick, selectedQuest }) => {
+  const [activeTab, setActiveTab] = useState('daily');
+
   if (!showQuestPopup) return null;
+
+  const filteredQuests = quests.filter((quest) => quest.type === activeTab);
 
   return (
     <div className="quest-popup unselectable" style={popupStyle}>
       <div className="popup-content" style={popupContentStyle}>
         <h3 className="popup-title" style={titleStyle}>📜 Nhiệm Vụ</h3>
 
+        {/* Tabs */}
+        <div style={tabContainerStyle}>
+          <button
+            style={activeTab === 'daily' ? tabButtonActiveStyle : tabButtonStyle}
+            onClick={() => setActiveTab('daily')}
+          >
+            🗓 Hằng Ngày
+          </button>
+          <button
+            style={activeTab === 'weekly' ? tabButtonActiveStyle : tabButtonStyle}
+            onClick={() => setActiveTab('weekly')}
+          >
+            📅 Hằng Tuần
+          </button>
+        </div>
+
+        {/* Danh sách nhiệm vụ */}
         <div className="quest-list" style={listStyle}>
           {loading ? (
             <p>⏳ Đang tải nhiệm vụ...</p>
-          ) : quests.length > 0 ? (
-            quests.map((quest) => (
+          ) : filteredQuests.length > 0 ? (
+            filteredQuests.map((quest) => (
               <div
                 key={quest.id}
                 className="quest-item"
@@ -49,7 +70,30 @@ const QuestPopup = ({ showQuestPopup, setShowQuestPopup, quests, loading, onQues
   );
 };
 
-// Inline styles (move to Quest.css for production)
+// Tab styles
+const tabContainerStyle = {
+  display: 'flex',
+  justifyContent: 'center',
+  marginBottom: '15px',
+  gap: '10px',
+};
+
+const tabButtonStyle = {
+  padding: '10px 20px',
+  backgroundColor: '#6A4C93',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '6px',
+  cursor: 'pointer',
+  fontWeight: 'bold',
+};
+
+const tabButtonActiveStyle = {
+  ...tabButtonStyle,
+  backgroundColor: '#FFB74D',
+  color: '#000',
+};
+
 const popupStyle = {
   position: 'fixed',
   top: 0,

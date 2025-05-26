@@ -23,6 +23,9 @@ import XpAmountsManager from './pages/admin/XpAmountsManager';
 import InventoryManager from './pages/admin/InventoryManager';
 import LevelRequirementsManager from './pages/admin/LevelRequirementsManager';
 
+import Game from './components/Game';
+import BASE_URL from './components/BaseURL';
+
 const ProtectedRoute = ({ children, requireAdmin = false }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [role, setRole] = useState(null);
@@ -61,6 +64,8 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
   return children;
 };
 
+
+
 const App = () => {
   return (
     <Routes>
@@ -71,15 +76,11 @@ const App = () => {
       <Route path="/friend" element={<Friend />} />
       <Route path="/barrack" element={<Barrack />} />
       <Route path="/test" element={<HeroCard />} />
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute requireAdmin={true}>
-            <AdminDashboard />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<UserManager />} />
+      <Route path='/arena' element={<Game />}></Route>
+
+      {/* admin */}
+      <Route path="/admin" element={<AdminDashboard />}>
+        <Route index element={<UserManager />} /> {/* /admin mặc định */}
         <Route path="user-heroes" element={<UserHeroesManager />} />
         <Route path="classes" element={<ClassesManager />} />
         <Route path="hero-skills" element={<HeroSkillManager />} />

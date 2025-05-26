@@ -19,31 +19,31 @@
 }
 
 .avatar-frame {
-  background-image: url("../img/frames/Frame_10170.png"); /* Add frame image */
-  background-size: contain; /* Adjust frame size */
+  background-image: url("../img/frames/Frame_10170.png");
+  background-size: contain;
   background-repeat: no-repeat;
-  padding: 10px; /* Adjust the padding if necessary */
-  border-radius: 10px; /* Adjust border radius for rounded frame */
-  width: 60px; /* Set a fixed width for the avatar */
-  height: 60px; /* Set a fixed height for the avatar */
+  padding: 10px;
+  border-radius: 10px;
+  width: 60px;
+  height: 60px;
   justify-content: center;
   align-items: center;
   z-index: 1;
 }
 
 .avatar-img {
-  width: 60px; /* Adjust avatar size */
-  height: 60px; /* Adjust avatar size */
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background-image: url("../img/avatar/avatar_1.png");
-  background-size: contain; /* Adjust frame size */
+  background-size: contain;
   background-repeat: no-repeat;
   justify-content: center;
   align-items: center;
   position: absolute;
   top: -11px;
   left: 2px;
-  z-index: 1; /* Ensure avatar is above the frame */
+  z-index: 1;
 }
 
 .username {
@@ -80,10 +80,10 @@
 }
 
 .top-right.show {
-  max-height: 330px; /* Adjust this value depending on the number of items */
+  max-height: 330px;
   gap: 20px;
   padding: 20px 7px;
-  margin:0;
+  margin: 0;
 }
 
 .nav-item {
@@ -93,6 +93,7 @@
   text-align: center;
   width: 100%;
   cursor: pointer;
+  z-index: 100;
 }
 
 .nav-icon {
@@ -111,10 +112,9 @@
 }
 
 /* Arrow animation for top nav toggle */
-
 .arrow-container {
   position: absolute;
-  background-image: url("../img/icons/Challenge_Board_03_0.png"); /* Adjust frame size */
+  background-image: url("../img/icons/Challenge_Board_03_0.png");
   background-repeat: no-repeat;
   justify-content: center;
   align-items: center;
@@ -123,9 +123,9 @@
   width: 60px;
   top: 0;
   right: 20px;
-
   cursor: pointer;
   transition: transform 0.3s ease, top 0.3s ease;
+  z-index: 100;
 }
 
 /* When toggled, move down and rotate */
@@ -164,20 +164,155 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px 0; /* Adjust as necessary */
-  height: 100%; /* Adjust the height based on your design */
+  margin: 20px 0;
+  height: calc(100vh - 60px);
+  position: relative;
+  top: 60px;
 }
 
 .illustration-image {
   max-width: 100%;
   height: auto;
-  object-fit: contain; /* This ensures the image scales properly without distorting */
+  object-fit: contain;
+}
+
+/* Matchmaking Container */
+.matchmaking-container {
+  position: absolute;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+  z-index: 10;
+}
+
+.find-match-btn, .ready-btn, .cancel-match-btn {
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid #d4af37;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  width: 100%;
+  margin: 5px 0;
+}
+
+.find-match-btn:hover, .ready-btn:hover, .cancel-match-btn:hover {
+  background: #d4af37;
+  color: #1a1a1a;
+  transform: scale(1.05);
+}
+
+.cancel-match-btn {
+  background: rgba(50, 50, 50, 0.7); /* Slightly darker to distinguish */
+  border: 2px solid #8B4513; /* Brown to indicate cancellation */
+}
+
+.cancel-match-btn:hover {
+  background: #8B4513;
+  color: white;
+}
+
+.match-status {
+  margin-top: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #d4af37;
+}
+
+.match-status p {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  color: white;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+  margin: 5px 0;
+}
+
+.match-info {
+  margin-top: 10px;
 }
 
 .unselectable {
   user-select: none;
-  -webkit-user-select: none; /* Safari */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE10+/Edge */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
+/* Responsive Design */
+@media (max-width: 768px) {
+  .top-left {
+    top: 5px;
+    left: 5px;
+    font-size: 1rem;
+  }
+
+  .avatar-frame, .avatar-img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .username {
+    font-size: 1rem;
+    padding-left: 20px;
+    padding-top: 3px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    left: -25px;
+  }
+
+  .top-right {
+    right: 5px;
+    font-size: 1.2rem;
+  }
+
+  .top-right.show {
+    max-height: 280px;
+    gap: 15px;
+    padding: 15px 5px;
+  }
+
+  .arrow-container {
+    height: 50px;
+    width: 50px;
+    right: 15px;
+  }
+
+  .arrow-container.active {
+    transform: translateY(200px);
+    top: 80px;
+    height: 50px;
+    width: 50px;
+  }
+
+  .bottom-nav {
+    padding: 5px 0;
+    font-size: 1.2rem;
+  }
+
+  .illustration-container {
+    top: 50px;
+    height: calc(100vh - 50px);
+  }
+
+  .matchmaking-container {
+    bottom: 70px;
+    width: 95%;
+    max-width: 350px;
+  }
+
+  .find-match-btn, .ready-btn, .cancel-match-btn {
+    font-size: 1rem;
+    padding: 8px 15px;
+  }
+
+  .match-status p {
+    font-size: 1rem;
+  }
+}
